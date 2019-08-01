@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ProfilRepository")
+ * @UniqueEntity(fields= {"libelle"},message="Ce NINEA existe déja")
  */
 class Profil
 {
@@ -20,6 +23,8 @@ class Profil
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="La raison sociale est trop courte !!")
      */
     private $libelle;
 

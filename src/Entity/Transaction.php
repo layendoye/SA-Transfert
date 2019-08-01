@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\TransactionRepository")
+ * @UniqueEntity(fields= {"code"},message="Ce code existe déja")
  */
 class Transaction
 {
@@ -20,16 +23,22 @@ class Transaction
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le nom est trop court !!")
      */
     private $nomClientEmetteur;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le téléphone est trop court !!")
      */
     private $telephoneEmetteur;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le NCI est trop court !!")
      */
     private $nciEmetteur;
 
@@ -40,6 +49,8 @@ class Transaction
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le code est trop court !!")
      */
     private $code;
 
@@ -51,6 +62,8 @@ class Transaction
 
     /**
      * @ORM\Column(type="bigint")
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Range(min=500 ,minMessage="Il faut transferer 500 fr au moins!!")
      */
     private $montant;
 
@@ -61,16 +74,22 @@ class Transaction
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le nom est trop court !!")
      */
     private $nomClientRecepteur;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le téléphone est trop court !!")
      */
     private $telephoneRecepteur;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le NCI est trop court !!")
      */
     private $nciRecepteur;
 

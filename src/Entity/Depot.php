@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\DepotRepository")
+ * @UniqueEntity(fields= {"numeroCompte"},message="Le numero compte déja utilisé")
  */
 class Depot
 {
@@ -25,6 +28,7 @@ class Depot
 
     /**
      * @ORM\Column(type="bigint")
+     * @Assert\Range(min=75000 ,minMessage="Le depot doit être superieur à 75 000 !!")
      */
     private $montant;
 
@@ -36,6 +40,7 @@ class Depot
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="depots")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      */
     private $compte;
 

@@ -6,10 +6,13 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\CompteRepository")
+ * @UniqueEntity(fields= {"numeroCompte"},message="Le numero compte déja utilisé")
  */
 class Compte
 {
@@ -22,17 +25,20 @@ class Compte
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="4", max="255" ,minMessage="Le nom est trop court !!")
      */
     private $numeroCompte;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="bigint", length=255, nullable=true)
      */
     private $solde;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Entreprise", inversedBy="comptes")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      */
     private $entreprise;
 
@@ -69,12 +75,12 @@ class Compte
         return $this;
     }
 
-    public function getSolde(): ?string
+    public function getSolde(): ?bigint
     {
         return $this->solde;
     }
 
-    public function setSolde(?string $solde): self
+    public function setSolde(?bigint $solde): self
     {
         $this->solde = $solde;
 

@@ -6,9 +6,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UtilisateurRepository")
+ * @UniqueEntity(fields= {"username"},message="Login déja utilisé")
+ * @UniqueEntity(fields= {"email"},message="Email déja utilisé")
+ * @UniqueEntity(fields= {"telephone"},message="téléphone déja utilisé")
+ * @UniqueEntity(fields= {"nci"},message="NCI déja utilisé")
  */
 class Utilisateur implements UserInterface
 {
@@ -21,6 +27,8 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le login est trop court !!")
      */
     private $username;
 
@@ -32,16 +40,26 @@ class Utilisateur implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le mot de passe est trop court !!")
      */
     private $password;
 
     /**
+    *@Assert\EqualTo(propertyPath="password",message="Les mots de passes ne correspondent pas !")
+    */
+    private $confirmPassword; //créé le getter et setter!
+
+    /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le nom est trop court !!")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email(message="Veuillez mettre un email valide !!")
      */
     private $email;
 
@@ -149,6 +167,18 @@ class Utilisateur implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getConfirmPassword(): string
+    {
+        return (string) $this->confirmPassword;
+    }
+
+    public function setConfirmPassword(string $confirmPassword): self
+    {
+        $this->confirmPassword = $confirmPassword;
 
         return $this;
     }
