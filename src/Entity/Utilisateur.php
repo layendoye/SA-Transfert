@@ -85,6 +85,11 @@ class Utilisateur implements UserInterface
      */
     private $entreprise;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
     public function __construct()
     {
         $this->depots = new ArrayCollection();
@@ -338,6 +343,18 @@ class Utilisateur implements UserInterface
     public function setEntreprise(?Entreprise $entreprise): self
     {
         $this->entreprise = $entreprise;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
