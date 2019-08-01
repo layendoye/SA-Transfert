@@ -36,3 +36,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
         ];
     }
 }
+    /*
+        1 - php bin/console make:subscriber
+        2 - repondre : EventSubscriber
+        3 - ensuite : kernel.exception
+    */
