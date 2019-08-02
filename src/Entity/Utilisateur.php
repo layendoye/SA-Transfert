@@ -2,13 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UtilisateurRepository")
  * @UniqueEntity(fields= {"username"},message="Login déja utilisé")
@@ -377,12 +376,12 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImage() //enlever le string ici
     {
         return $this->image;
     }
 
-    public function setImage(?string $image): self
+    public function setImage($image)//enlever le string ici aussi
     {
         $this->image = $image;
 

@@ -35,7 +35,8 @@ class SecurityController extends AbstractFOSRestController
         /* Début traitement formulaire et envoie des données */
 
             $form=$this->createForm(UtilisateurType::class,$user);
-            $data=json_decode($request->getContent(),true);//Récupère une chaîne encodée JSON et la convertit en une variable PHP
+            //$data=json_decode($request->getContent(),true);//Récupère une chaîne encodée JSON et la convertit en une variable PHP
+            $data=$request->request->all();
             $profil=$data['profil'];
             unset($data['profil']);//on supprime le profil car il ne fait pas partit de UtilisateurType
             $form->submit($data);
@@ -97,6 +98,13 @@ class SecurityController extends AbstractFOSRestController
                     return $this->handleView($this->view([$erreur => 'Ce profil ne doit pas être rattacher à un compte !!'],Response::HTTP_CONFLICT));
                 }
             /* Fin gestion des compte */
+
+            /*Début gestion des images */
+                $file=$request->files->all()['image'];
+                $fileName=md5(uniqid()).'.'.$file->guessExtensionn();
+                $user->setImage($fileName);
+                $file->move($this->getParameter('image_directory'),$fileName);
+            /*Début gestion des images */
 
             /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
                 $user->setStatus('Actif');
