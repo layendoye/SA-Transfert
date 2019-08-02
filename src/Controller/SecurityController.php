@@ -105,7 +105,7 @@ class SecurityController extends AbstractFOSRestController
                 if($file=$request->files->all()['image']){
                     $fileName=md5(uniqid()).'.'.$file->guessExtension();
                     $user->setImage($fileName);
-                    $file->move($this->getParameter('image_directory'),$fileName);
+                    $file->move($this->getParameter('image_directory'),$fileName); //definir le image_directory dans service.yaml
                 }
             /*Début gestion des images */
 

@@ -26,7 +26,7 @@ class Compte
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
-     * @Assert\Length(min="4", max="255" ,minMessage="Le nom est trop court !!")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpeg" })
      */
     private $numeroCompte;
 

@@ -20,6 +20,9 @@
                 'required' => [
                     true,
                 ],
+                'iri' => [
+                    'http://schema.org/MediaObject',
+                ],
                 'identifier' => [
                     false,
                 ],

@@ -8,11 +8,17 @@
         null,
         [
             'stdClass' => [
-                'length' => [
-                    255,
-                ],
                 'nullable' => [
                     true,
+                ],
+                'mimeTypes' => [
+                    1 => [
+                        'image/jpeg',
+                        'image/png',
+                    ],
+                ],
+                'mimeTypesMessage' => [
+                    1 => 'Entrez une image valide',
                 ],
                 'groups' => [
                     1 => [

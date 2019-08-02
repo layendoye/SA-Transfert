@@ -104,7 +104,7 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Image()
+     * @Assert\Image(mimeTypes = {"image/jpeg", "image/png"}, mimeTypesMessage = "Entrez une image valide")
      */
     private $image;
 

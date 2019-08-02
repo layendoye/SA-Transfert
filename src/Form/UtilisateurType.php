@@ -7,9 +7,11 @@ use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+
 
 class UtilisateurType extends AbstractType
 {
@@ -24,8 +26,6 @@ class UtilisateurType extends AbstractType
             ->add('telephone')
             ->add('nci')
             ->add('image', FileType::class,['label'=>'Inserer une image'])
-
-            
             ->add('compte', EntityType::class, ['class'=> Compte::class,
                 'choice_label' => function(Compte $compte,UserInterface $Userconnecte) {
                     if($compte->getEntreprise()==$Userconnecte->getEntreprise()){
