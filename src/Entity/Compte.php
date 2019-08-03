@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\CompteRepository")
@@ -27,11 +27,13 @@ class Compte
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\File(mimeTypes={ "image/png", "image/jpeg" })
+     * @Groups({"list"})
      */
     private $numeroCompte;
 
     /**
      * @ORM\Column(type="bigint", length=255, nullable=true)
+     * @Groups({"list"})
      */
     private $solde;
 

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Exception;
+
 use App\Entity\Entreprise;
 use App\Entity\Utilisateur;
 use App\Form\UtilisateurType;
@@ -131,7 +131,7 @@ class SecurityController extends AbstractFOSRestController
     /**
      *@Route("/connexion", name="connexion", methods={"POST"})
      */
-    public function login(){ /*gerer dans config packages security.yaml*/}
+    public function login(){ }
 }
      /*
         1 - Aller dans config -> packages -> fos_rest.yaml

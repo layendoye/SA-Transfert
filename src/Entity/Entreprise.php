@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\EntrepriseRepository")
@@ -27,6 +27,7 @@ class Entreprise
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="La raison sociale est trop courte !!")
+     * @Groups({"list"})
      */
     private $raisonSociale;
 
@@ -34,6 +35,7 @@ class Entreprise
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="4", max="255" ,minMessage="Le NINEA est trop court !!")
+     * @Groups({"list"})
      */
     private $ninea;
 
@@ -41,16 +43,19 @@ class Entreprise
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="L'adresse est trop court !!")
+     * @Groups({"list"})
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"list"})
      */
     private $status;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Compte", mappedBy="entreprise")
+     * @Groups({"list"})
      */
     private $comptes;
 
