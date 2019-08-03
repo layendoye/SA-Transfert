@@ -2,34 +2,21 @@
 
     return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
         $o = [
-            clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Mapping\\Column'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Column')),
-            clone ($p['Symfony\\Component\\Validator\\Constraints\\Image'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Validator\\Constraints\\Image')),
+            clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['Doctrine\\ORM\\Mapping\\Column'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Column')),
         ],
         null,
         [
             'stdClass' => [
+                'length' => [
+                    255,
+                ],
                 'nullable' => [
                     true,
-                ],
-                'mimeTypes' => [
-                    1 => [
-                        'image/jpeg',
-                        'image/png',
-                    ],
-                ],
-                'mimeTypesMessage' => [
-                    1 => 'Entrez une image valide',
-                ],
-                'groups' => [
-                    1 => [
-                        'Default',
-                    ],
                 ],
             ],
         ],
         [
             $o[0],
-            $o[1],
         ],
         []
     );
