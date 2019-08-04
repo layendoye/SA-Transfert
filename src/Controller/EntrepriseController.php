@@ -85,6 +85,9 @@ class EntrepriseController extends AbstractFOSRestController
         if($compte=$repo->findOneBy(['numeroCompte'=>$data['compte']]))
         {
             $data['compte']=$compte->getId();//on lui donne directement l'id
+            if($compte->getEntreprise()->getRaisonSociale()=='SA Transfert'){
+                throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
+            }
         }
         else{
             throw new HttpException(404,'Ce numero de compte n\'existe pas !');
@@ -119,12 +122,11 @@ class EntrepriseController extends AbstractFOSRestController
             throw new HttpException(404,'Ce partenaire n\'existe pas !');
         }
         elseif($entreprise->getRaisonSociale()=='SA Transfert'){
-            throw new HttpException(409,'Impossible de bloquer SA Transfert !');
+            throw new HttpException(403,'Impossible de bloquer SA Transfert !');
         }
         elseif($entreprise->getStatus() == $this->actif){
             $entreprise->setStatus("bloqué");
             $texte= 'Partenaire bloqué';
-            
         }
         else{
             $entreprise->setStatus($this->actif);

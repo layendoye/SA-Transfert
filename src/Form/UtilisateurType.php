@@ -26,12 +26,7 @@ class UtilisateurType extends AbstractType
             ->add('telephone')
             ->add('nci')
             ->add('image', FileType::class,['label'=>'Inserer une image'])
-            ->add('compte', EntityType::class, ['class'=> Compte::class,
-                'choice_label' => function(Compte $compte,UserInterface $Userconnecte) {
-                    if($compte->getEntreprise()==$Userconnecte->getEntreprise()){
-                       return $compte->getNumeroCompte(); 
-                    }
-            }]);
+            ->add('compte', EntityType::class, ['class'=> Compte::class,'choice_label' => 'numeroCompte']);
     }
     
     public function configureOptions(OptionsResolver $resolver)

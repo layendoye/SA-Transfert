@@ -3,7 +3,7 @@ security:
         App\Entity\Utilisateur:
             algorithm: auto
     role_hierarchy:
-        ROLE_Super_admin: [ROLE_listeur-entreprise,ROLE_inscrir]
+        ROLE_Super-admin: [ROLE_listeur-entreprise, ROLE_inscrir]
         ROLE_Caissier: ROLE_listeur-entreprise
         ROLE_admin-Principal: ROLE_inscrir
         ROLE_admin: ROLE_inscrir

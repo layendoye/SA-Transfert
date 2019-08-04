@@ -135,7 +135,7 @@
     <parameter key="security.authentication.trust_resolver.anonymous_class">null</parameter>
     <parameter key="security.authentication.trust_resolver.rememberme_class">null</parameter>
     <parameter key="security.role_hierarchy.roles" type="collection">
-      <parameter key="ROLE_Super_admin" type="collection">
+      <parameter key="ROLE_Super-admin" type="collection">
         <parameter>ROLE_listeur-entreprise</parameter>
         <parameter>ROLE_inscrir</parameter>
       </parameter>

@@ -41,7 +41,7 @@ class AppFixtures extends Fixture
                     ->setAdresse('Mermoz')
                     ->setStatus($actif);
         $compte=new Compte();
-        $compte->setNumeroCompte(date('y').date('m').' '.date('d').date('H').' '.date('i').date('s'))
+        $compte->setNumeroCompte('1910 1409 0043')
                    ->setEntreprise($saTransfert);
         $manager->persist($saTransfert);
         $manager->persist($compte);
