@@ -15,7 +15,7 @@
             'Symfony\\Component\\Serializer\\Annotation\\Groups' => [
                 'groups' => [
                     1 => [
-                        'list',
+                        'list-entreprise',
                     ],
                 ],
             ],

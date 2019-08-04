@@ -10,7 +10,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\DepotRepository")
- * @UniqueEntity(fields= {"numeroCompte"},message="Le numero compte déja utilisé")
  */
 class Depot
 {

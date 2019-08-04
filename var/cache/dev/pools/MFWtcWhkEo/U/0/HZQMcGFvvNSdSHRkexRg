@@ -37,7 +37,7 @@
             'Symfony\\Component\\Serializer\\Annotation\\Groups' => [
                 'groups' => [
                     3 => [
-                        'list',
+                        'list-entreprise',
                     ],
                 ],
             ],

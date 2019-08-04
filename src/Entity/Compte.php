@@ -26,14 +26,13 @@ class Compte
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpeg" })
-     * @Groups({"list"})
+     * @Groups({"list-entreprise"})
      */
     private $numeroCompte;
 
     /**
-     * @ORM\Column(type="bigint", length=255, nullable=true)
-     * @Groups({"list"})
+     * @ORM\Column(type="bigint", nullable=true)
+     * @Groups({"list-entreprise"})
      */
     private $solde;
 
@@ -77,12 +76,12 @@ class Compte
         return $this;
     }
 
-    public function getSolde(): ?bigint
+    public function getSolde(): ?int
     {
         return $this->solde;
     }
 
-    public function setSolde(?bigint $solde): self
+    public function setSolde(?int $solde): self
     {
         $this->solde = $solde;
 

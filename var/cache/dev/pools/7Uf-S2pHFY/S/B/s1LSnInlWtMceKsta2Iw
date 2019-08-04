@@ -15,6 +15,7 @@
                         'adresse',
                         'status',
                         'comptes',
+                        'soldeGlobal',
                         'utilisateurs',
                     ],
                 ],

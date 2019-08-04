@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CompteRepository;
+use App\Repository\EntrepriseRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert; //pour la validation des données
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\EntrepriseRepository")
@@ -27,7 +29,7 @@ class Entreprise
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="La raison sociale est trop courte !!")
-     * @Groups({"list"})
+     * @Groups({"list-entreprise"})
      */
     private $raisonSociale;
 
@@ -35,7 +37,7 @@ class Entreprise
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="4", max="255" ,minMessage="Le NINEA est trop court !!")
-     * @Groups({"list"})
+     * @Groups({"list-entreprise"})
      */
     private $ninea;
 
@@ -43,19 +45,19 @@ class Entreprise
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="L'adresse est trop court !!")
-     * @Groups({"list"})
+     * @Groups({"list-entreprise"})
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"list"})
+     * @Groups({"list-entreprise"})
      */
     private $status;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Compte", mappedBy="entreprise")
-     * @Groups({"list"})
+     * @Groups({"list-entreprise"})
      */
     private $comptes;
 
@@ -63,6 +65,11 @@ class Entreprise
      * @ORM\OneToMany(targetEntity="App\Entity\Utilisateur", mappedBy="entreprise")
      */
     private $utilisateurs;
+
+    /**
+     * @Groups({"list-entreprise"})
+     */
+    private $soldeGlobal; 
 
     public function __construct()
     {
@@ -152,6 +159,14 @@ class Entreprise
         }
 
         return $this;
+    }
+
+    public function getSoldeGlobal(){
+        $tabCompte=$this->getComptes()->getSnapshot();
+        for($i=0;$i<count($tabCompte);$i++){
+            $this->soldeGlobal+=$tabCompte[$i]->getSolde();
+        }
+        return $this->soldeGlobal;
     }
 
     /**

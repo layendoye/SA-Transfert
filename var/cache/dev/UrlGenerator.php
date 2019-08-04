@@ -18,6 +18,7 @@ return [
     'entreprises' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::lister'], [], [['text', '/entreprises/liste']], [], []],
     'entreprise' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::lister'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/entreprise']], [], []],
     'add_entreprise' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::add'], [], [['text', '/partenaires/add']], [], []],
+    'app_entreprise_depot' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::depot'], [], [['text', '/nouveau/depot']], [], []],
     'inscription' => [[], ['_controller' => 'App\\Controller\\SecurityController::inscriptionUtilisateur'], [], [['text', '/inscription']], [], []],
     'add_adminPrinc' => [['id'], ['_controller' => 'App\\Controller\\SecurityController::inscriptionUtilisateur'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/add/admin-partenaire']], [], []],
     'connexion' => [[], ['_controller' => 'App\\Controller\\SecurityController::login'], [], [['text', '/connexion']], [], []],

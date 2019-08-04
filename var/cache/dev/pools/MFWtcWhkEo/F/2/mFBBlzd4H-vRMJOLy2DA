@@ -4,7 +4,6 @@
         $o = [
             clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Mapping\\Column'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Column')),
             clone ($p['Symfony\\Component\\Validator\\Constraints\\NotBlank'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Validator\\Constraints\\NotBlank')),
-            clone ($p['Symfony\\Component\\Validator\\Constraints\\File'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Validator\\Constraints\\File')),
             clone ($p['Symfony\\Component\\Serializer\\Annotation\\Groups'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Annotation\\Groups')),
         ],
         null,
@@ -20,21 +19,12 @@
                     1 => [
                         'Default',
                     ],
-                    [
-                        'Default',
-                    ],
-                ],
-                'mimeTypes' => [
-                    2 => [
-                        'image/png',
-                        'image/jpeg',
-                    ],
                 ],
             ],
             'Symfony\\Component\\Serializer\\Annotation\\Groups' => [
                 'groups' => [
-                    3 => [
-                        'list',
+                    2 => [
+                        'list-entreprise',
                     ],
                 ],
             ],
@@ -43,7 +33,6 @@
             $o[0],
             $o[1],
             $o[2],
-            $o[3],
         ],
         []
     );

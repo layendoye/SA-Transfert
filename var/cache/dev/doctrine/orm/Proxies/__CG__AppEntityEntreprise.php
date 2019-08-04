@@ -64,10 +64,10 @@ class Entreprise extends \App\Entity\Entreprise implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'raisonSociale', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'utilisateurs'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'raisonSociale', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'utilisateurs', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'soldeGlobal'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'raisonSociale', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'utilisateurs'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'raisonSociale', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'utilisateurs', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'soldeGlobal'];
     }
 
     /**
@@ -307,6 +307,17 @@ class Entreprise extends \App\Entity\Entreprise implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeCompte', [$compte]);
 
         return parent::removeCompte($compte);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSoldeGlobal()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSoldeGlobal', []);
+
+        return parent::getSoldeGlobal();
     }
 
     /**
