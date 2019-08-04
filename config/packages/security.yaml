@@ -2,7 +2,11 @@ security:
     encoders:
         App\Entity\Utilisateur:
             algorithm: auto
-
+    role_hierarchy:
+        ROLE_Super_admin: [ROLE_listeur-entreprise,ROLE_inscrir]
+        ROLE_Caissier: ROLE_listeur-entreprise
+        ROLE_admin-Principal: ROLE_inscrir
+        ROLE_admin: ROLE_inscrir
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
@@ -16,7 +20,7 @@ security:
             security: false
         login:
             pattern:  ^/connexion
-            #user_checker : app.user_checker  je l'ai mis dans services.yaml pour les utilisateurs bloqués
+            user_checker : app.user_checker   # je l'ai mis dans services.yaml pour les utilisateurs bloqués
             stateless: true
             anonymous: true
             provider: app_user_provider  # pour voir le site on doit se connecter et notre provider de reference pour ce connecté est in_database
@@ -44,4 +48,9 @@ security:
     access_control:
          - { path: ^/partenaires/add, roles: ROLE_Super-admin }
          - { path: ^/nouveau/depot, roles: ROLE_Caissier }
+         - { path: ^/bloque/entreprises, roles: ROLE_Super-admin }
+         - { path: ^/entreprises/liste, roles: ROLE_listeur-entreprise }
+         - { path: ^/entreprise/, roles: ROLE_listeur-entreprise }
+         - { path: ^/inscription, roles: ROLE_inscrir }
+         - { path: ^/add/admin-partenaire/, roles: ROLE_Super-admin }
 

@@ -143,7 +143,21 @@
     <parameter key="twig.default_path">/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/templates</parameter>
     <parameter key="security.authentication.trust_resolver.anonymous_class">null</parameter>
     <parameter key="security.authentication.trust_resolver.rememberme_class">null</parameter>
-    <parameter key="security.role_hierarchy.roles" type="collection"/>
+    <parameter key="security.role_hierarchy.roles" type="collection">
+      <parameter key="ROLE_Super_admin" type="collection">
+        <parameter>ROLE_listeur-entreprise</parameter>
+        <parameter>ROLE_inscrir</parameter>
+      </parameter>
+      <parameter key="ROLE_Caissier" type="collection">
+        <parameter>ROLE_listeur-entreprise</parameter>
+      </parameter>
+      <parameter key="ROLE_admin-Principal" type="collection">
+        <parameter>ROLE_inscrir</parameter>
+      </parameter>
+      <parameter key="ROLE_admin" type="collection">
+        <parameter>ROLE_inscrir</parameter>
+      </parameter>
+    </parameter>
     <parameter key="security.access.denied_url">null</parameter>
     <parameter key="security.authentication.manager.erase_credentials">true</parameter>
     <parameter key="security.authentication.session_strategy.strategy">migrate</parameter>
@@ -481,6 +495,7 @@
   </parameters>
   <services>
     <service id="service_container" class="Symfony\Component\DependencyInjection\ContainerInterface" public="true" synthetic="true"/>
+    <service id="app.user_checker" class="App\Entity\UserChecker" autowire="true" autoconfigure="true"/>
     <service id="App\Controller\EntrepriseController" class="App\Controller\EntrepriseController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -3468,14 +3483,15 @@
       <argument type="service" id="request_stack"/>
     </service>
     <service id="security.role_hierarchy" class="Symfony\Component\Security\Core\Role\RoleHierarchy" public="false">
-      <argument type="collection"/>
-    </service>
-    <service id="security.access.simple_role_voter" class="Symfony\Component\Security\Core\Authorization\Voter\RoleVoter" public="false">
-      <tag name="security.voter" priority="245"/>
+      <argument>%security.role_hierarchy.roles%</argument>
     </service>
     <service id="security.access.authenticated_voter" class="Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter" public="false">
       <tag name="security.voter" priority="250"/>
       <argument type="service" id="security.authentication.trust_resolver"/>
+    </service>
+    <service id="security.access.role_hierarchy_voter" class="Symfony\Component\Security\Core\Authorization\Voter\RoleHierarchyVoter" public="false">
+      <tag name="security.voter" priority="245"/>
+      <argument type="service" id="security.role_hierarchy"/>
     </service>
     <service id="security.access.expression_voter" class="Symfony\Component\Security\Core\Authorization\Voter\ExpressionVoter" public="false">
       <tag name="security.voter" priority="245"/>
@@ -3583,6 +3599,41 @@
         <argument type="service" id=".security.request_matcher.38X.oWv"/>
         <argument type="collection">
           <argument>ROLE_Caissier</argument>
+        </argument>
+        <argument>null</argument>
+      </call>
+      <call method="add">
+        <argument type="service" id=".security.request_matcher.kGrIsYm"/>
+        <argument type="collection">
+          <argument>ROLE_Super-admin</argument>
+        </argument>
+        <argument>null</argument>
+      </call>
+      <call method="add">
+        <argument type="service" id=".security.request_matcher.ogCU.kG"/>
+        <argument type="collection">
+          <argument>ROLE_listeur-entreprise</argument>
+        </argument>
+        <argument>null</argument>
+      </call>
+      <call method="add">
+        <argument type="service" id=".security.request_matcher.t3c39gS"/>
+        <argument type="collection">
+          <argument>ROLE_listeur-entreprise</argument>
+        </argument>
+        <argument>null</argument>
+      </call>
+      <call method="add">
+        <argument type="service" id=".security.request_matcher.fwV856b"/>
+        <argument type="collection">
+          <argument>ROLE_inscrir</argument>
+        </argument>
+        <argument>null</argument>
+      </call>
+      <call method="add">
+        <argument type="service" id=".security.request_matcher.Ynqpvg_"/>
+        <argument type="collection">
+          <argument>ROLE_Super-admin</argument>
         </argument>
         <argument>null</argument>
       </call>
@@ -3930,7 +3981,7 @@
     </service>
     <service id="security.firewall.map.config.login" class="Symfony\Bundle\SecurityBundle\Security\FirewallConfig" public="false">
       <argument>login</argument>
-      <argument>security.user_checker</argument>
+      <argument>app.user_checker</argument>
       <argument>.security.request_matcher.p1N9D6u</argument>
       <argument>true</argument>
       <argument>true</argument>
@@ -3950,7 +4001,7 @@
     </service>
     <service id="security.authentication.provider.dao.login" class="Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider" public="false">
       <argument type="service" id="security.user.provider.concrete.app_user_provider"/>
-      <argument type="service" id="security.user_checker"/>
+      <argument type="service" id="app.user_checker"/>
       <argument>login</argument>
       <argument type="service" id="security.encoder_factory.generic"/>
       <argument>true</argument>
@@ -4106,6 +4157,21 @@
     </service>
     <service id=".security.request_matcher.38X.oWv" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
       <argument>^/nouveau/depot</argument>
+    </service>
+    <service id=".security.request_matcher.kGrIsYm" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+      <argument>^/bloque/entreprises</argument>
+    </service>
+    <service id=".security.request_matcher.ogCU.kG" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+      <argument>^/entreprises/liste</argument>
+    </service>
+    <service id=".security.request_matcher.t3c39gS" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+      <argument>^/entreprise/</argument>
+    </service>
+    <service id=".security.request_matcher.fwV856b" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+      <argument>^/inscription</argument>
+    </service>
+    <service id=".security.request_matcher.Ynqpvg_" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+      <argument>^/add/admin-partenaire/</argument>
     </service>
     <service id="security.command.user_password_encoder" class="Symfony\Bundle\SecurityBundle\Command\UserPasswordEncoderCommand" public="false">
       <tag name="console.command" command="security:encode-password"/>
@@ -5821,6 +5887,12 @@
         <argument key="validator" type="service" id="debug.validator"/>
       </argument>
     </service>
+    <service id=".service_locator.ut29XRA" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
     <service id=".service_locator.l2alLEu" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5837,16 +5909,18 @@
         <argument key="validator" type="service" id="debug.validator"/>
       </argument>
     </service>
-    <service id=".service_locator.G68jiNB" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.piKFrSQ" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\EntrepriseController::add" type="service" id=".service_locator.8VNxdUn"/>
+        <argument key="App\Controller\EntrepriseController::bloque" type="service" id=".service_locator.ut29XRA"/>
         <argument key="App\Controller\EntrepriseController::depot" type="service" id=".service_locator.vD8Uu7b"/>
         <argument key="App\Controller\EntrepriseController::lister" type="service" id=".service_locator.6tT8guL"/>
         <argument key="App\Controller\EntrepriseController::setViewHandler" type="service" id=".service_locator.l2alLEu"/>
         <argument key="App\Controller\SecurityController::inscriptionUtilisateur" type="service" id=".service_locator.gb6KpeQ"/>
         <argument key="App\Controller\SecurityController::setViewHandler" type="service" id=".service_locator.l2alLEu"/>
         <argument key="App\Controller\EntrepriseController:add" type="service" id=".service_locator.8VNxdUn"/>
+        <argument key="App\Controller\EntrepriseController:bloque" type="service" id=".service_locator.ut29XRA"/>
         <argument key="App\Controller\EntrepriseController:depot" type="service" id=".service_locator.vD8Uu7b"/>
         <argument key="App\Controller\EntrepriseController:lister" type="service" id=".service_locator.6tT8guL"/>
         <argument key="App\Controller\EntrepriseController:setViewHandler" type="service" id=".service_locator.l2alLEu"/>
@@ -5947,8 +6021,8 @@
       <argument type="service" id="security.access.authenticated_voter"/>
       <argument type="service" id="debug.event_dispatcher"/>
     </service>
-    <service id="debug.security.voter.security.access.simple_role_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
-      <argument type="service" id="security.access.simple_role_voter"/>
+    <service id="debug.security.voter.security.access.role_hierarchy_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
+      <argument type="service" id="security.access.role_hierarchy_voter"/>
       <argument type="service" id="debug.event_dispatcher"/>
     </service>
     <service id="debug.security.voter.security.access.expression_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
@@ -6096,7 +6170,7 @@
     <service id="debug.security.access.decision_manager.inner" class="Symfony\Component\Security\Core\Authorization\AccessDecisionManager" public="false">
       <argument type="iterator">
         <argument type="service" id="debug.security.voter.security.access.authenticated_voter"/>
-        <argument type="service" id="debug.security.voter.security.access.simple_role_voter"/>
+        <argument type="service" id="debug.security.voter.security.access.role_hierarchy_voter"/>
         <argument type="service" id="debug.security.voter.security.access.expression_voter"/>
       </argument>
       <argument>affirmative</argument>
@@ -6136,12 +6210,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.G68jiNB"/>
+      <argument type="service" id=".service_locator.piKFrSQ"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.G68jiNB"/>
+      <argument type="service" id=".service_locator.piKFrSQ"/>
     </service>
     <service id="fos_rest.serializer.form_error_handler.inner" class="JMS\Serializer\Handler\FormErrorHandler" public="false">
       <argument>null</argument>
@@ -6559,10 +6633,9 @@
     <service id="security.firewall" alias="debug.security.firewall" public="false"/>
     <service id="Symfony\Component\Security\Core\User\UserProviderInterface" alias="security.user.provider.concrete.app_user_provider"/>
     <service id="security.authentication.session_strategy.login" alias="security.authentication.session_strategy_noop"/>
-    <service id="security.user_checker.login" alias="security.user_checker" public="false"/>
+    <service id="security.user_checker.login" alias="app.user_checker" public="false"/>
     <service id="security.authentication.session_strategy.api" alias="security.authentication.session_strategy_noop"/>
     <service id="security.user_checker.api" alias="security.user_checker" public="false"/>
-    <service id="Symfony\Component\Security\Core\User\UserCheckerInterface" alias="security.user_checker" public="false"/>
     <service id="Doctrine\DBAL\Driver\Connection" alias="doctrine.dbal.default_connection" public="false"/>
     <service id="Doctrine\DBAL\Connection" alias="doctrine.dbal.default_connection" public="false"/>
     <service id="Doctrine\Common\Persistence\ManagerRegistry" alias="doctrine" public="false"/>
@@ -6634,7 +6707,7 @@
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.G68jiNB"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.piKFrSQ"/>
     <service id="fos_rest.serializer" alias="fos_rest.serializer.jms"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>

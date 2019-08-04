@@ -16,6 +16,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Entity\Compte;
 
 class SecurityController extends AbstractFOSRestController
 {
@@ -46,6 +47,7 @@ class SecurityController extends AbstractFOSRestController
         $form->submit($data);
         
        /* Fin traitement formulaire et envoie des données */
+        
         if($form->isSubmitted() && $form->isValid()){
             
            /* Début controle de saissie des profils*/
@@ -62,11 +64,11 @@ class SecurityController extends AbstractFOSRestController
             $libelle=$profil->getLibelle();
             $roles=['ROLE_'.$libelle];
 
-            if($roles == $roleSupAdmi   && $roleUserConnecte != $roleSupAdmi   ||
-            $roles == $roleCaissier  && $roleUserConnecte != $roleSupAdmi   ||
-            $roles == $roleAdmiPrinc && $roleUserConnecte != $roleSupAdmi   ||
-            $roles == $roleAdmi      && $roleUserConnecte != $roleAdmiPrinc ||
-            $roles == $utilisateur   && $roleUserConnecte != $roleAdmiPrinc
+            if($roles == $roleSupAdmi && $roleUserConnecte != $roleSupAdmi   ||
+            $roles == $roleCaissier   && $roleUserConnecte != $roleSupAdmi   ||
+            $roles == $roleAdmiPrinc  && $roleUserConnecte != $roleSupAdmi   ||
+            $roles == $roleAdmi       && $roleUserConnecte != $roleAdmiPrinc && $roleUserConnecte != $roleAdmi
+
             ){//Vérifier que son profil lui permet de l'ajouter
                  throw new HttpException(403,'Votre profil ne vous permet pas de créer ce type d\'utilisateur');
             }
@@ -124,6 +126,9 @@ class SecurityController extends AbstractFOSRestController
             $manager->flush();
            /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
             return $this->handleView($this->view(['status'=>'Enregistrer'],Response::HTTP_CREATED));
+        }
+        if ( $profil==5 && $data['compte'] && ! $user->getCompte() instanceof Compte ) {//si on ajout un utilisateur et que le compte qu on veut lui assigné n'existe pas
+            throw new HttpException(404,'Ce compte n\'existe pas !');
         }
         return $this->handleView($this->view($validator->validate($form)));
     }

@@ -21,12 +21,25 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EntrepriseController extends AbstractFOSRestController
 {
+    private $actif;
+    private $statut;
+    private $message;
+    public function __construct(){
+        $this->actif='Actif';
+        $this->statut='status';
+        $this->message='message';
+    }
+    
     /**
-     * @Route("/entreprises/liste", name="entreprises")
-     * @Route("/entreprise/{id}", name="entreprise")
+     * @Route("/entreprises/liste", name="entreprises", methods={"GET"})
+     * @Route("/entreprise/{id}", name="entreprise", methods={"GET"})
      */
-    public function lister(EntrepriseRepository $repo, SerializerInterface $serializer,Entreprise $entreprise=null)
+    public function lister(EntrepriseRepository $repo, SerializerInterface $serializer,Entreprise $entreprise=null,$id=null)
     {
+        
+        if($id && !$entreprise instanceof Entreprise) {
+            throw new HttpException(404,'Ce partenaire n\'existe pas !');
+        }
         if(!$entreprise){
             $entreprise=$repo->findAll();
         }
@@ -43,26 +56,26 @@ class EntrepriseController extends AbstractFOSRestController
         $data=json_decode($request->getContent(),true);
         $form->submit($data);
         if($form->isSubmitted() && $form->isValid()){
-            $entreprise->setStatus('Actif');
+            $entreprise->setStatus($this->actif);
+            
             $compte=new Compte();
-            $manager->persist($entreprise);
-            $manager->flush();
             $compte->setNumeroCompte(date('y').date('m').' '.date('d').date('H').' '.date('i').date('s'))
-                   ->setEntreprise($entreprise);            
+                   ->setEntreprise($entreprise);
+            $manager->persist($entreprise);            
             $manager->persist($compte);
             $manager->flush();
-            $message = [
-               'status' => 201,
-               'message' => 'Le partenaire '.$entreprise->getRaisonSociale().' a bien été ajouté !! ',
+            $afficher = [
+               $this->statut => 201,
+               $this->message => 'Le partenaire '.$entreprise->getRaisonSociale().' a bien été ajouté !! ',
                'Compte' =>'Le compte numéro '.$compte->getNumeroCompte().' lui a été assigné'
            ];
-            return $this->handleView($this->view($message,Response::HTTP_CREATED));
+            return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
         }
         return $this->handleView($this->view($validator->validate($form)));
     }
 
     /**
-    * @Route("/nouveau/depot")
+    * @Route("/nouveau/depot", methods={"POST"})
     */
     public function depot (Request $request, ValidatorInterface $validator, UserInterface $Userconnecte,CompteRepository $repo, ObjectManager $manager)
     {
@@ -87,13 +100,39 @@ class EntrepriseController extends AbstractFOSRestController
            $manager->persist($compte);
            $manager->persist($depot);
            $manager->flush();
-           $message = [
-               'status' => 201,
+           $afficher = [
+               $this->statut => 201,
                'message' => 'Le depot a bien été effectué dans le compte '.$compte->getNumeroCompte()
            ];
-           return $this->handleView($this->view($message,Response::HTTP_CREATED));
+           return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
 
         }
         return $this->handleView($this->view($validator->validate($form)));
+    }
+
+    /**
+    * @Route("/bloque/entreprises/{id}", name="bloque_entreprise", methods={"GET"})
+    */ 
+    public function bloque(ObjectManager $manager,Entreprise $entreprise=null )
+    {
+        if(!$entreprise){
+            throw new HttpException(404,'Ce partenaire n\'existe pas !');
+        }
+        elseif($entreprise->getRaisonSociale()=='SA Transfert'){
+            throw new HttpException(409,'Impossible de bloquer SA Transfert !');
+        }
+        elseif($entreprise->getStatus() == $this->actif){
+            $entreprise->setStatus("bloqué");
+            $texte= 'Partenaire bloqué';
+            
+        }
+        else{
+            $entreprise->setStatus($this->actif);
+            $texte= 'Partenaire débloqué';
+        }
+        $manager->persist($entreprise);
+        $manager->flush();
+        $afficher = [$this->statut => 200,$this->message => $texte];
+        return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
 }

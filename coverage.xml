@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Project Test Suite" tests="1" assertions="1" errors="0" failures="1" skipped="0" time="1.719855">
+    <testsuite name="App\Tests\SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" tests="1" assertions="1" errors="0" failures="1" skipped="0" time="1.719855">
+      <testcase name="testInscriptionUtilisateurok1" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="9" assertions="1" time="1.719855">
+        <failure type="PHPUnit\Framework\ExpectationFailedException">App\Tests\SecurityControllerTest::testInscriptionUtilisateurok1
+Failed asserting that 403 is identical to 201.
+
+/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:29
+</failure>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>
