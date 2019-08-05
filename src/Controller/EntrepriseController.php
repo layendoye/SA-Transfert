@@ -21,6 +21,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Repository\UtilisateurRepository;
 
 class EntrepriseController extends AbstractFOSRestController
 {
@@ -189,7 +190,7 @@ class EntrepriseController extends AbstractFOSRestController
     /**
     * @Route("/nouveau/compte/{id}", name="nouveau_compte", methods={"GET"})
     */ 
-    public function addCompte(ObjectManager $manager, Entreprise $entreprise){
+    public function addCompte(ObjectManager $manager, Entreprise $entreprise){//securiser la route
         $compte =new Compte();
         if(!$entreprise){
             throw new HttpException(404,'Ce partenaire n\'existe pas !');
@@ -207,6 +208,36 @@ class EntrepriseController extends AbstractFOSRestController
             $this->message => 'Un nouveau compte est créé pour l\'entreprise '.$entreprise->getRaisonSociale(),
             'Numéro de compte '=> $compte->getNumeroCompte()
         ];
+        return $this->handleView($this->view($afficher,Response::HTTP_OK));
+    }
+    /**
+     * @Route("/changer/compte" ,name="change_compte")
+     */
+    public function changeCompte(Request $request,ObjectManager $manager, UserInterface $Userconnecte,UtilisateurRepository $repoUser,CompteRepository $repoCompte)
+    //securiser la route{
+        $data=json_decode($request->getContent());
+        if(!$user=$repoUser->find($data->utilisateur)){
+            throw new HttpException(404,'Cet utilisateur n\'existe pas !');
+        }
+        elseif(!$user->getCompte()){//vu qu en creant un user simple on lui affecte un compte, s'il n'en a pas donc c est pas un user
+            throw new HttpException(403,'Impossible d\'affecter un compte à et utilisateur !');
+        }
+        elseif($user->getCompte()->getEntreprise()!=$Userconnecte->getEntreprise()){
+            throw new HttpException(404,'Cet utilisateur n\'appartient pas à votre entreprise !');
+        }
+        if(!$compte=$repoCompte->find($data->compte)){
+            throw new HttpException(404,'Ce compte n\'existe pas !');
+        }
+        elseif($compte->getEntreprise()!=$Userconnecte->getEntreprise()){
+            throw new HttpException(404,'Ce compte n\'appartient pas à votre entreprise !');
+        }
+        $user->setCompte($compte);
+        $manager->persist($user);
+        $manager->flush();
+        $afficher = [
+               $this->statut => 201,
+               'message' => 'Le compte de l\'utilisateur a été modifié !!'
+           ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
 }

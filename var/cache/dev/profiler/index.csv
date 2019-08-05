@@ -510,3 +510,12 @@ affab1,127.0.0.1,POST,http://127.0.0.1:8000/partenaires/add,1565034031,,201
 be2af1,127.0.0.1,GET,http://127.0.0.1:8000/bloque/entreprises/1,1565038583,,404
 eb69d7,127.0.0.1,GET,http://127.0.0.1:8000/bloque/entreprises/1,1565038644,,403
 1f1fac,127.0.0.1,POST,http://127.0.0.1:8000/partenaires/add,1565038990,,500
+e86a3d,127.0.0.1,POST,http://127.0.0.1:8000/connexion,1565042291,,200
+332802,127.0.0.1,POST,http://127.0.0.1:8000/connexion,1565042730,,200
+ff7ecb,127.0.0.1,POST,http://127.0.0.1:8000/inscription,1565042770,,403
+556641,127.0.0.1,POST,http://127.0.0.1:8000/inscription,1565042824,,201
+0cde9a,127.0.0.1,GET,http://127.0.0.1:8000/nouveau/compte/8,1565042848,,200
+6cabf3,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565042956,,500
+42d9cf,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565042985,,404
+a52515,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565043024,,200
+8cb221,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565043133,,403

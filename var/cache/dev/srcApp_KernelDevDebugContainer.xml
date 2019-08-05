@@ -5901,6 +5901,15 @@
         <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
       </argument>
     </service>
+    <service id=".service_locator.rfN.IFF" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="Userconnecte" type="service" id=".errored..service_locator.rfN.IFF.Symfony\Component\Security\Core\User\UserInterface"/>
+        <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+        <argument key="repoCompte" type="service" id="App\Repository\CompteRepository"/>
+        <argument key="repoUser" type="service" id="App\Repository\UtilisateurRepository"/>
+      </argument>
+    </service>
     <service id=".service_locator.l2alLEu" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5917,12 +5926,13 @@
         <argument key="validator" type="service" id="debug.validator"/>
       </argument>
     </service>
-    <service id=".service_locator.5zcue4K" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.EVsUBes" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\EntrepriseController::add" type="service" id=".service_locator.NpJNP1H"/>
         <argument key="App\Controller\EntrepriseController::addCompte" type="service" id=".service_locator.pV4HNdF"/>
         <argument key="App\Controller\EntrepriseController::bloque" type="service" id=".service_locator.ut29XRA"/>
+        <argument key="App\Controller\EntrepriseController::changeCompte" type="service" id=".service_locator.rfN.IFF"/>
         <argument key="App\Controller\EntrepriseController::depot" type="service" id=".service_locator.vD8Uu7b"/>
         <argument key="App\Controller\EntrepriseController::lister" type="service" id=".service_locator.6tT8guL"/>
         <argument key="App\Controller\EntrepriseController::setViewHandler" type="service" id=".service_locator.l2alLEu"/>
@@ -5931,6 +5941,7 @@
         <argument key="App\Controller\EntrepriseController:add" type="service" id=".service_locator.NpJNP1H"/>
         <argument key="App\Controller\EntrepriseController:addCompte" type="service" id=".service_locator.pV4HNdF"/>
         <argument key="App\Controller\EntrepriseController:bloque" type="service" id=".service_locator.ut29XRA"/>
+        <argument key="App\Controller\EntrepriseController:changeCompte" type="service" id=".service_locator.rfN.IFF"/>
         <argument key="App\Controller\EntrepriseController:depot" type="service" id=".service_locator.vD8Uu7b"/>
         <argument key="App\Controller\EntrepriseController:lister" type="service" id=".service_locator.6tT8guL"/>
         <argument key="App\Controller\EntrepriseController:setViewHandler" type="service" id=".service_locator.l2alLEu"/>
@@ -6220,12 +6231,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.5zcue4K"/>
+      <argument type="service" id=".service_locator.EVsUBes"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.5zcue4K"/>
+      <argument type="service" id=".service_locator.EVsUBes"/>
     </service>
     <service id="fos_rest.serializer.form_error_handler.inner" class="JMS\Serializer\Handler\FormErrorHandler" public="false">
       <argument>null</argument>
@@ -6268,6 +6279,7 @@
     </service>
     <service id=".errored..service_locator.vD8Uu7b.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
     <service id=".errored..service_locator.pV4HNdF.App\Entity\Entreprise" class="App\Entity\Entreprise"/>
+    <service id=".errored..service_locator.rfN.IFF.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
     <service id=".errored..service_locator.5FGfkQK.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <argument type="service" id=".service_locator.SrZR6To"/>
@@ -6718,7 +6730,7 @@
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.5zcue4K"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.EVsUBes"/>
     <service id="fos_rest.serializer" alias="fos_rest.serializer.jms"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>

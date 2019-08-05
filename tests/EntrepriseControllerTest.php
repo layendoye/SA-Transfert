@@ -126,7 +126,6 @@ class EntrepriseControllerTest extends WebTestCase
         var_dump($rep);
         $this->assertSame(404,$client->getResponse()->getStatusCode());
     }
-    
     public function testInscriptionCaissier()
     {//ajout caissier
         $client = static::createClient([],[ 
