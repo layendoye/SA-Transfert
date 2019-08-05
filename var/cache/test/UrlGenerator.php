@@ -8,6 +8,7 @@ return [
     'add_entreprise' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::add'], [], [['text', '/partenaires/add']], [], []],
     'app_entreprise_depot' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::depot'], [], [['text', '/nouveau/depot']], [], []],
     'bloque_entreprise' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::bloque'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/bloque/entreprises']], [], []],
+    'nouveau_compte' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::addCompte'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/nouveau/compte']], [], []],
     'inscription' => [[], ['_controller' => 'App\\Controller\\SecurityController::inscriptionUtilisateur'], [], [['text', '/inscription']], [], []],
     'add_adminPrinc' => [['id'], ['_controller' => 'App\\Controller\\SecurityController::inscriptionUtilisateur'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/add/admin-partenaire']], [], []],
     'connexion' => [[], ['_controller' => 'App\\Controller\\SecurityController::login'], [], [['text', '/connexion']], [], []],

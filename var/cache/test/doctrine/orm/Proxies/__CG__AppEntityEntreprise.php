@@ -64,10 +64,10 @@ class Entreprise extends \App\Entity\Entreprise implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'raisonSociale', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'utilisateurs', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'soldeGlobal'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'raisonSociale', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'utilisateurs', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'soldeGlobal', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'telephoneEntreprise', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'emailEntreprise'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'raisonSociale', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'utilisateurs', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'soldeGlobal'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'raisonSociale', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'utilisateurs', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'soldeGlobal', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'telephoneEntreprise', '' . "\0" . 'App\\Entity\\Entreprise' . "\0" . 'emailEntreprise'];
     }
 
     /**
@@ -351,6 +351,50 @@ class Entreprise extends \App\Entity\Entreprise implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeUtilisateur', [$utilisateur]);
 
         return parent::removeUtilisateur($utilisateur);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTelephoneEntreprise(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTelephoneEntreprise', []);
+
+        return parent::getTelephoneEntreprise();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTelephoneEntreprise(?string $telephoneEntreprise): \App\Entity\Entreprise
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTelephoneEntreprise', [$telephoneEntreprise]);
+
+        return parent::setTelephoneEntreprise($telephoneEntreprise);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEmailEntreprise(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmailEntreprise', []);
+
+        return parent::getEmailEntreprise();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setEmailEntreprise(?string $emailEntreprise): \App\Entity\Entreprise
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmailEntreprise', [$emailEntreprise]);
+
+        return parent::setEmailEntreprise($emailEntreprise);
     }
 
 }

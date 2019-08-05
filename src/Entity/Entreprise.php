@@ -73,11 +73,17 @@ class Entreprise
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Length(min="2", max="255" ,minMessage="Le numero de téléphone est trop court !!")
+     * @Groups({"list-entreprise"})
      */
     private $telephoneEntreprise;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\Email(message="Veuillez mettre un email valide !!")
+     * @Groups({"list-entreprise"})
      */
     private $emailEntreprise; 
 

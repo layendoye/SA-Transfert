@@ -65,7 +65,9 @@ class Utilisateur implements UserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * 
      */
     private $telephone;
 

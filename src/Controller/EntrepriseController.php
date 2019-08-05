@@ -27,10 +27,12 @@ class EntrepriseController extends AbstractFOSRestController
     private $actif;
     private $statut;
     private $message;
+    private $saTransfert;
     public function __construct(){
         $this->actif='Actif';
         $this->statut='status';
         $this->message='message';
+        $this->saTransfert='SA Transfert';
     }
     
     /**
@@ -92,7 +94,6 @@ class EntrepriseController extends AbstractFOSRestController
         $manager->persist($entreprise);            
         $manager->persist($compte);
         
-        
         $user->setRoles(['ROLE_admin-Principal'])
             ->setEntreprise($entreprise)
             ->setStatus($this->actif);
@@ -119,9 +120,6 @@ class EntrepriseController extends AbstractFOSRestController
            'Compte partenaire' =>'Le compte numéro '.$compte->getNumeroCompte().' lui a été assigné'
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
-
-        
-        
     }
 
     /**
@@ -135,7 +133,7 @@ class EntrepriseController extends AbstractFOSRestController
         if($compte=$repo->findOneBy(['numeroCompte'=>$data['compte']]))
         {
             $data['compte']=$compte->getId();//on lui donne directement l'id
-            if($compte->getEntreprise()->getRaisonSociale()=='SA Transfert'){
+            if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
                 throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
             }
         }
@@ -171,7 +169,7 @@ class EntrepriseController extends AbstractFOSRestController
         if(!$entreprise){
             throw new HttpException(404,'Ce partenaire n\'existe pas !');
         }
-        elseif($entreprise->getRaisonSociale()=='SA Transfert'){
+        elseif($entreprise->getRaisonSociale()==$this->saTransfert){
             throw new HttpException(403,'Impossible de bloquer SA Transfert !');
         }
         elseif($entreprise->getStatus() == $this->actif){
@@ -189,14 +187,14 @@ class EntrepriseController extends AbstractFOSRestController
     }
 
     /**
-    * @Route("/nouveau/compte/{id}", name="bloque_entreprise", methods={"GET"})
+    * @Route("/nouveau/compte/{id}", name="nouveau_compte", methods={"GET"})
     */ 
     public function addCompte(ObjectManager $manager, Entreprise $entreprise){
         $compte =new Compte();
         if(!$entreprise){
             throw new HttpException(404,'Ce partenaire n\'existe pas !');
         }
-        elseif($entreprise->getRaisonSociale()=='SA Transfert'){
+        elseif($entreprise->getRaisonSociale()==$this->saTransfert){
             throw new HttpException(403,'Impossible de créer plusieurs compte pour SA Transfert!');
         }
         $compte->setNumeroCompte(date('y').date('m').' '.date('d').date('H').' '.date('i').date('s'))

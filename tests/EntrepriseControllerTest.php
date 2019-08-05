@@ -26,12 +26,21 @@ class EntrepriseControllerTest extends WebTestCase
                 'PHP_AUTH_USER' => 'Abdou' ,
                 'PHP_AUTH_PW'   => 'azerty'
             ]);
-        $ninea=rand(100000,1500000);
+        $random=rand(100000,1500000);
         $client->request('POST', '/partenaires/add',[],[],['CONTENT_TYPE'=>"application/json"],
             '{
-                	"raisonSociale":"testPartenaire",
-                    "ninea": "'.$ninea.'",
-                    "adresse": "yoff"
+                "raisonSociale":"testPart2",
+                "ninea": "'.$random.'",
+                "adresse": "yoff",
+                "emailEntreprise":"entr2@gmail.com",
+                "telephoneEntreprise": "'.$random.'",
+                "nom":"adminPTest2",
+                "username": "adminPTest2",
+                "password": "azerty",
+                "confirmPassword": "azerty",
+                "email":"adminPTest2@gmail.com",
+                "telephone": "'.$random.'",
+                "nci":"'.$random.'"
             }'
         );
 
@@ -40,23 +49,60 @@ class EntrepriseControllerTest extends WebTestCase
         $this->assertSame(201,$client->getResponse()->getStatusCode());
     }
     public function testajoutPartenaireko1()
-    {//ajouter un partenaire
+    {//ajouter un partenaire erreur raisonSocialee
         $client = static::createClient([],[ 
                 'PHP_AUTH_USER' => 'Abdou' ,
                 'PHP_AUTH_PW'   => 'azerty'
             ]);
-        $ninea=rand(100000,1500000);
+        $random=rand(100000,1500000);
         $client->request('POST', '/partenaires/add',[],[],['CONTENT_TYPE'=>"application/json"],
             '{
                 	"raisonSocialee":"testPartenaire",
-                    "ninea": "'.$ninea.'",
-                    "adresse": "yoff"
+                    "ninea": "'.$random.'",
+                    "adresse": "yoff",
+                    "emailEntreprise":"entr2@gmail.com",
+                    "telephoneEntreprise": "'.$random.'",
+                    "nom":"adminPTest2",
+                    "username": "adminPTest2",
+                    "password": "azerty",
+                    "confirmPassword": "azerty",
+                    "email":"adminPTest2@gmail.com",
+                    "telephone": "'.$random.'",
+                    "nci":"'.$random.'"
             }'
         );
 
         $rep=$client->getResponse();
         var_dump($rep);
-        $this->assertSame(200,$client->getResponse()->getStatusCode());
+        $this->assertSame(500,$client->getResponse()->getStatusCode());
+    }
+    public function testajoutPartenaireko1_2()
+    {//ajouter un partenaire erreur usernamee
+        $client = static::createClient([],[ 
+                'PHP_AUTH_USER' => 'Abdou' ,
+                'PHP_AUTH_PW'   => 'azerty'
+            ]);
+        $random=rand(100000,1500000);
+        $client->request('POST', '/partenaires/add',[],[],['CONTENT_TYPE'=>"application/json"],
+            '{
+                	"raisonSociale":"testPartenaire",
+                    "ninea": "'.$random.'",
+                    "adresse": "yoff",
+                    "emailEntreprise":"entr2@gmail.com",
+                    "telephoneEntreprise": "'.$random.'",
+                    "nom":"adminPTest2",
+                    "usernamee": "adminPTest2",
+                    "password": "azerty",
+                    "confirmPassword": "azerty",
+                    "email":"adminPTest2@gmail.com",
+                    "telephone": "'.$random.'",
+                    "nci":"'.$random.'"
+            }'
+        );
+
+        $rep=$client->getResponse();
+        var_dump($rep);
+        $this->assertSame(500,$client->getResponse()->getStatusCode());
     }
     public function testlisterok2()
     {//lister une
@@ -112,7 +158,7 @@ class EntrepriseControllerTest extends WebTestCase
             ]);
         $client->request('POST', '/nouveau/depot',[],[],['CONTENT_TYPE'=>"application/json"],
             '{
-                "compte":"1908 0417 0422",
+                "compte":"1908 0520 4722",
 	            "montant":5000000
             }'
         );
@@ -163,7 +209,7 @@ class EntrepriseControllerTest extends WebTestCase
             ]);
         $client->request('POST', '/nouveau/depot',[],[],['CONTENT_TYPE'=>"application/json"],
             '{
-                "compte":"1908 0417 0422",
+                "compte":"1908 0520 4722",
 	            "montant":5000
             }'
         );

@@ -504,3 +504,9 @@ ca67f2,127.0.0.1,POST,http://127.0.0.1:8000/partenaires/add,1565033772,,200
 1fbe45,127.0.0.1,POST,http://127.0.0.1:8000/partenaires/add,1565033848,,204
 affab1,127.0.0.1,POST,http://127.0.0.1:8000/partenaires/add,1565034031,,201
 6f18c4,127.0.0.1,POST,http://127.0.0.1:8000/partenaires/add,1565034220,,201
+47df6d,127.0.0.1,POST,http://127.0.0.1:8000/connexion,1565038022,,200
+877a70,127.0.0.1,POST,http://127.0.0.1:8000/partenaires/add,1565038043,,201
+7e9128,127.0.0.1,GET,http://127.0.0.1:8000/bloque/entreprises/1,1565038503,,404
+be2af1,127.0.0.1,GET,http://127.0.0.1:8000/bloque/entreprises/1,1565038583,,404
+eb69d7,127.0.0.1,GET,http://127.0.0.1:8000/bloque/entreprises/1,1565038644,,403
+1f1fac,127.0.0.1,POST,http://127.0.0.1:8000/partenaires/add,1565038990,,500

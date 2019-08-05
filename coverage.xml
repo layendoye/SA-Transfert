@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Project Test Suite" tests="27" assertions="27" errors="0" failures="0" skipped="0" time="30.728934">
-    <testsuite name="App\Tests\EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" tests="14" assertions="14" errors="0" failures="0" skipped="0" time="18.634406">
-      <testcase name="testlisterok1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="11" assertions="1" time="5.684521">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:19:
-class Symfony\Component\HttpFoundation\Response#3177 (6) {
+  <testsuite name="Project Test Suite" tests="27" assertions="27" errors="0" failures="0" skipped="0" time="31.234530">
+    <testsuite name="App\Tests\EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" tests="15" assertions="15" errors="0" failures="0" skipped="0" time="19.488389">
+      <testcase name="testlisterok1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="11" assertions="1" time="5.862896">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:19:
+class Symfony\Component\HttpFoundation\Response#4783 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#3183 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#4774 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -58,7 +58,7 @@ class Symfony\Component\HttpFoundation\Response#3177 (6) {
     }
   }
   protected $content =&gt;
-  string(5237) "[{"raisonSociale":"SA Transfert","ninea":"452607021","adresse":"Mermoz","status":"Actif","comptes":[{"numeroCompte":"1910 1409 0043","solde":null}],"soldeGlobal":0},{"raisonSociale":"testPart","ninea":"691281","adresse":"yoff","status":"Actif","comptes":[{"numeroCompte":"1908 0417 0422","solde":60000000}],"soldeGlobal":60000000},{"raisonSociale":"testPartenaire","ninea":"252186","adresse":"yoff","status":"Actif","comptes":[{"numeroCompte":"1908 0417 0754","solde":null}],"soldeGlobal":0},{"raisonSociale":"te"...
+  string(1255) "[{"raisonSociale":"SA Transfert","ninea":"611404328","adresse":"Mermoz","status":"Actif","comptes":[{"numeroCompte":"1910 1409 0043","solde":null}],"soldeGlobal":0,"telephoneEntreprise":null,"emailEntreprise":null},{"raisonSociale":"AZE","ninea":"010015885","adresse":"yoff","status":"Actif","comptes":[{"numeroCompte":"1908 0520 4722","solde":10000000}],"soldeGlobal":10000000,"telephoneEntreprise":"338201358","emailEntreprise":"aze@gmail.com"},{"raisonSociale":"testPart2","ninea":"925963","adresse":"yoff","s"...
   protected $version =&gt;
   string(3) "1.1"
   protected $statusCode =&gt;
@@ -70,11 +70,11 @@ class Symfony\Component\HttpFoundation\Response#3177 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testajoutPartenaireok" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="23" assertions="1" time="2.563249">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:39:
-class Symfony\Component\HttpFoundation\Response#4087 (6) {
+      <testcase name="testajoutPartenaireok" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="23" assertions="1" time="1.898535">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:48:
+class Symfony\Component\HttpFoundation\Response#5480 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#4072 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#5549 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -126,7 +126,7 @@ class Symfony\Component\HttpFoundation\Response#4087 (6) {
     }
   }
   protected $content =&gt;
-  string(173) "{"status":201,"message":"Le partenaire testPartenaire a bien \u00e9t\u00e9 ajout\u00e9 !! ","Compte":"Le compte num\u00e9ro 1908 0418 4042 lui a \u00e9t\u00e9 assign\u00e9"}"
+  string(211) "{"status":201,"message":"Le partenaire testPart2 ainsi que son admin principal ont bien \u00e9t\u00e9 ajout\u00e9 !! ","Compte partenaire":"Le compte num\u00e9ro 1908 0521 0531 lui a \u00e9t\u00e9 assign\u00e9"}"
   protected $version =&gt;
   string(3) "1.1"
   protected $statusCode =&gt;
@@ -138,11 +138,17 @@ class Symfony\Component\HttpFoundation\Response#4087 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testajoutPartenaireko1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="42" assertions="1" time="1.157850">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:58:
-class Symfony\Component\HttpFoundation\Response#5149 (6) {
+      <testcase name="testajoutPartenaireko1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="51" assertions="1" time="0.841448">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:76:
+class Symfony\Component\HttpFoundation\JsonResponse#1120 (9) {
+  protected $data =&gt;
+  string(43) "{"Erreur":"Undefined index: raisonSociale"}"
+  protected $callback =&gt;
+  NULL
+  protected $encodingOptions =&gt;
+  int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#5144 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#1190 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -194,23 +200,97 @@ class Symfony\Component\HttpFoundation\Response#5149 (6) {
     }
   }
   protected $content =&gt;
-  string(164) "[{"property_path":"data.raisonSociale","message":"Le champ ne doit pas \u00eatre vide"},{"property_path":"","message":"This form should not contain extra fields."}]"
+  string(43) "{"Erreur":"Undefined index: raisonSociale"}"
   protected $version =&gt;
   string(3) "1.1"
   protected $statusCode =&gt;
-  int(200)
+  int(500)
   protected $statusText =&gt;
-  string(2) "OK"
+  string(21) "Internal Server Error"
   protected $charset =&gt;
   string(5) "UTF-8"
 }
 </system-out>
       </testcase>
-      <testcase name="testlisterok2" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="61" assertions="1" time="0.880445">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:69:
-class Symfony\Component\HttpFoundation\Response#3631 (6) {
+      <testcase name="testajoutPartenaireko1_2" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="79" assertions="1" time="1.091804">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:104:
+class Symfony\Component\HttpFoundation\JsonResponse#86 (9) {
+  protected $data =&gt;
+  string(120) "{"Erreur":"Expected argument of type \u0022string\u0022, \u0022NULL\u0022 given at property path \u0022username\u0022."}"
+  protected $callback =&gt;
+  NULL
+  protected $encodingOptions =&gt;
+  int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#3653 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#87 (5) {
+    protected $computedCacheControl =&gt;
+    array(2) {
+      'no-cache' =&gt;
+      bool(true)
+      'private' =&gt;
+      bool(true)
+    }
+    protected $cookies =&gt;
+    array(0) {
+    }
+    protected $headerNames =&gt;
+    array(5) {
+      'cache-control' =&gt;
+      string(13) "Cache-Control"
+      'date' =&gt;
+      string(4) "Date"
+      'content-type' =&gt;
+      string(12) "Content-Type"
+      'link' =&gt;
+      string(4) "Link"
+      'x-robots-tag' =&gt;
+      string(12) "X-Robots-Tag"
+    }
+    protected $headers =&gt;
+    array(5) {
+      'cache-control' =&gt;
+      array(1) {
+        ...
+      }
+      'date' =&gt;
+      array(1) {
+        ...
+      }
+      'content-type' =&gt;
+      array(1) {
+        ...
+      }
+      'link' =&gt;
+      array(1) {
+        ...
+      }
+      'x-robots-tag' =&gt;
+      array(1) {
+        ...
+      }
+    }
+    protected $cacheControl =&gt;
+    array(0) {
+    }
+  }
+  protected $content =&gt;
+  string(120) "{"Erreur":"Expected argument of type \u0022string\u0022, \u0022NULL\u0022 given at property path \u0022username\u0022."}"
+  protected $version =&gt;
+  string(3) "1.1"
+  protected $statusCode =&gt;
+  int(500)
+  protected $statusText =&gt;
+  string(21) "Internal Server Error"
+  protected $charset =&gt;
+  string(5) "UTF-8"
+}
+</system-out>
+      </testcase>
+      <testcase name="testlisterok2" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="107" assertions="1" time="0.845233">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:115:
+class Symfony\Component\HttpFoundation\Response#1513 (6) {
+  public $headers =&gt;
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#1511 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -262,7 +342,7 @@ class Symfony\Component\HttpFoundation\Response#3631 (6) {
     }
   }
   protected $content =&gt;
-  string(165) "{"raisonSociale":"testPart","ninea":"691281","adresse":"yoff","status":"Actif","comptes":[{"numeroCompte":"1908 0417 0422","solde":60000000}],"soldeGlobal":60000000}"
+  string(231) "{"raisonSociale":"AZE","ninea":"010015885","adresse":"yoff","status":"Actif","comptes":[{"numeroCompte":"1908 0520 4722","solde":10000000}],"soldeGlobal":10000000,"telephoneEntreprise":"338201358","emailEntreprise":"aze@gmail.com"}"
   protected $version =&gt;
   string(3) "1.1"
   protected $statusCode =&gt;
@@ -274,9 +354,9 @@ class Symfony\Component\HttpFoundation\Response#3631 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testlisterok3" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="72" assertions="1" time="0.825261">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:80:
-class Symfony\Component\HttpFoundation\JsonResponse#5085 (9) {
+      <testcase name="testlisterok3" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="118" assertions="1" time="0.819410">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:126:
+class Symfony\Component\HttpFoundation\JsonResponse#2669 (9) {
   protected $data =&gt;
   string(59) "{"status":404,"Erreur":"Ce partenaire n\u0027existe pas !"}"
   protected $callback =&gt;
@@ -284,7 +364,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#5085 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#6998 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#5217 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -348,11 +428,11 @@ class Symfony\Component\HttpFoundation\JsonResponse#5085 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testInscriptionCaissier" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="84" assertions="1" time="1.391701">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:104:
-class Symfony\Component\HttpFoundation\Response#4089 (6) {
+      <testcase name="testInscriptionCaissier" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="130" assertions="1" time="1.433918">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:150:
+class Symfony\Component\HttpFoundation\Response#1773 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#1609 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#1771 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -416,11 +496,11 @@ class Symfony\Component\HttpFoundation\Response#4089 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testDepotok" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="107" assertions="1" time="0.792477">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:121:
-class Symfony\Component\HttpFoundation\Response#732 (6) {
+      <testcase name="testDepotok" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="153" assertions="1" time="1.319965">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:167:
+class Symfony\Component\HttpFoundation\Response#396 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#733 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#398 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -472,7 +552,7 @@ class Symfony\Component\HttpFoundation\Response#732 (6) {
     }
   }
   protected $content =&gt;
-  string(100) "{"status":201,"message":"Le depot a bien \u00e9t\u00e9 effectu\u00e9 dans le compte 1908 0417 0422"}"
+  string(100) "{"status":201,"message":"Le depot a bien \u00e9t\u00e9 effectu\u00e9 dans le compte 1908 0520 4722"}"
   protected $version =&gt;
   string(3) "1.1"
   protected $statusCode =&gt;
@@ -484,9 +564,9 @@ class Symfony\Component\HttpFoundation\Response#732 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testDepotko1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="124" assertions="1" time="0.493582">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:138:
-class Symfony\Component\HttpFoundation\JsonResponse#207 (9) {
+      <testcase name="testDepotko1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="170" assertions="1" time="0.547463">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:184:
+class Symfony\Component\HttpFoundation\JsonResponse#4272 (9) {
   protected $data =&gt;
   string(88) "{"status":403,"Erreur":"On ne peut pas faire de depot dans le compte de SA Transfert !"}"
   protected $callback =&gt;
@@ -494,7 +574,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#207 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#208 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#4276 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -558,9 +638,9 @@ class Symfony\Component\HttpFoundation\JsonResponse#207 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testDepotko2" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="141" assertions="1" time="0.562750">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:155:
-class Symfony\Component\HttpFoundation\JsonResponse#5281 (9) {
+      <testcase name="testDepotko2" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="187" assertions="1" time="0.431750">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:201:
+class Symfony\Component\HttpFoundation\JsonResponse#2398 (9) {
   protected $data =&gt;
   string(65) "{"status":404,"Erreur":"Ce numero de compte n\u0027existe pas !"}"
   protected $callback =&gt;
@@ -568,7 +648,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#5281 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#5290 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#2399 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -632,11 +712,11 @@ class Symfony\Component\HttpFoundation\JsonResponse#5281 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testDepotko3" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="158" assertions="1" time="0.693620">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:171:
-class Symfony\Component\HttpFoundation\Response#2007 (6) {
+      <testcase name="testDepotko3" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="204" assertions="1" time="0.828413">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:217:
+class Symfony\Component\HttpFoundation\Response#786 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#3557 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#1549 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -700,11 +780,11 @@ class Symfony\Component\HttpFoundation\Response#2007 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testbloquerok1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="174" assertions="1" time="0.972539">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:182:
-class Symfony\Component\HttpFoundation\Response#6961 (6) {
+      <testcase name="testbloquerok1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="220" assertions="1" time="0.980986">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:228:
+class Symfony\Component\HttpFoundation\Response#44 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#6919 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#8790 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -768,11 +848,11 @@ class Symfony\Component\HttpFoundation\Response#6961 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testbloquerok2" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="185" assertions="1" time="0.958312">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:193:
-class Symfony\Component\HttpFoundation\Response#5217 (6) {
+      <testcase name="testbloquerok2" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="231" assertions="1" time="0.961620">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:239:
+class Symfony\Component\HttpFoundation\Response#1354 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#1425 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#2169 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -836,9 +916,9 @@ class Symfony\Component\HttpFoundation\Response#5217 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testbloquerko1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="196" assertions="1" time="0.828547">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:204:
-class Symfony\Component\HttpFoundation\JsonResponse#6430 (9) {
+      <testcase name="testbloquerko1" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="242" assertions="1" time="0.832149">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:250:
+class Symfony\Component\HttpFoundation\JsonResponse#1637 (9) {
   protected $data =&gt;
   string(59) "{"status":404,"Erreur":"Ce partenaire n\u0027existe pas !"}"
   protected $callback =&gt;
@@ -846,7 +926,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#6430 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#6429 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#824 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -910,9 +990,9 @@ class Symfony\Component\HttpFoundation\JsonResponse#6430 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testbloquerko2" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php" line="207" assertions="1" time="0.829552">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EntrepriseControllerTest.php:215:
-class Symfony\Component\HttpFoundation\JsonResponse#4910 (9) {
+      <testcase name="testbloquerko2" class="App\Tests\EntrepriseControllerTest" classname="App.Tests.EntrepriseControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php" line="253" assertions="1" time="0.792799">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EntrepriseControllerTest.php:261:
+class Symfony\Component\HttpFoundation\JsonResponse#3496 (9) {
   protected $data =&gt;
   string(62) "{"status":403,"Erreur":"Impossible de bloquer SA Transfert !"}"
   protected $callback =&gt;
@@ -920,7 +1000,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#4910 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#4249 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#3497 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -985,10 +1065,10 @@ class Symfony\Component\HttpFoundation\JsonResponse#4910 (9) {
 </system-out>
       </testcase>
     </testsuite>
-    <testsuite name="App\Tests\EventSubscriberTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EventSubscriberTest.php" tests="2" assertions="2" errors="0" failures="0" skipped="0" time="1.067458">
-      <testcase name="testeventSub1" class="App\Tests\EventSubscriberTest" classname="App.Tests.EventSubscriberTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EventSubscriberTest.php" line="9" assertions="1" time="0.127713">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EventSubscriberTest.php:17:
-class Symfony\Component\HttpFoundation\JsonResponse#4019 (9) {
+    <testsuite name="App\Tests\EventSubscriberTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EventSubscriberTest.php" tests="2" assertions="2" errors="0" failures="0" skipped="0" time="1.446075">
+      <testcase name="testeventSub1" class="App\Tests\EventSubscriberTest" classname="App.Tests.EventSubscriberTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EventSubscriberTest.php" line="9" assertions="1" time="0.266689">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EventSubscriberTest.php:17:
+class Symfony\Component\HttpFoundation\JsonResponse#3020 (9) {
   protected $data =&gt;
   string(55) "{"status":404,"message":"Resource non trouv\u00e9e !!"}"
   protected $callback =&gt;
@@ -996,7 +1076,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#4019 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#1984 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#3021 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1060,9 +1140,9 @@ class Symfony\Component\HttpFoundation\JsonResponse#4019 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testeventSub2" class="App\Tests\EventSubscriberTest" classname="App.Tests.EventSubscriberTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EventSubscriberTest.php" line="20" assertions="1" time="0.939745">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/EventSubscriberTest.php:39:
-class Symfony\Component\HttpFoundation\JsonResponse#5266 (9) {
+      <testcase name="testeventSub2" class="App\Tests\EventSubscriberTest" classname="App.Tests.EventSubscriberTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EventSubscriberTest.php" line="20" assertions="1" time="1.179386">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/EventSubscriberTest.php:39:
+class Symfony\Component\HttpFoundation\JsonResponse#3580 (9) {
   protected $data =&gt;
   string(36) "{"Erreur":"Undefined index: profil"}"
   protected $callback =&gt;
@@ -1070,7 +1150,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#5266 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#5267 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#541 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1135,12 +1215,12 @@ class Symfony\Component\HttpFoundation\JsonResponse#5266 (9) {
 </system-out>
       </testcase>
     </testsuite>
-    <testsuite name="App\Tests\SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" tests="11" assertions="11" errors="0" failures="0" skipped="0" time="11.027070">
-      <testcase name="testInscriptionUtilisateurok1" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="9" assertions="1" time="1.338327">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:29:
-class Symfony\Component\HttpFoundation\Response#1729 (6) {
+    <testsuite name="App\Tests\SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" tests="10" assertions="10" errors="0" failures="0" skipped="0" time="10.300066">
+      <testcase name="testInscriptionUtilisateurok1" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="9" assertions="1" time="1.283045">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:29:
+class Symfony\Component\HttpFoundation\Response#67 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#3152 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#586 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1204,9 +1284,9 @@ class Symfony\Component\HttpFoundation\Response#1729 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testInscriptionUtilisateurko1" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="33" assertions="1" time="1.095190">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:53:
-class Symfony\Component\HttpFoundation\JsonResponse#555 (9) {
+      <testcase name="testInscriptionUtilisateurko1" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="32" assertions="1" time="1.064043">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:52:
+class Symfony\Component\HttpFoundation\JsonResponse#796 (9) {
   protected $data =&gt;
   string(55) "{"status":404,"Erreur":"Ce profil n\u0027existe pas !"}"
   protected $callback =&gt;
@@ -1214,7 +1294,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#555 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#554 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#628 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1278,9 +1358,9 @@ class Symfony\Component\HttpFoundation\JsonResponse#555 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testInscriptionUtilisateurko2" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="56" assertions="1" time="1.090205">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:76:
-class Symfony\Component\HttpFoundation\JsonResponse#3656 (9) {
+      <testcase name="testInscriptionUtilisateurko2" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="55" assertions="1" time="1.084359">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:75:
+class Symfony\Component\HttpFoundation\JsonResponse#5819 (9) {
   protected $data =&gt;
   string(98) "{"status":403,"Erreur":"Votre profil ne vous permet pas de cr\u00e9er ce type d\u0027utilisateur"}"
   protected $callback =&gt;
@@ -1288,7 +1368,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#3656 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#6890 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#2388 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1352,17 +1432,11 @@ class Symfony\Component\HttpFoundation\JsonResponse#3656 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testInscriptionUtilisateurko3" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="79" assertions="1" time="1.127342">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:99:
-class Symfony\Component\HttpFoundation\JsonResponse#1432 (9) {
-  protected $data =&gt;
-  string(73) "{"status":404,"Erreur":"Veuillez lui assigner un partenaire existant !!"}"
-  protected $callback =&gt;
-  NULL
-  protected $encodingOptions =&gt;
-  int(15)
+      <testcase name="testajoutPartenaireok" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="78" assertions="1" time="1.933713">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:102:
+class Symfony\Component\HttpFoundation\Response#99 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#1615 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#4227 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1414,75 +1488,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#1432 (9) {
     }
   }
   protected $content =&gt;
-  string(73) "{"status":404,"Erreur":"Veuillez lui assigner un partenaire existant !!"}"
-  protected $version =&gt;
-  string(3) "1.1"
-  protected $statusCode =&gt;
-  int(404)
-  protected $statusText =&gt;
-  string(9) "Not Found"
-  protected $charset =&gt;
-  string(5) "UTF-8"
-}
-</system-out>
-      </testcase>
-      <testcase name="testajoutPartenaireok" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="102" assertions="1" time="1.088017">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:118:
-class Symfony\Component\HttpFoundation\Response#498 (6) {
-  public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#2358 (5) {
-    protected $computedCacheControl =&gt;
-    array(2) {
-      'no-cache' =&gt;
-      bool(true)
-      'private' =&gt;
-      bool(true)
-    }
-    protected $cookies =&gt;
-    array(0) {
-    }
-    protected $headerNames =&gt;
-    array(5) {
-      'cache-control' =&gt;
-      string(13) "Cache-Control"
-      'date' =&gt;
-      string(4) "Date"
-      'content-type' =&gt;
-      string(12) "Content-Type"
-      'link' =&gt;
-      string(4) "Link"
-      'x-robots-tag' =&gt;
-      string(12) "X-Robots-Tag"
-    }
-    protected $headers =&gt;
-    array(5) {
-      'cache-control' =&gt;
-      array(1) {
-        ...
-      }
-      'date' =&gt;
-      array(1) {
-        ...
-      }
-      'content-type' =&gt;
-      array(1) {
-        ...
-      }
-      'link' =&gt;
-      array(1) {
-        ...
-      }
-      'x-robots-tag' =&gt;
-      array(1) {
-        ...
-      }
-    }
-    protected $cacheControl =&gt;
-    array(0) {
-    }
-  }
-  protected $content =&gt;
-  string(167) "{"status":201,"message":"Le partenaire testPart a bien \u00e9t\u00e9 ajout\u00e9 !! ","Compte":"Le compte num\u00e9ro 1908 0418 4100 lui a \u00e9t\u00e9 assign\u00e9"}"
+  string(210) "{"status":201,"message":"Le partenaire testPart ainsi que son admin principal ont bien \u00e9t\u00e9 ajout\u00e9 !! ","Compte partenaire":"Le compte num\u00e9ro 1908 0521 0550 lui a \u00e9t\u00e9 assign\u00e9"}"
   protected $version =&gt;
   string(3) "1.1"
   protected $statusCode =&gt;
@@ -1494,77 +1500,9 @@ class Symfony\Component\HttpFoundation\Response#498 (6) {
 }
 </system-out>
       </testcase>
-      <testcase name="testInscriptionUtilisateurok2" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="121" assertions="1" time="1.397153">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:141:
-class Symfony\Component\HttpFoundation\Response#6337 (6) {
-  public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#2955 (5) {
-    protected $computedCacheControl =&gt;
-    array(2) {
-      'no-cache' =&gt;
-      bool(true)
-      'private' =&gt;
-      bool(true)
-    }
-    protected $cookies =&gt;
-    array(0) {
-    }
-    protected $headerNames =&gt;
-    array(5) {
-      'cache-control' =&gt;
-      string(13) "Cache-Control"
-      'date' =&gt;
-      string(4) "Date"
-      'content-type' =&gt;
-      string(12) "Content-Type"
-      'link' =&gt;
-      string(4) "Link"
-      'x-robots-tag' =&gt;
-      string(12) "X-Robots-Tag"
-    }
-    protected $headers =&gt;
-    array(5) {
-      'cache-control' =&gt;
-      array(1) {
-        ...
-      }
-      'date' =&gt;
-      array(1) {
-        ...
-      }
-      'content-type' =&gt;
-      array(1) {
-        ...
-      }
-      'link' =&gt;
-      array(1) {
-        ...
-      }
-      'x-robots-tag' =&gt;
-      array(1) {
-        ...
-      }
-    }
-    protected $cacheControl =&gt;
-    array(0) {
-    }
-  }
-  protected $content =&gt;
-  string(24) "{"status":"Enregistrer"}"
-  protected $version =&gt;
-  string(3) "1.1"
-  protected $statusCode =&gt;
-  int(201)
-  protected $statusText =&gt;
-  string(7) "Created"
-  protected $charset =&gt;
-  string(5) "UTF-8"
-}
-</system-out>
-      </testcase>
-      <testcase name="testInscriptionUtilisateurko4" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="144" assertions="1" time="0.679868">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:164:
-class Symfony\Component\HttpFoundation\JsonResponse#4077 (9) {
+      <testcase name="testInscriptionUtilisateurko4" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="105" assertions="1" time="0.687005">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:125:
+class Symfony\Component\HttpFoundation\JsonResponse#2225 (9) {
   protected $data =&gt;
   string(82) "{"status":404,"Erreur":"Aucun compte n\u0027est attribuer \u00e0 cet utilisateur"}"
   protected $callback =&gt;
@@ -1572,7 +1510,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#4077 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#4710 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#2065 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1636,9 +1574,9 @@ class Symfony\Component\HttpFoundation\JsonResponse#4077 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testInscriptionUtilisateurko5" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="167" assertions="1" time="0.683234">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:188:
-class Symfony\Component\HttpFoundation\JsonResponse#3449 (9) {
+      <testcase name="testInscriptionUtilisateurko5" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="128" assertions="1" time="0.801621">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:149:
+class Symfony\Component\HttpFoundation\JsonResponse#5543 (9) {
   protected $data =&gt;
   string(84) "{"status":403,"Erreur":"Ce compte n\u0027appartient pas \u00e0 votre entreprise !!"}"
   protected $callback =&gt;
@@ -1646,7 +1584,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#3449 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#3043 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#5740 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1710,9 +1648,9 @@ class Symfony\Component\HttpFoundation\JsonResponse#3449 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testInscriptionUtilisateurko6" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="191" assertions="1" time="1.124838">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:212:
-class Symfony\Component\HttpFoundation\JsonResponse#5398 (9) {
+      <testcase name="testInscriptionUtilisateurko6" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="152" assertions="1" time="1.053657">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:173:
+class Symfony\Component\HttpFoundation\JsonResponse#3776 (9) {
   protected $data =&gt;
   string(87) "{"status":403,"Erreur":"Ce profil ne doit pas \u00eatre rattacher \u00e0 un compte !!"}"
   protected $callback =&gt;
@@ -1720,7 +1658,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#5398 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#4713 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#3716 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1784,9 +1722,9 @@ class Symfony\Component\HttpFoundation\JsonResponse#5398 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testInscriptionUtilisateurko7" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="215" assertions="1" time="0.701462">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:236:
-class Symfony\Component\HttpFoundation\JsonResponse#2449 (9) {
+      <testcase name="testInscriptionUtilisateurko7" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="176" assertions="1" time="0.657195">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:197:
+class Symfony\Component\HttpFoundation\JsonResponse#4155 (9) {
   protected $data =&gt;
   string(55) "{"status":404,"Erreur":"Ce compte n\u0027existe pas !"}"
   protected $callback =&gt;
@@ -1794,7 +1732,7 @@ class Symfony\Component\HttpFoundation\JsonResponse#2449 (9) {
   protected $encodingOptions =&gt;
   int(15)
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#5547 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#5352 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1858,11 +1796,11 @@ class Symfony\Component\HttpFoundation\JsonResponse#2449 (9) {
 }
 </system-out>
       </testcase>
-      <testcase name="testInscriptionUtilisateurko8" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php" line="239" assertions="1" time="0.701434">
-        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/tests/SecurityControllerTest.php:260:
-class Symfony\Component\HttpFoundation\Response#1412 (6) {
+      <testcase name="testInscriptionUtilisateurko8" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="200" assertions="1" time="0.709362">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:221:
+class Symfony\Component\HttpFoundation\Response#5553 (6) {
   public $headers =&gt;
-  class Symfony\Component\HttpFoundation\ResponseHeaderBag#2013 (5) {
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#5806 (5) {
     protected $computedCacheControl =&gt;
     array(2) {
       'no-cache' =&gt;
@@ -1921,6 +1859,80 @@ class Symfony\Component\HttpFoundation\Response#1412 (6) {
   int(200)
   protected $statusText =&gt;
   string(2) "OK"
+  protected $charset =&gt;
+  string(5) "UTF-8"
+}
+</system-out>
+      </testcase>
+      <testcase name="testInscriptionUtilisateurko9" class="App\Tests\SecurityControllerTest" classname="App.Tests.SecurityControllerTest" file="/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php" line="224" assertions="1" time="1.026066">
+        <system-out>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/tests/SecurityControllerTest.php:245:
+class Symfony\Component\HttpFoundation\JsonResponse#1039 (9) {
+  protected $data =&gt;
+  string(115) "{"status":403,"Erreur":"Impossible de cr\u00e9er ce type d\u0027utilisateur sans cr\u00e9er un nouveau partenaire"}"
+  protected $callback =&gt;
+  NULL
+  protected $encodingOptions =&gt;
+  int(15)
+  public $headers =&gt;
+  class Symfony\Component\HttpFoundation\ResponseHeaderBag#199 (5) {
+    protected $computedCacheControl =&gt;
+    array(2) {
+      'no-cache' =&gt;
+      bool(true)
+      'private' =&gt;
+      bool(true)
+    }
+    protected $cookies =&gt;
+    array(0) {
+    }
+    protected $headerNames =&gt;
+    array(5) {
+      'cache-control' =&gt;
+      string(13) "Cache-Control"
+      'date' =&gt;
+      string(4) "Date"
+      'content-type' =&gt;
+      string(12) "Content-Type"
+      'link' =&gt;
+      string(4) "Link"
+      'x-robots-tag' =&gt;
+      string(12) "X-Robots-Tag"
+    }
+    protected $headers =&gt;
+    array(5) {
+      'cache-control' =&gt;
+      array(1) {
+        ...
+      }
+      'date' =&gt;
+      array(1) {
+        ...
+      }
+      'content-type' =&gt;
+      array(1) {
+        ...
+      }
+      'link' =&gt;
+      array(1) {
+        ...
+      }
+      'x-robots-tag' =&gt;
+      array(1) {
+        ...
+      }
+    }
+    protected $cacheControl =&gt;
+    array(0) {
+    }
+  }
+  protected $content =&gt;
+  string(115) "{"status":403,"Erreur":"Impossible de cr\u00e9er ce type d\u0027utilisateur sans cr\u00e9er un nouveau partenaire"}"
+  protected $version =&gt;
+  string(3) "1.1"
+  protected $statusCode =&gt;
+  int(403)
+  protected $statusText =&gt;
+  string(9) "Forbidden"
   protected $charset =&gt;
   string(5) "UTF-8"
 }

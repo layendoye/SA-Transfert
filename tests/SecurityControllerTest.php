@@ -29,7 +29,6 @@ class SecurityControllerTest extends WebTestCase
         var_dump($rep);
         $this->assertSame(201,$client->getResponse()->getStatusCode());
     }
-    
     public function testInscriptionUtilisateurko1()
     {//le profil n existe pas
         $client = static::createClient([],[ 
@@ -76,67 +75,29 @@ class SecurityControllerTest extends WebTestCase
         var_dump($rep);
         $this->assertSame(403,$client->getResponse()->getStatusCode());
     }
-    public function testInscriptionUtilisateurko3()
-    {//l'entreprise n'existe pas
-        $client = static::createClient([],[ 
-                'PHP_AUTH_USER' => 'Abdou' ,
-                'PHP_AUTH_PW'   => 'azerty'
-            ]);
-        $client->request('POST', '/add/admin-partenaire/80',[],[],['CONTENT_TYPE'=>"application/json"],
-            '{
-                	"nom":"Test",
-                    "username": "Test",
-                    "password": "azerty",
-                    "confirmPassword": "azerty",
-                    "email":"Test@gmail.com",
-                    "telephone": 77223,
-                    "nci":"77223",
-                    "profil": 3
-            }'
-        );
-
-        $rep=$client->getResponse();
-        var_dump($rep);
-        $this->assertSame(404,$client->getResponse()->getStatusCode());
-    }
     public function testajoutPartenaireok()
-    {//ajouter un partenaire on en a besoin pour la suite 
+    {//ajouter un partenaire et un admin principal on en a besoin pour la suite 
         $client = static::createClient([],[ 
                 'PHP_AUTH_USER' => 'Abdou' ,
                 'PHP_AUTH_PW'   => 'azerty'
             ]);
-        $ninea=rand(100000,1500000);
+        $random=rand(100000,1500000);
         $client->request('POST', '/partenaires/add',[],[],['CONTENT_TYPE'=>"application/json"],
             '{
-                	"raisonSociale":"testPart",
-                    "ninea": "'.$ninea.'",
-                    "adresse": "yoff"
+                "raisonSociale":"testPart",
+                "ninea": "'.$random.'",
+                "adresse": "yoff",
+                "emailEntreprise":"maimou@gmail.com",
+                "telephoneEntreprise": "'.$random.'",
+                "nom":"adminPTest1",
+                "username": "adminPTest1",
+                "password": "azerty",
+                "confirmPassword": "azerty",
+                "email":"adminPTest1@gmail.com",
+                "telephone": "'.$random.'",
+                "nci":"'.$random.'"
             }'
         );
-
-        $rep=$client->getResponse();
-        var_dump($rep);
-        $this->assertSame(201,$client->getResponse()->getStatusCode());
-    }
-    public function testInscriptionUtilisateurok2()
-    {//creer un admin principal
-        $client = static::createClient([],[ 
-                'PHP_AUTH_USER' => 'Abdou' ,
-                'PHP_AUTH_PW'   => 'azerty'
-            ]);
-        $client->request('POST', '/add/admin-partenaire/2',[],[],['CONTENT_TYPE'=>"application/json"],
-            '{
-                	"nom":"adminPTest1",
-                    "username": "adminPTest1",
-                    "password": "azerty",
-                    "confirmPassword": "azerty",
-                    "email":"adminPTest1@gmail.com",
-                    "telephone": 772231,
-                    "nci":"772231",
-                    "profil": 3
-            }'
-        );
-
         $rep=$client->getResponse();
         var_dump($rep);
         $this->assertSame(201,$client->getResponse()->getStatusCode());
@@ -259,6 +220,30 @@ class SecurityControllerTest extends WebTestCase
         $rep=$client->getResponse();
         var_dump($rep);
         $this->assertSame(200,$client->getResponse()->getStatusCode());
+    }
+    public function testInscriptionUtilisateurko9()
+    {//impossible de lui assigner un compte
+        $client = static::createClient([],[ 
+                'PHP_AUTH_USER' => 'Abdou' ,
+                'PHP_AUTH_PW'   => 'azerty'
+            ]);
+        $client->request('POST', '/inscription',[],[],['CONTENT_TYPE'=>"application/json"],
+            '{
+                	"nom":"Test",
+                    "username": "Test",
+                    "password": "azerty",
+                    "confirmPassword": "azerty",
+                    "email":"Test@gmail.com",
+                    "telephone": 7722,
+                    "nci":"7722",
+                    "compte":1,
+                    "profil": 3
+            }'
+        );
+
+        $rep=$client->getResponse();
+        var_dump($rep);
+        $this->assertSame(403,$client->getResponse()->getStatusCode());
     }
 }
     /*
