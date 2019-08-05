@@ -69,7 +69,17 @@ class Entreprise
     /**
      * @Groups({"list-entreprise"})
      */
-    private $soldeGlobal; 
+    private $soldeGlobal;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $telephoneEntreprise;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $emailEntreprise; 
 
     public function __construct()
     {
@@ -196,6 +206,30 @@ class Entreprise
                 $utilisateur->setEntreprise(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTelephoneEntreprise(): ?string
+    {
+        return $this->telephoneEntreprise;
+    }
+
+    public function setTelephoneEntreprise(?string $telephoneEntreprise): self
+    {
+        $this->telephoneEntreprise = $telephoneEntreprise;
+
+        return $this;
+    }
+
+    public function getEmailEntreprise(): ?string
+    {
+        return $this->emailEntreprise;
+    }
+
+    public function setEmailEntreprise(?string $emailEntreprise): self
+    {
+        $this->emailEntreprise = $emailEntreprise;
 
         return $this;
     }
