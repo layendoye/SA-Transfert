@@ -22,6 +22,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Repository\UtilisateurRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class EntrepriseController extends AbstractFOSRestController
 {
@@ -187,8 +188,35 @@ class EntrepriseController extends AbstractFOSRestController
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
 
+
+    /**
+    * @Route("/bloque/user/{id}", name="bloque_user", methods={"GET"})
+    */ 
+    public function bloqueUser(UserInterface $Userconnecte,ObjectManager $manager,Utilisateur $user=null)
+    {
+        if(!$user){
+            throw new HttpException(404,'Cet utilisateur n\'existe pas !');
+        }
+        elseif($Userconnecte->getRaisonSociale()==$this->saTransfert && $user->getId()==1){
+            throw new HttpException(403,'Impossible de bloquer ce super-admin !');
+        }
+        elseif($user->getStatus() == $this->actif){
+            $user->setStatus("bloqué");
+            $texte='Partenaire bloqué';
+        }
+        else{
+            $user->setStatus($this->actif);
+            $texte= 'Partenaire débloqué';
+        }
+        $manager->persist($user);
+        $manager->flush();
+        $afficher = [$this->statut => 200,$this->message => $texte];
+        return $this->handleView($this->view($afficher,Response::HTTP_OK));
+    }
+
     /**
     * @Route("/nouveau/compte/{id}", name="nouveau_compte", methods={"GET"})
+    * @IsGranted("ROLE_Super-admin", statusCode=403, message="Vous n'avez pas accès à cette page !")
     */ 
     public function addCompte(ObjectManager $manager, Entreprise $entreprise){//securiser la route
         $compte =new Compte();
@@ -212,6 +240,7 @@ class EntrepriseController extends AbstractFOSRestController
     }
     /**
      * @Route("/changer/compte" ,name="change_compte")
+     * @IsGranted("ROLE_admin-Principal", statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
     public function changeCompte(Request $request,ObjectManager $manager, UserInterface $Userconnecte,UtilisateurRepository $repoUser,CompteRepository $repoCompte)
     {//securiser la route

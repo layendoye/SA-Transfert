@@ -529,3 +529,8 @@ d38fd1,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565088486,,200
 a8ed4b,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565088657,,403
 cd89c9,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565088678,,200
 db26f1,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565088687,,404
+46779b,127.0.0.1,GET,http://127.0.0.1:8000/nouveau/compte/8,1565089437,,403
+8dbae7,127.0.0.1,POST,http://127.0.0.1:8000/connexion,1565092365,,200
+db3df8,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565092571,,200
+df31e2,127.0.0.1,POST,http://127.0.0.1:8000/connexion,1565092612,,200
+bc372f,127.0.0.1,POST,http://127.0.0.1:8000/changer/compte,1565092648,,404

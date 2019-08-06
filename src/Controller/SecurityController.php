@@ -93,7 +93,8 @@ class SecurityController extends AbstractFOSRestController
            /*Début gestion des images */
             if($requestFile=$request->files->all()){
                 $file=$requestFile['image'];
-                if($file->guessExtension()!='png' && $file->guessExtension()!='jpeg' ){
+                
+                if($file->guessExtension()!='png' && $file->guessExtension()!='jpeg'){
                     throw new HttpException(400,'Entrer une image valide !! ');
                 }
                 
