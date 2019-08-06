@@ -191,22 +191,37 @@ class EntrepriseController extends AbstractFOSRestController
 
     /**
     * @Route("/bloque/user/{id}", name="bloque_user", methods={"GET"})
+    * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */ 
     public function bloqueUser(UserInterface $Userconnecte,ObjectManager $manager,Utilisateur $user=null)
     {
         if(!$user){
             throw new HttpException(404,'Cet utilisateur n\'existe pas !');
         }
-        elseif($Userconnecte->getRaisonSociale()==$this->saTransfert && $user->getId()==1){
-            throw new HttpException(403,'Impossible de bloquer ce super-admin !');
+        if($user==$Userconnecte){
+            throw new HttpException(403,'Impossible de se bloquer soit même !');
         }
-        elseif($user->getStatus() == $this->actif){
+        if(!$entreprise=$user->getEntreprise()){//s il n'existe pas donc c est un user simple (pas d entreprise car on l a rattacher avec compte)
+            $entreprise=$user->getCompte()->getEntreprise();
+        }
+
+        if($Userconnecte->getEntreprise()!=$entreprise){//si un super admin et caissier sont dans la meme entreprises les admin principaux les admins et les users simple aussi
+            throw new HttpException(403,'Impossible de bloquer cet utilisateur !');
+        }
+        elseif($user->getId()==1){
+            throw new HttpException(403,'Impossible de bloquer le super-admin principal !');
+        }
+        elseif($Userconnecte->getRoles()[0]==['ROLE_admin'] && $user->getRoles()[0]==['ROLE_admin-Principal']){
+            throw new HttpException(403,'Impossible de bloquer l\' admin principal !');
+        }
+        
+        if($user->getStatus() == $this->actif){
             $user->setStatus("bloqué");
-            $texte='Partenaire bloqué';
+            $texte='Bloqué';
         }
         else{
             $user->setStatus($this->actif);
-            $texte= 'Partenaire débloqué';
+            $texte= 'Débloqué';
         }
         $manager->persist($user);
         $manager->flush();

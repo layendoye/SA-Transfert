@@ -20,10 +20,10 @@
                     1 => 'ROLE_admin-Principal',
                 ],
                 'message' => [
-                    1 => 'Vous avez pas accès à cette page !',
+                    1 => 'Vous n\'avez pas accès à cette page !',
                 ],
                 'statusCode' => [
-                    1 => 404,
+                    1 => 403,
                 ],
             ],
         ],

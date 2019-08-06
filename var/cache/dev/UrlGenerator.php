@@ -20,6 +20,7 @@ return [
     'add_entreprise' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::add'], [], [['text', '/partenaires/add']], [], []],
     'app_entreprise_depot' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::depot'], [], [['text', '/nouveau/depot']], [], []],
     'bloque_entreprise' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::bloque'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/bloque/entreprises']], [], []],
+    'bloque_user' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::bloqueUser'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/bloque/user']], [], []],
     'nouveau_compte' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::addCompte'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/nouveau/compte']], [], []],
     'change_compte' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::changeCompte'], [], [['text', '/changer/compte']], [], []],
     'inscription' => [[], ['_controller' => 'App\\Controller\\SecurityController::inscriptionUtilisateur'], [], [['text', '/inscription']], [], []],
