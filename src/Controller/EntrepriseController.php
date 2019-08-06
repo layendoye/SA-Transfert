@@ -44,7 +44,7 @@ class EntrepriseController extends AbstractFOSRestController
     {
         
         if($id && !$entreprise instanceof Entreprise) {
-            throw new HttpException(404,'Ce partenaire n\'existe pas !');
+            throw new HttpException(404,'Ce partenaire n\'existe pas!');
         }
         if(!$entreprise){
             $entreprise=$repo->findAll();
@@ -154,7 +154,7 @@ class EntrepriseController extends AbstractFOSRestController
            $manager->flush();
            $afficher = [
                $this->statut => 201,
-               'message' => 'Le depot a bien été effectué dans le compte '.$compte->getNumeroCompte()
+               $this->message => 'Le depot a bien été effectué dans le compte '.$compte->getNumeroCompte()
            ];
            return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
 
@@ -214,9 +214,12 @@ class EntrepriseController extends AbstractFOSRestController
      * @Route("/changer/compte" ,name="change_compte")
      */
     public function changeCompte(Request $request,ObjectManager $manager, UserInterface $Userconnecte,UtilisateurRepository $repoUser,CompteRepository $repoCompte)
-    //securiser la route{
+    {//securiser la route
         $data=json_decode($request->getContent());
-        if(!$user=$repoUser->find($data->utilisateur)){
+        if(!isset($data->utilisateur,$data->compte)){
+            throw new HttpException(404,'Remplir l\'utilisateur et le compte !');
+        }
+        elseif(!$user=$repoUser->find($data->utilisateur)){
             throw new HttpException(404,'Cet utilisateur n\'existe pas !');
         }
         elseif(!$user->getCompte()){//vu qu en creant un user simple on lui affecte un compte, s'il n'en a pas donc c est pas un user
@@ -236,7 +239,7 @@ class EntrepriseController extends AbstractFOSRestController
         $manager->flush();
         $afficher = [
                $this->statut => 201,
-               'message' => 'Le compte de l\'utilisateur a été modifié !!'
+               $this->message => 'Le compte de l\'utilisateur a été modifié !!'
            ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
