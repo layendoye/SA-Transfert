@@ -20,7 +20,7 @@ class UserChecker implements UserCheckerInterface
             throw new HttpException(403,'Ce compte est bloqué, veuillez contacter l\'administrateur');
         }
 
-        if ( $user->getEntreprise() && $user->getEntreprise()->getStatus()!=$actif || !$user->getEntreprise() && $user->getCompte()->getEntreprise()->getStatus()!=$actif) {//si l'entreprise de l'utilisateur est bloqué
+        if ( $user->getEntreprise() && $user->getEntreprise()->getStatus()!=$actif || !$user->getEntreprise() && $user->getUserCompteActuels()->getCompte()->getEntreprise()->getStatus()!=$actif) {//si l'entreprise de l'utilisateur est bloqué
             throw new HttpException(403,'Ce partenaire est bloqué, veuillez contacter la société SA Transfert');
         }
     }

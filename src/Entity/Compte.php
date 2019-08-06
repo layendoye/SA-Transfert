@@ -48,15 +48,16 @@ class Compte
      */
     private $depots;
 
+
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Utilisateur", mappedBy="compte")
+     * @ORM\OneToMany(targetEntity="App\Entity\UserCompteActuel", mappedBy="compte")
      */
-    private $utilisateurs;
+    private $userCompteActuels;
 
     public function __construct()
     {
         $this->depots = new ArrayCollection();
-        $this->utilisateurs = new ArrayCollection();
+        $this->userCompteActuels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -132,30 +133,30 @@ class Compte
     }
 
     /**
-     * @return Collection|Utilisateur[]
+     * @return Collection|UserCompteActuel[]
      */
-    public function getUtilisateurs(): Collection
+    public function getUserCompteActuels(): Collection
     {
-        return $this->utilisateurs;
+        return $this->userCompteActuels;
     }
 
-    public function addUtilisateur(Utilisateur $utilisateur): self
+    public function addUserCompteActuel(UserCompteActuel $userCompteActuel): self
     {
-        if (!$this->utilisateurs->contains($utilisateur)) {
-            $this->utilisateurs[] = $utilisateur;
-            $utilisateur->setCompte($this);
+        if (!$this->userCompteActuels->contains($userCompteActuel)) {
+            $this->userCompteActuels[] = $userCompteActuel;
+            $userCompteActuel->setCompte($this);
         }
 
         return $this;
     }
 
-    public function removeUtilisateur(Utilisateur $utilisateur): self
+    public function removeUserCompteActuel(UserCompteActuel $userCompteActuel): self
     {
-        if ($this->utilisateurs->contains($utilisateur)) {
-            $this->utilisateurs->removeElement($utilisateur);
+        if ($this->userCompteActuels->contains($userCompteActuel)) {
+            $this->userCompteActuels->removeElement($userCompteActuel);
             // set the owning side to null (unless already changed)
-            if ($utilisateur->getCompte() === $this) {
-                $utilisateur->setCompte(null);
+            if ($userCompteActuel->getCompte() === $this) {
+                $userCompteActuel->setCompte(null);
             }
         }
 

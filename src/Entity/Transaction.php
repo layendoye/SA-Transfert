@@ -55,10 +55,10 @@ class Transaction
     private $code;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="transactions")
+     * @ORM\ManyToOne(targetEntity="App\Entity\UserCompteActuel", inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userPartenaireEmetteur;
+    private $userComptePartenaireEmetteur;
 
     /**
      * @ORM\Column(type="bigint")
@@ -99,9 +99,9 @@ class Transaction
     private $dateReception;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="retraits")
+     * @ORM\ManyToOne(targetEntity="App\Entity\UserCompteActuel", inversedBy="retraits")
      */
-    private $userPartenaireRecepteur;
+    private $userComptePartenaireRecepteur;
 
     /**
      * @ORM\Column(type="integer")
@@ -190,14 +190,14 @@ class Transaction
         return $this;
     }
 
-    public function getUserPartenaireEmetteur(): ?Utilisateur
+    public function getUserComptePartenaireEmetteur(): ?UserCompteActuel
     {
-        return $this->userPartenaireEmetteur;
+        return $this->userComptePartenaireEmetteur;
     }
 
-    public function setUserPartenaireEmetteur(?Utilisateur $userPartenaireEmetteur): self
+    public function setUserComptePartenaireEmetteur(?UserCompteActuel $userComptePartenaireEmetteur): self
     {
-        $this->userPartenaireEmetteur = $userPartenaireEmetteur;
+        $this->userComptePartenaireEmetteur = $userComptePartenaireEmetteur;
 
         return $this;
     }
@@ -274,14 +274,14 @@ class Transaction
         return $this;
     }
 
-    public function getUserPartenaireRecepteur(): ?Utilisateur
+    public function getUserComptePartenaireRecepteur(): ?UserCompteActuel
     {
-        return $this->userPartenaireRecepteur;
+        return $this->userComptePartenaireRecepteur;
     }
 
-    public function setUserPartenaireRecepteur(?Utilisateur $userPartenaireRecepteur): self
+    public function setUserComptePartenaireRecepteur(?UserCompteActuel $userComptePartenaireRecepteur): self
     {
-        $this->userPartenaireRecepteur = $userPartenaireRecepteur;
+        $this->userComptePartenaireRecepteur = $userComptePartenaireRecepteur;
 
         return $this;
     }

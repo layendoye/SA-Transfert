@@ -96,10 +96,6 @@ class Utilisateur implements UserInterface
      */
     private $retraits;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="utilisateurs")
-     */
-    private $compte;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Entreprise", inversedBy="utilisateurs")
@@ -112,11 +108,19 @@ class Utilisateur implements UserInterface
      */
     private $image;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserCompteActuel", mappedBy="utilisateur")
+     */
+    private $userCompteActuels;
+
+    private $leUsercompteActu;
+    
     public function __construct()
     {
         $this->depots = new ArrayCollection();
         $this->envois = new ArrayCollection();
         $this->retraits = new ArrayCollection();
+        $this->userCompteActuels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -357,17 +361,7 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
-    public function getCompte(): ?Compte
-    {
-        return $this->compte;
-    }
 
-    public function setCompte(?Compte $compte): self
-    {
-        $this->compte = $compte;
-
-        return $this;
-    }
 
     public function getEntreprise(): ?Entreprise
     {
@@ -392,4 +386,47 @@ class Utilisateur implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|UserCompteActuel[]
+     */
+    public function getUserCompteActuels(): Collection
+    {
+        return $this->userCompteActuels;
+    }
+
+    public function addUserCompteActuel(UserCompteActuel $userCompteActuel): self
+    {
+        if (!$this->userCompteActuels->contains($userCompteActuel)) {
+            $this->userCompteActuels[] = $userCompteActuel;
+            $userCompteActuel->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserCompteActuel(UserCompteActuel $userCompteActuel): self
+    {
+        if ($this->userCompteActuels->contains($userCompteActuel)) {
+            $this->userCompteActuels->removeElement($userCompteActuel);
+            // set the owning side to null (unless already changed)
+            if ($userCompteActuel->getUtilisateur() === $this) {
+                $userCompteActuel->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
+    /**
+     * Get the value of leUsercompteActu
+     */ 
+    public function getLeUsercompteActu()
+    {
+        var_dump($this->getUserCompteActuels());die();
+        return $this->leUsercompteActu=$this->getUserCompteActuels();
+    }
+
+
 }

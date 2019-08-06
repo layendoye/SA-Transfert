@@ -39,6 +39,8 @@ class AppFixtures extends Fixture
         $saTransfert->setRaisonSociale('SA Transfert')
                     ->setNinea(strval(rand(150000000,979999999)))
                     ->setAdresse('Mermoz')
+                    ->setTelephoneEntreprise('0000011')
+                    ->setEmailEntreprise('sat@gmail.com')
                     ->setStatus($actif);
         $compte=new Compte();
         $compte->setNumeroCompte('1910 1409 0043')

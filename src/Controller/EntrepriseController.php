@@ -166,7 +166,7 @@ class EntrepriseController extends AbstractFOSRestController
     /**
     * @Route("/bloque/entreprises/{id}", name="bloque_entreprise", methods={"GET"})
     */ 
-    public function bloque(ObjectManager $manager,Entreprise $entreprise=null )
+    public function bloqueEntrep(ObjectManager $manager,Entreprise $entreprise=null )
     {
         if(!$entreprise){
             throw new HttpException(404,'Ce partenaire n\'existe pas !');
@@ -187,8 +187,6 @@ class EntrepriseController extends AbstractFOSRestController
         $afficher = [$this->statut => 200,$this->message => $texte];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
-
-
     /**
     * @Route("/bloque/user/{id}", name="bloque_user", methods={"GET"})
     * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -211,7 +209,7 @@ class EntrepriseController extends AbstractFOSRestController
         elseif($user->getId()==1){
             throw new HttpException(403,'Impossible de bloquer le super-admin principal !');
         }
-        elseif($Userconnecte->getRoles()[0]==['ROLE_admin'] && $user->getRoles()[0]==['ROLE_admin-Principal']){
+        if($Userconnecte->getRoles()[0]=='ROLE_admin' && $user->getRoles()[0]=='ROLE_admin-Principal'){
             throw new HttpException(403,'Impossible de bloquer l\' admin principal !');
         }
         
@@ -286,5 +284,15 @@ class EntrepriseController extends AbstractFOSRestController
                $this->message => 'Le compte de l\'utilisateur a été modifié !!'
            ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
+    }
+
+     /**
+     * @Route("/user/{id}", name="entreprise", methods={"GET"})
+     */
+    public function listerUser(SerializerInterface $serializer,Utilisateur $user=null)
+    {
+        
+        $data = $serializer->serialize($user,'json',['groups' => ['list-entreprise']]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200,['Content-Type' => 'application/json']);
     }
 }
