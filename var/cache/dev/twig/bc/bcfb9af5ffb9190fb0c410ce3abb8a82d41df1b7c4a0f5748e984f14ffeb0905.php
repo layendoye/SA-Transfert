@@ -79,6 +79,6 @@ class __TwigTemplate_477a0d68b53d0606c09ac89acbf6ceae86fdea794da36318eda80b95fee
         return new Source("<?xml version=\"1.0\" encoding=\"{{ _charset }}\" ?>
 
 <error code=\"{{ status_code }}\" message=\"{{ status_text }}\" />
-", "@Twig/Exception/error.xml.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/vendor/symfony/twig-bundle/Resources/views/Exception/error.xml.twig");
+", "@Twig/Exception/error.xml.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/symfony/twig-bundle/Resources/views/Exception/error.xml.twig");
     }
 }

@@ -227,6 +227,6 @@ class __TwigTemplate_8c78e39c96e20e9b4468040b29f51dd505f21620d1153ed5f1cf5e36301
         {{ include('@Twig/base_js.html.twig') }}
     </body>
 </html>
-", "@Twig/layout.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/vendor/symfony/twig-bundle/Resources/views/layout.html.twig");
+", "@Twig/layout.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/symfony/twig-bundle/Resources/views/layout.html.twig");
     }
 }

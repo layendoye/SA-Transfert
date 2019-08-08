@@ -2,8 +2,7 @@
 
     return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
         $o = [
-            clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Mapping\\Column'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Column')),
-            clone ($p['Symfony\\Component\\Validator\\Constraints\\File'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Validator\\Constraints\\File')),
+            clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['Doctrine\\ORM\\Mapping\\Column'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Column')),
         ],
         null,
         [
@@ -14,22 +13,10 @@
                 'nullable' => [
                     true,
                 ],
-                'mimeTypes' => [
-                    1 => [
-                        'image/png',
-                        'image/jpeg',
-                    ],
-                ],
-                'groups' => [
-                    1 => [
-                        'Default',
-                    ],
-                ],
             ],
         ],
         [
             $o[0],
-            $o[1],
         ],
         []
     );

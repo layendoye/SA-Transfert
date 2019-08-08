@@ -479,6 +479,6 @@ class __TwigTemplate_a670379d1bea505ced4a668635c8db3890e77f7ead23de163d752e3b369
         </div>
     {% endfor %}
 {% endblock %}
-", "@WebProfiler/Collector/validator.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/vendor/symfony/web-profiler-bundle/Resources/views/Collector/validator.html.twig");
+", "@WebProfiler/Collector/validator.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/symfony/web-profiler-bundle/Resources/views/Collector/validator.html.twig");
     }
 }

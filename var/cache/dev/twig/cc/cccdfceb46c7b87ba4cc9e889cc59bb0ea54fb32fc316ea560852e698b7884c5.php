@@ -1828,6 +1828,6 @@ class __TwigTemplate_4ab7fea87c45495ed8496c6dc458ae0e8ee4314d67b9c70e9fdda7fc225
         </tbody>
     </table>
 {% endmacro %}
-", "@Doctrine/Collector/db.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/vendor/doctrine/doctrine-bundle/Resources/views/Collector/db.html.twig");
+", "@Doctrine/Collector/db.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/doctrine/doctrine-bundle/Resources/views/Collector/db.html.twig");
     }
 }

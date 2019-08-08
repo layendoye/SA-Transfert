@@ -85,7 +85,8 @@ class Entreprise
      * @Assert\Email(message="Veuillez mettre un email valide !!")
      * @Groups({"list-entreprise"})
      */
-    private $emailEntreprise; 
+    private $emailEntreprise;
+
 
     public function __construct()
     {
@@ -239,4 +240,5 @@ class Entreprise
 
         return $this;
     }
+
 }

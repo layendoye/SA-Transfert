@@ -104,7 +104,6 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\File(mimeTypes={ "image/png", "image/jpeg" })
      */
     private $image;
 
@@ -112,9 +111,8 @@ class Utilisateur implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\UserCompteActuel", mappedBy="utilisateur")
      */
     private $userCompteActuels;
-
-    private $leUsercompteActu;
-    
+    private $profil;
+    private $compte;
     public function __construct()
     {
         $this->depots = new ArrayCollection();
@@ -417,15 +415,44 @@ class Utilisateur implements UserInterface
 
         return $this;
     }
-
-    
-    /**
-     * Get the value of leUsercompteActu
+        /**
+     * Get the value of profil
      */ 
-    public function getLeUsercompteActu()
+    public function getProfil()
     {
-        var_dump($this->getUserCompteActuels());die();
-        return $this->leUsercompteActu=$this->getUserCompteActuels();
+        return $this->profil;
+    }
+
+    /**
+     * Set the value of profil
+     *
+     * @return  self
+     */ 
+    public function setProfil($profil)
+    {
+        $this->profil = $profil;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of compte
+     */ 
+    public function getCompte()
+    {
+        return $this->compte;
+    }
+
+    /**
+     * Set the value of compte
+     *
+     * @return  self
+     */ 
+    public function setCompte($compte)
+    {
+        $this->compte = $compte;
+
+        return $this;
     }
 
 

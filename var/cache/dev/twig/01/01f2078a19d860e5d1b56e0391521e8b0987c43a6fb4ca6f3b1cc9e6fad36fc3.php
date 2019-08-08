@@ -97,6 +97,6 @@ class __TwigTemplate_fa8f50cfacb0f60dd5e563a1bbb8da41ac8f988d616f6b8ae7b422a0b98
         </div>
     </div>
 </div>
-", "@WebProfiler/Profiler/header.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/header.html.twig");
+", "@WebProfiler/Profiler/header.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/header.html.twig");
     }
 }

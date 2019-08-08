@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 
+use App\Entity\Compte;
 use App\Entity\Entreprise;
 use App\Entity\Utilisateur;
 use App\Form\UtilisateurType;
+use App\Entity\UserCompteActuel;
+use App\Repository\CompteRepository;
 use App\Repository\ProfilRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -16,15 +19,14 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use App\Entity\Compte;
+use App\Repository\UtilisateurRepository;
 
 class SecurityController extends AbstractFOSRestController
 {
     /**
      * @Route("/inscription", name="inscription", methods={"POST"})
-     * @Route("/add/admin-partenaire/{id}", name="add_adminPrinc", methods={"POST"})
      */
-    public function inscriptionUtilisateur(Request $request,ObjectManager $manager,UserPasswordEncoderInterface $encoder, UserInterface $Userconnecte, ProfilRepository $repoProfil,  ValidatorInterface $validator){
+    public function inscriptionUtilisateur(Request $request,ObjectManager $manager,UserPasswordEncoderInterface $encoder, UserInterface $Userconnecte, ProfilRepository $repoProfil,  ValidatorInterface $validator,CompteRepository $repoComp){
       /* Début variable utilisé frequement */   
         $roleSupAdmi=['ROLE_Super-admin'];
         $roleCaissier=['ROLE_Caissier'];
@@ -37,22 +39,23 @@ class SecurityController extends AbstractFOSRestController
         
        /* Début traitement formulaire et envoie des données */
 
-        $form=$this->createForm(UtilisateurType::class,$user);
-        $data=json_decode($request->getContent(),true);//Récupère une chaîne encodée JSON et la convertit en une variable PHP
+        $form = $this->createForm(UtilisateurType::class,$user);
+        $data = json_decode($request->getContent(),true);//Récupère une chaîne encodée JSON et la convertit en une variable PHP
         if(!$data){//s il n'existe pas donc on recupere directement le tableau via la request
             $data=$request->request->all();
         }
-        $profil=$data['profil'];
-        unset($data['profil']);//on supprime le profil car il ne fait pas partit de UtilisateurType
         $form->submit($data);
         
        /* Fin traitement formulaire et envoie des données */
         
         if($form->isSubmitted() && $form->isValid()){
+            $idProfil = $user->getProfil();
+            $idCompte = $user->getCompte();
+            $compte=$repoComp->find($idCompte);
             
            /* Début controle de saissie des profils*/
 
-            if(!$profil=$repoProfil->find($profil)){
+            if(!$profil=$repoProfil->find($idProfil)){
                 throw new HttpException(404,'Ce profil n\'existe pas !');
             }
 
@@ -79,13 +82,16 @@ class SecurityController extends AbstractFOSRestController
            /* Fin gestion des roles pouvant ajouter */
 
            /* Début gestion des compte */
-            if($roles == $utilisateur && !$user->getCompte()){
+            if ( $idProfil==5 && $idCompte && !$compte instanceof Compte ) {//si on ajout un utilisateur et que le compte qu on veut lui assigné n'existe pas
+                throw new HttpException(404,'Ce compte n\'existe pas !');
+            }
+            elseif($roles == $utilisateur && !$compte){
                 throw new HttpException(404,'Aucun compte n\'est attribuer à cet utilisateur');
             }
-            elseif($user->getCompte() && $user->getCompte()->getEntreprise()!=$Userconnecte->getEntreprise()){
+            elseif($compte && $compte->getEntreprise()!=$Userconnecte->getEntreprise()){
                 throw new HttpException(403,'Ce compte n\'appartient pas à votre entreprise !!');
             }
-            elseif($user->getCompte() && $libelle!='utilisateur'){
+            elseif($compte && $libelle!='utilisateur'){
                 throw new HttpException(403,'Ce profil ne doit pas être rattacher à un compte !!');
             }
            /* Fin gestion des compte */
@@ -106,20 +112,65 @@ class SecurityController extends AbstractFOSRestController
 
            /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
             $user->setEntreprise($Userconnecte->getEntreprise());//si super admin ajout caissier (mm entreprise) si admin principal ajout admin ou user simple (mm entreprise)
-            $user->setStatus('Actif');
+            $user->setStatus('Actif')
+                 ->setEntreprise($Userconnecte->getEntreprise());
             $hash=$encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
+            $userCompte=new UserCompteActuel();
+
+            $userCompte->setCompte($compte)
+                    ->setUtilisateur($user)
+                    ->setDateAffectation(new \DateTime());
+            $manager->persist($userCompte);
             $manager->persist($user);
             $manager->flush();
            /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
             return $this->handleView($this->view(['status'=>'Enregistrer'],Response::HTTP_CREATED));
         }
-        if ( $profil==5 && $data['compte'] && ! $user->getCompte() instanceof Compte ) {//si on ajout un utilisateur et que le compte qu on veut lui assigné n'existe pas
-            throw new HttpException(404,'Ce compte n\'existe pas !');
-        }
+        
         return $this->handleView($this->view($validator->validate($form)));
     }
-    
+    /**
+     * @Route("/user/update/{id}", name="update_user", methods={"POST"})
+     */
+    public function updateUser(Utilisateur $user,Request $request, ObjectManager $manager, ValidatorInterface $validator,UserPasswordEncoderInterface $encoder){
+        if(!$user){
+            throw new HttpException(404,'Cet utilisateur n\'existe pas !');
+        }
+        $form = $this->createForm(UtilisateurType::class,$user);
+        $data=json_decode($request->getContent(),true);//si json
+        if(!$data){
+            $data=$request->request->all();//si non json
+        }
+        $ancienPhoto=$this->getParameter('image_directory')."/".$user->getImage();
+        $form->submit($data);
+        if(!$form->isSubmitted() || !$form->isValid()){
+            return $this->handleView($this->view($validator->validate($form)));
+        }
+        if($requestFile=$request->files->all()){
+            $file=$requestFile['image'];
+            
+            
+            if($file->guessExtension()!='png' && $file->guessExtension()!='jpeg'){
+                throw new HttpException(400,'Entrer une image valide !! ');
+            }
+            
+            $fileName=md5(uniqid()).'.'.$file->guessExtension();//on change le nom du fichier
+            $user->setImage($fileName);
+            $file->move($this->getParameter('image_directory'),$fileName); //definir le image_directory dans service.yaml
+            unlink($ancienPhoto);
+        }
+        $hash=$encoder->encodePassword($user, $user->getPassword());
+        $user->setPassword($hash);
+        $manager->persist($user); 
+        $manager->flush();
+        $afficher = [
+           'status' => 200,
+           'message' => 'L\'utilisateur a été correctement modifié !'
+        ];
+        return $this->handleView($this->view($afficher,Response::HTTP_OK));
+    }
+
     /**
      *@Route("/connexion", name="connexion", methods={"POST"})
      */

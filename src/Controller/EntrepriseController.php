@@ -23,6 +23,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Repository\UtilisateurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Repository\UserCompteActuelRepository;
+use App\Entity\UserCompteActuel;
 
 class EntrepriseController extends AbstractFOSRestController
 {
@@ -56,7 +58,7 @@ class EntrepriseController extends AbstractFOSRestController
     /**
      * @Route("/partenaires/add", name="add_entreprise", methods={"POST"})
      */
-    public function add(Request $request, ObjectManager $manager, ValidatorInterface $validator,UserPasswordEncoderInterface $encoder)
+    public function addPartenaire(Request $request, ObjectManager $manager, ValidatorInterface $validator,UserPasswordEncoderInterface $encoder)
     {
         $raisonSociale='raisonSociale';
         $ninea='ninea';
@@ -76,7 +78,6 @@ class EntrepriseController extends AbstractFOSRestController
             $telephoneEntreprise=>$data[$telephoneEntreprise],
             $emailEntreprise=>$data[$emailEntreprise]
         );
-        
         $form1->submit($dataPartenaire);
         if(!$form1->isSubmitted() || !$form1->isValid()){
             return $this->handleView($this->view($validator->validate($form1)));
@@ -88,7 +89,7 @@ class EntrepriseController extends AbstractFOSRestController
         if(!$form2->isSubmitted() || !$form2->isValid()){
             return $this->handleView($this->view($validator->validate($form2)));
         }
-
+        
         $entreprise->setStatus($this->actif); 
         $compte=new Compte();
         $compte->setNumeroCompte(date('y').date('m').' '.date('d').date('H').' '.date('i').date('s'))
@@ -101,6 +102,14 @@ class EntrepriseController extends AbstractFOSRestController
             ->setStatus($this->actif);
         $hash=$encoder->encodePassword($user, $user->getPassword());
         $user->setPassword($hash);
+        $manager->persist($user);
+
+        $userCompte=new UserCompteActuel();
+        $userCompte->setCompte($compte)
+                   ->setUtilisateur($user)
+                   ->setDateAffectation(new \DateTime());
+        $manager->persist($userCompte);
+        
         /*Début gestion des images */
             if($requestFile=$request->files->all()){
                 $file=$requestFile['image'];
@@ -113,7 +122,7 @@ class EntrepriseController extends AbstractFOSRestController
                 $file->move($this->getParameter('image_directory'),$fileName); //definir le image_directory dans service.yaml
             }
         /*Début gestion des images */
-        $manager->persist($user);
+        
 
         $manager->flush();
         $afficher = [
@@ -123,7 +132,32 @@ class EntrepriseController extends AbstractFOSRestController
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
     }
-
+    /**
+    * @Route("/partenaires/update/{id}", name="update_entreprise", methods={"POST"})
+    * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+    */
+    public function updatePartenaire(Entreprise $entreprise,Request $request, ObjectManager $manager, ValidatorInterface $validator){
+        if(!$entreprise){
+            throw new HttpException(404,'Cette entreprise n\'existe pas !');
+        }
+        $form=$this->createForm(EntrepriseType::class,$entreprise);
+        $data=json_decode($request->getContent(),true);//si json
+        if(!$data){
+            $data=$request->request->all();//si non json
+        }
+        $form->submit($data);
+        if(!$form->isSubmitted() || !$form->isValid()){
+            return $this->handleView($this->view($validator->validate($form)));
+        }
+        $entreprise->setStatus($this->actif); 
+        $manager->persist($entreprise); 
+        $manager->flush();
+        $afficher = [
+           $this->statut => 200,
+           $this->message => 'Le partenaire a été correctement modifié !'
+        ];
+        return $this->handleView($this->view($afficher,Response::HTTP_OK));
+    }
     /**
     * @Route("/nouveau/depot", methods={"POST"})
     */
@@ -191,18 +225,16 @@ class EntrepriseController extends AbstractFOSRestController
     * @Route("/bloque/user/{id}", name="bloque_user", methods={"GET"})
     * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */ 
-    public function bloqueUser(UserInterface $Userconnecte,ObjectManager $manager,Utilisateur $user=null)
+    public function bloqueUser(UserInterface $Userconnecte,ObjectManager $manager, Utilisateur $user=null)
     {
+        
         if(!$user){
             throw new HttpException(404,'Cet utilisateur n\'existe pas !');
         }
         if($user==$Userconnecte){
             throw new HttpException(403,'Impossible de se bloquer soit même !');
         }
-        if(!$entreprise=$user->getEntreprise()){//s il n'existe pas donc c est un user simple (pas d entreprise car on l a rattacher avec compte)
-            $entreprise=$user->getCompte()->getEntreprise();
-        }
-
+        $entreprise=$user->getEntreprise(); 
         if($Userconnecte->getEntreprise()!=$entreprise){//si un super admin et caissier sont dans la meme entreprises les admin principaux les admins et les users simple aussi
             throw new HttpException(403,'Impossible de bloquer cet utilisateur !');
         }
@@ -255,20 +287,21 @@ class EntrepriseController extends AbstractFOSRestController
      * @Route("/changer/compte" ,name="change_compte")
      * @IsGranted("ROLE_admin-Principal", statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
-    public function changeCompte(Request $request,ObjectManager $manager, UserInterface $Userconnecte,UtilisateurRepository $repoUser,CompteRepository $repoCompte)
-    {//securiser la route
+    public function changeCompte(Request $request,ObjectManager $manager, UserInterface $Userconnecte,UtilisateurRepository $repoUser,CompteRepository $repoCompte,UserCompteActuelRepository $repoUserComp)
+    {   
         $data=json_decode($request->getContent());
+        
         if(!isset($data->utilisateur,$data->compte)){
             throw new HttpException(404,'Remplir l\'utilisateur et le compte !');
         }
         elseif(!$user=$repoUser->find($data->utilisateur)){
             throw new HttpException(404,'Cet utilisateur n\'existe pas !');
         }
-        elseif(!$user->getCompte()){//vu qu en creant un user simple on lui affecte un compte, s'il n'en a pas donc c est pas un user
+        elseif($user->getRoles()[0]=='ROLE_Super-admin' || $user->getRoles()[0]=='ROLE_Caissier'){
             throw new HttpException(403,'Impossible d\'affecter un compte à et utilisateur !');
         }
-        elseif($user->getCompte()->getEntreprise()!=$Userconnecte->getEntreprise()){
-            throw new HttpException(404,'Cet utilisateur n\'appartient pas à votre entreprise !');
+        elseif($user->getEntreprise()!=$Userconnecte->getEntreprise()){
+            throw new HttpException(403,'Cet utilisateur n\'appartient pas à votre entreprise !');
         }
         if(!$compte=$repoCompte->find($data->compte)){
             throw new HttpException(404,'Ce compte n\'existe pas !');
@@ -276,8 +309,17 @@ class EntrepriseController extends AbstractFOSRestController
         elseif($compte->getEntreprise()!=$Userconnecte->getEntreprise()){
             throw new HttpException(404,'Ce compte n\'appartient pas à votre entreprise !');
         }
-        $user->setCompte($compte);
-        $manager->persist($user);
+        $userComp=$repoUserComp->findBy(['utilisateur'=>$user]);
+        $idcompActuel=$userComp[count($userComp)-1]->getCompte()->getId();//l id du compte qu il utilise actuellement
+        if($idcompActuel==$compte->getId()){
+            throw new HttpException(403,'Cet utilisateur utilise ce compte actuellement!');
+        }
+        $userCompte=new UserCompteActuel();
+
+        $userCompte->setCompte($compte)
+                   ->setUtilisateur($user)
+                   ->setDateAffectation(new \DateTime());
+        $manager->persist($userCompte);
         $manager->flush();
         $afficher = [
                $this->statut => 201,
@@ -291,7 +333,6 @@ class EntrepriseController extends AbstractFOSRestController
      */
     public function listerUser(SerializerInterface $serializer,Utilisateur $user=null)
     {
-        
         $data = $serializer->serialize($user,'json',['groups' => ['list-entreprise']]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200,['Content-Type' => 'application/json']);
     }

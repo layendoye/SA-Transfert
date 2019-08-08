@@ -130,6 +130,6 @@ class __TwigTemplate_9e83002deb053f2b6ffcfd3f5d83af4a51021b2e87d299b2297115b89ce
 
 </body>
 </html>
-", "@ApiPlatform/Graphiql/index.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/vendor/api-platform/core/src/Bridge/Symfony/Bundle/Resources/views/Graphiql/index.html.twig");
+", "@ApiPlatform/Graphiql/index.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/api-platform/core/src/Bridge/Symfony/Bundle/Resources/views/Graphiql/index.html.twig");
     }
 }

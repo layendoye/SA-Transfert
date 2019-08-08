@@ -25,8 +25,9 @@ class UtilisateurType extends AbstractType
             ->add('email')
             ->add('telephone')
             ->add('nci')
-            ->add('image', FileType::class,['label'=>'Inserer une image'])
-            ->add('compte', EntityType::class, ['class'=> Compte::class,'choice_label' => 'numeroCompte']);
+            ->add('profil')
+            ->add('compte')
+            ->add('image');
     }
     
     public function configureOptions(OptionsResolver $resolver)

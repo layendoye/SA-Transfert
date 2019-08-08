@@ -189,6 +189,6 @@ class __TwigTemplate_c6f40d5524579bb4f4ddba39ceadcaf22dd1a38da52a4d8d28ddd5b997f
         </div>
     </div>
 </div>
-", "@Twig/Exception/traces.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/symfony-API/vendor/symfony/twig-bundle/Resources/views/Exception/traces.html.twig");
+", "@Twig/Exception/traces.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/symfony/twig-bundle/Resources/views/Exception/traces.html.twig");
     }
 }
