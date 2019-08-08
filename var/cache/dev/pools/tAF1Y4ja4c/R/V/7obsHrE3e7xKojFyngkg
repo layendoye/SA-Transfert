@@ -26,8 +26,14 @@
                 'minMessage' => [
                     2 => 'Il faut transferer 500 fr au moins!!',
                 ],
+                'maxMessage' => [
+                    2 => 'Montant maximum 3 000 000 de franc!!',
+                ],
                 'min' => [
                     2 => 500,
+                ],
+                'max' => [
+                    2 => 3000000,
                 ],
             ],
         ],

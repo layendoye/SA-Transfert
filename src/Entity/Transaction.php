@@ -49,8 +49,6 @@ class Transaction
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
-     * @Assert\Length(min="2", max="255" ,minMessage="Le code est trop court !!")
      */
     private $code;
 
@@ -63,7 +61,7 @@ class Transaction
     /**
      * @ORM\Column(type="bigint")
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
-     * @Assert\Range(min=500 ,minMessage="Il faut transferer 500 fr au moins!!")
+     * @Assert\Range(min=500, max=3000000 ,minMessage="Il faut transferer 500 fr au moins!!" ,maxMessage="Montant maximum 3 000 000 de franc!!")
      */
     private $montant;
 
@@ -88,8 +86,6 @@ class Transaction
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
-     * @Assert\Length(min="2", max="255" ,minMessage="Le NCI est trop court !!")
      */
     private $nciRecepteur;
 
@@ -122,6 +118,11 @@ class Transaction
      * @ORM\Column(type="integer")
      */
     private $taxesEtat;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status;
 
     
 
@@ -330,6 +331,18 @@ class Transaction
     public function setTaxesEtat(int $taxesEtat): self
     {
         $this->taxesEtat = $taxesEtat;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

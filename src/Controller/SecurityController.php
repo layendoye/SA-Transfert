@@ -23,6 +23,16 @@ use App\Repository\UtilisateurRepository;
 
 class SecurityController extends AbstractFOSRestController
 {
+    
+    public function __construct()
+    {
+        define('ACTIF',"Actif");
+        define('MESSAGE',"message");
+        define('STATUS',"status");
+        define('SAT',"SA Transfert");
+        define('IMAGE_DIRECTORY',"image_directory");
+
+    }
     /**
      * @Route("/inscription", name="inscription", methods={"POST"})
      */
@@ -49,7 +59,7 @@ class SecurityController extends AbstractFOSRestController
        /* Fin traitement formulaire et envoie des données */
         
         if($form->isSubmitted() && $form->isValid()){
-            $idProfil = $user->getProfil();
+            $idProfil = $user->getProfil();//recuperer via le formulaire
             $idCompte = $user->getCompte();
             $compte=$repoComp->find($idCompte);
             
@@ -106,13 +116,13 @@ class SecurityController extends AbstractFOSRestController
                 
                 $fileName=md5(uniqid()).'.'.$file->guessExtension();//on change le nom du fichier
                 $user->setImage($fileName);
-                $file->move($this->getParameter('image_directory'),$fileName); //definir le image_directory dans service.yaml
+                $file->move($this->getParameter(IMAGE_DIRECTORY),$fileName); //definir le image_directory dans service.yaml
             }
            /*Début gestion des images */
 
            /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
             $user->setEntreprise($Userconnecte->getEntreprise());//si super admin ajout caissier (mm entreprise) si admin principal ajout admin ou user simple (mm entreprise)
-            $user->setStatus('Actif')
+            $user->setStatus(ACTIF)
                  ->setEntreprise($Userconnecte->getEntreprise());
             $hash=$encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
@@ -125,7 +135,7 @@ class SecurityController extends AbstractFOSRestController
             $manager->persist($user);
             $manager->flush();
            /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
-            return $this->handleView($this->view(['status'=>'Enregistrer'],Response::HTTP_CREATED));
+            return $this->handleView($this->view([STATUS=>'Enregistrer'],Response::HTTP_CREATED));
         }
         
         return $this->handleView($this->view($validator->validate($form)));
@@ -142,15 +152,13 @@ class SecurityController extends AbstractFOSRestController
         if(!$data){
             $data=$request->request->all();//si non json
         }
-        $ancienPhoto=$this->getParameter('image_directory')."/".$user->getImage();
+        $ancienPhoto=$this->getParameter(IMAGE_DIRECTORY)."/".$user->getImage();
         $form->submit($data);
         if(!$form->isSubmitted() || !$form->isValid()){
             return $this->handleView($this->view($validator->validate($form)));
         }
         if($requestFile=$request->files->all()){
             $file=$requestFile['image'];
-            
-            
             if($file->guessExtension()!='png' && $file->guessExtension()!='jpeg'){
                 throw new HttpException(400,'Entrer une image valide !! ');
             }
@@ -158,15 +166,15 @@ class SecurityController extends AbstractFOSRestController
             $fileName=md5(uniqid()).'.'.$file->guessExtension();//on change le nom du fichier
             $user->setImage($fileName);
             $file->move($this->getParameter('image_directory'),$fileName); //definir le image_directory dans service.yaml
-            unlink($ancienPhoto);
+            unlink($ancienPhoto);//supprime l'ancienne
         }
         $hash=$encoder->encodePassword($user, $user->getPassword());
         $user->setPassword($hash);
         $manager->persist($user); 
         $manager->flush();
         $afficher = [
-           'status' => 200,
-           'message' => 'L\'utilisateur a été correctement modifié !'
+           STATUS => 200,
+           MESSAGE => 'L\'utilisateur a été correctement modifié !'
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }

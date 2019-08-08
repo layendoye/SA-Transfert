@@ -47,6 +47,19 @@ class AppFixtures extends Fixture
                    ->setEntreprise($saTransfert);
         $manager->persist($saTransfert);
         $manager->persist($compte);
+
+        $etat=new Entreprise();
+        $etat->setRaisonSociale('Etat du Sénégal')
+                    ->setNinea('000 000 000')
+                    ->setAdresse('Tresor public')
+                    ->setTelephoneEntreprise('338541296')
+                    ->setEmailEntreprise('tresor-public@gouv.sn')
+                    ->setStatus($actif);
+        $compte=new Compte();
+        $compte->setNumeroCompte('0221 0445 0443')
+                   ->setEntreprise($etat);
+        $manager->persist($etat);
+        $manager->persist($compte);
         
         $SupUser=new Utilisateur();
         $SupUser->setUsername('Abdou')

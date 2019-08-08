@@ -28,17 +28,6 @@ use App\Entity\UserCompteActuel;
 
 class EntrepriseController extends AbstractFOSRestController
 {
-    private $actif;
-    private $statut;
-    private $message;
-    private $saTransfert;
-    public function __construct(){
-        $this->actif='Actif';
-        $this->statut='status';
-        $this->message='message';
-        $this->saTransfert='SA Transfert';
-    }
-    
     /**
      * @Route("/entreprises/liste", name="entreprises", methods={"GET"})
      * @Route("/entreprise/{id}", name="entreprise", methods={"GET"})
@@ -90,7 +79,7 @@ class EntrepriseController extends AbstractFOSRestController
             return $this->handleView($this->view($validator->validate($form2)));
         }
         
-        $entreprise->setStatus($this->actif); 
+        $entreprise->setStatus("Actif"); 
         $compte=new Compte();
         $compte->setNumeroCompte(date('y').date('m').' '.date('d').date('H').' '.date('i').date('s'))
                ->setEntreprise($entreprise);
@@ -99,7 +88,7 @@ class EntrepriseController extends AbstractFOSRestController
         
         $user->setRoles(['ROLE_admin-Principal'])
             ->setEntreprise($entreprise)
-            ->setStatus($this->actif);
+            ->setStatus("Actif");
         $hash=$encoder->encodePassword($user, $user->getPassword());
         $user->setPassword($hash);
         $manager->persist($user);
@@ -126,8 +115,8 @@ class EntrepriseController extends AbstractFOSRestController
 
         $manager->flush();
         $afficher = [
-           $this->statut => 201,
-           $this->message => 'Le partenaire '.$entreprise->getRaisonSociale().' ainsi que son admin principal ont bien été ajouté !! ',
+           "status" => 201,
+           "message" => 'Le partenaire '.$entreprise->getRaisonSociale().' ainsi que son admin principal ont bien été ajouté !! ',
            'Compte partenaire' =>'Le compte numéro '.$compte->getNumeroCompte().' lui a été assigné'
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
@@ -149,12 +138,12 @@ class EntrepriseController extends AbstractFOSRestController
         if(!$form->isSubmitted() || !$form->isValid()){
             return $this->handleView($this->view($validator->validate($form)));
         }
-        $entreprise->setStatus($this->actif); 
+        $entreprise->setStatus(ACTIF); 
         $manager->persist($entreprise); 
         $manager->flush();
         $afficher = [
-           $this->statut => 200,
-           $this->message => 'Le partenaire a été correctement modifié !'
+           STATUS => 200,
+           MESSAGE => 'Le partenaire a été correctement modifié !'
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
@@ -169,7 +158,7 @@ class EntrepriseController extends AbstractFOSRestController
         if($compte=$repo->findOneBy(['numeroCompte'=>$data['compte']]))
         {
             $data['compte']=$compte->getId();//on lui donne directement l'id
-            if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
+            if($compte->getEntreprise()->getRaisonSociale()==SAT){
                 throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
             }
         }
@@ -188,8 +177,8 @@ class EntrepriseController extends AbstractFOSRestController
            $manager->persist($depot);
            $manager->flush();
            $afficher = [
-               $this->statut => 201,
-               $this->message => 'Le depot a bien été effectué dans le compte '.$compte->getNumeroCompte()
+               STATUS => 201,
+               MESSAGE => 'Le depot a bien été effectué dans le compte '.$compte->getNumeroCompte()
            ];
            return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
 
@@ -205,20 +194,20 @@ class EntrepriseController extends AbstractFOSRestController
         if(!$entreprise){
             throw new HttpException(404,'Ce partenaire n\'existe pas !');
         }
-        elseif($entreprise->getRaisonSociale()==$this->saTransfert){
+        elseif($entreprise->getRaisonSociale()==SAT){
             throw new HttpException(403,'Impossible de bloquer SA Transfert !');
         }
-        elseif($entreprise->getStatus() == $this->actif){
+        elseif($entreprise->getStatus() == ACTIF){
             $entreprise->setStatus("bloqué");
             $texte= 'Partenaire bloqué';
         }
         else{
-            $entreprise->setStatus($this->actif);
+            $entreprise->setStatus(ACTIF);
             $texte= 'Partenaire débloqué';
         }
         $manager->persist($entreprise);
         $manager->flush();
-        $afficher = [$this->statut => 200,$this->message => $texte];
+        $afficher = [STATUS => 200,MESSAGE => $texte];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
     /**
@@ -245,17 +234,17 @@ class EntrepriseController extends AbstractFOSRestController
             throw new HttpException(403,'Impossible de bloquer l\' admin principal !');
         }
         
-        if($user->getStatus() == $this->actif){
+        if($user->getStatus() == ACTIF){
             $user->setStatus("bloqué");
             $texte='Bloqué';
         }
         else{
-            $user->setStatus($this->actif);
+            $user->setStatus(ACTIF);
             $texte= 'Débloqué';
         }
         $manager->persist($user);
         $manager->flush();
-        $afficher = [$this->statut => 200,$this->message => $texte];
+        $afficher = [STATUS => 200,MESSAGE => $texte];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
 
@@ -268,7 +257,7 @@ class EntrepriseController extends AbstractFOSRestController
         if(!$entreprise){
             throw new HttpException(404,'Ce partenaire n\'existe pas !');
         }
-        elseif($entreprise->getRaisonSociale()==$this->saTransfert){
+        elseif($entreprise->getRaisonSociale()==SAT){
             throw new HttpException(403,'Impossible de créer plusieurs compte pour SA Transfert!');
         }
         $compte->setNumeroCompte(date('y').date('m').' '.date('d').date('H').' '.date('i').date('s'))
@@ -277,8 +266,8 @@ class EntrepriseController extends AbstractFOSRestController
         $manager->persist($compte);
         $manager->flush();
         $afficher = [
-            $this->statut => 201,
-            $this->message => 'Un nouveau compte est créé pour l\'entreprise '.$entreprise->getRaisonSociale(),
+            STATUS => 201,
+            MESSAGE => 'Un nouveau compte est créé pour l\'entreprise '.$entreprise->getRaisonSociale(),
             'Numéro de compte '=> $compte->getNumeroCompte()
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
@@ -322,8 +311,8 @@ class EntrepriseController extends AbstractFOSRestController
         $manager->persist($userCompte);
         $manager->flush();
         $afficher = [
-               $this->statut => 201,
-               $this->message => 'Le compte de l\'utilisateur a été modifié !!'
+               STATUS => 201,
+               MESSAGE => 'Le compte de l\'utilisateur a été modifié !!'
            ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }

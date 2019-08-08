@@ -27,6 +27,7 @@
                         'commissionRecepteur',
                         'commissionWari',
                         'taxesEtat',
+                        'status',
                     ],
                 ],
             ],
