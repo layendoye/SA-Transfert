@@ -4,3 +4,7 @@
 cd2122,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565488911,,500
 c5669f,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565488957,,200
 9d054c,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565489000,,201
+d58c0d,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565489133,,500
+10371e,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565489157,,404
+d84584,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565489266,,404
+5279dd,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565489280,,403
