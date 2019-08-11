@@ -26,13 +26,13 @@ class Compte
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
-     * @Groups({"list-entreprise"})
+     * @Groups({"list-entreprise","list-userCmpt"})
+     * 
      */
     private $numeroCompte;
 
     /**
      * @ORM\Column(type="bigint", nullable=true)
-     * @Groups({"list-entreprise"})
      */
     private $solde;
 

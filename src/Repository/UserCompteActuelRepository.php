@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\UserCompteActuel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Entity\Entreprise;
+use App\Entity\Utilisateur;
 
 /**
  * @method UserCompteActuel|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,7 +20,20 @@ class UserCompteActuelRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, UserCompteActuel::class);
     }
-
+    public function findByEntreprise(Entreprise $entreprise){
+        $valeurs=null;
+        $tous=$this->findAll();
+        for($i=0;$i<count($tous);$i++){
+            if($tous[$i]->getCompte()->getEntreprise()==$entreprise){
+                $valeurs[]=$tous[$i];
+            }
+        }
+        return $valeurs;
+    }
+    public function findUserComptActu(Utilisateur $user){
+        $tous=$this->findBy(['utilisateur'=>$user]);
+        return $tous[count($tous)-1];
+    }
     // /**
     //  * @return UserCompteActuel[] Returns an array of UserCompteActuel objects
     //  */

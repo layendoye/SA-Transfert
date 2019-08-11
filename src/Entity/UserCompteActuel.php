@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\UserCompteActuelRepository")
@@ -21,17 +21,20 @@ class UserCompteActuel
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="userCompteActuels")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"list-userCmpt"})
      */
     private $utilisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="userCompteActuels")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"list-userCmpt"})
      */
     private $compte;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"list-userCmpt"})
      */
     private $dateAffectation;
 

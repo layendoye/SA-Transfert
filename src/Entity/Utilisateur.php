@@ -55,29 +55,33 @@ class Utilisateur implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le nom est trop court !!")
+     * @Groups({"list-userCmpt","list-user"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Email(message="Veuillez mettre un email valide !!")
+     * @Groups({"list-user"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
-     * 
+     * @Groups({"list-user"})
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"list-user"})
      */
     private $nci;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"list-user"})
      */
     private $status;
 
@@ -104,6 +108,7 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"list-user"})
      */
     private $image;
 

@@ -85,12 +85,12 @@ class Transaction
     private $telephoneRecepteur;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $nciRecepteur;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime" , nullable=true)
      */
     private $dateReception;
 
@@ -105,7 +105,7 @@ class Transaction
     private $commissionEmetteur;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $commissionRecepteur;
 

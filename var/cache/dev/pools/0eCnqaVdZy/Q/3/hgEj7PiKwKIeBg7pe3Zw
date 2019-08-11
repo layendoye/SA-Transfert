@@ -32,7 +32,7 @@
                     1 => 'string',
                 ],
                 'nullable' => [
-                    1 => false,
+                    1 => true,
                 ],
                 'collection' => [
                     1 => false,

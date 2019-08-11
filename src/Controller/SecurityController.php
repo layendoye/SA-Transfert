@@ -23,14 +23,18 @@ use App\Repository\UtilisateurRepository;
 
 class SecurityController extends AbstractFOSRestController
 {
-    
+    private $actif;
+    private $message;
+    private $status;
+    private $saTransfert;
+    private $image_directory;
     public function __construct()
     {
-        define('ACTIF',"Actif");
-        define('MESSAGE',"message");
-        define('STATUS',"status");
-        define('SAT',"SA Transfert");
-        define('IMAGE_DIRECTORY',"image_directory");
+        $this->actif="Actif";
+        $this->message="message";
+        $this->status="status";
+        $this->saTransfert="SA Transfert";
+        $this->image_directory="image_directory";
 
     }
     /**
@@ -60,8 +64,7 @@ class SecurityController extends AbstractFOSRestController
         
         if($form->isSubmitted() && $form->isValid()){
             $idProfil = $user->getProfil();//recuperer via le formulaire
-            $idCompte = $user->getCompte();
-            $compte=$repoComp->find($idCompte);
+            
             
            /* Début controle de saissie des profils*/
 
@@ -91,21 +94,6 @@ class SecurityController extends AbstractFOSRestController
 
            /* Fin gestion des roles pouvant ajouter */
 
-           /* Début gestion des compte */
-            if ( $idProfil==5 && $idCompte && !$compte instanceof Compte ) {//si on ajout un utilisateur et que le compte qu on veut lui assigné n'existe pas
-                throw new HttpException(404,'Ce compte n\'existe pas !');
-            }
-            elseif($roles == $utilisateur && !$compte){
-                throw new HttpException(404,'Aucun compte n\'est attribuer à cet utilisateur');
-            }
-            elseif($compte && $compte->getEntreprise()!=$Userconnecte->getEntreprise()){
-                throw new HttpException(403,'Ce compte n\'appartient pas à votre entreprise !!');
-            }
-            elseif($compte && $libelle!='utilisateur'){
-                throw new HttpException(403,'Ce profil ne doit pas être rattacher à un compte !!');
-            }
-           /* Fin gestion des compte */
-
            /*Début gestion des images */
             if($requestFile=$request->files->all()){
                 $file=$requestFile['image'];
@@ -116,26 +104,21 @@ class SecurityController extends AbstractFOSRestController
                 
                 $fileName=md5(uniqid()).'.'.$file->guessExtension();//on change le nom du fichier
                 $user->setImage($fileName);
-                $file->move($this->getParameter(IMAGE_DIRECTORY),$fileName); //definir le image_directory dans service.yaml
+                $file->move($this->getParameter($this->image_directory),$fileName); //definir le image_directory dans service.yaml
             }
            /*Début gestion des images */
 
            /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
             $user->setEntreprise($Userconnecte->getEntreprise());//si super admin ajout caissier (mm entreprise) si admin principal ajout admin ou user simple (mm entreprise)
-            $user->setStatus(ACTIF)
+            $user->setStatus($this->actif)
                  ->setEntreprise($Userconnecte->getEntreprise());
             $hash=$encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
-            $userCompte=new UserCompteActuel();
 
-            $userCompte->setCompte($compte)
-                    ->setUtilisateur($user)
-                    ->setDateAffectation(new \DateTime());
-            $manager->persist($userCompte);
             $manager->persist($user);
             $manager->flush();
            /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
-            return $this->handleView($this->view([STATUS=>'Enregistrer'],Response::HTTP_CREATED));
+            return $this->handleView($this->view([$this->status=>'Enregistrer'],Response::HTTP_CREATED));
         }
         
         return $this->handleView($this->view($validator->validate($form)));
@@ -152,7 +135,7 @@ class SecurityController extends AbstractFOSRestController
         if(!$data){
             $data=$request->request->all();//si non json
         }
-        $ancienPhoto=$this->getParameter(IMAGE_DIRECTORY)."/".$user->getImage();
+        $ancienPhoto=$this->getParameter($this->image_directory)."/".$user->getImage();
         $form->submit($data);
         if(!$form->isSubmitted() || !$form->isValid()){
             return $this->handleView($this->view($validator->validate($form)));
@@ -165,7 +148,7 @@ class SecurityController extends AbstractFOSRestController
             
             $fileName=md5(uniqid()).'.'.$file->guessExtension();//on change le nom du fichier
             $user->setImage($fileName);
-            $file->move($this->getParameter('image_directory'),$fileName); //definir le image_directory dans service.yaml
+            $file->move($this->getParameter($this->image_directory),$fileName); //definir le image_directory dans service.yaml
             unlink($ancienPhoto);//supprime l'ancienne
         }
         $hash=$encoder->encodePassword($user, $user->getPassword());
@@ -173,8 +156,8 @@ class SecurityController extends AbstractFOSRestController
         $manager->persist($user); 
         $manager->flush();
         $afficher = [
-           STATUS => 200,
-           MESSAGE => 'L\'utilisateur a été correctement modifié !'
+            $this->status => 200,
+            $this->message => 'L\'utilisateur a été correctement modifié !'
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
