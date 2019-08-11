@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Repository\TransactionRepository;
+use App\Form\TransactionType;
 
 class TransationController extends AbstractFOSRestController
 {
@@ -36,7 +38,7 @@ class TransationController extends AbstractFOSRestController
     /**
      * @Route("/transation/envoie", name="transation_envoie")
      */
-    public function send(Request $request,ObjectManager $manager,ValidatorInterface $validator,TarifsRepository $repoTarif,UserCompteActuelRepository $repoUserComp,CompteRepository $repoCompt,UserInterface $userConnecte)
+    public function envois(Request $request,ObjectManager $manager,ValidatorInterface $validator,TarifsRepository $repoTarif,UserCompteActuelRepository $repoUserComp,CompteRepository $repoCompt,UserInterface $userConnecte)
     {   
         
         $envoie=new Transaction();
@@ -97,6 +99,42 @@ class TransationController extends AbstractFOSRestController
         $afficher = [
            $this->message => 201,
            $this->status => 'Transfert éffectué !'
+        ];
+        return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
+    }
+     /**
+     * @Route("/transation/retrait", name="transation_retrait")
+     */
+    public function retrait(Request $request,TransactionRepository $repoTrans, ObjectManager $manager,ValidatorInterface $validator,UserCompteActuelRepository $repoUserComp,CompteRepository $repoCompt,UserInterface $userConnecte)
+    {
+        $data = json_decode($request->getContent(),true);
+        if(!$data){
+            $data=$request->request->all();
+        }
+        $code=$data['code'];
+        $retrait=$repoTrans->findOneBy(['code'=>$code]);
+        if(!$retrait){
+            throw new HttpException(404,'Ce code n\'existe pas !');
+        }
+        $form = $this->createForm(TransactionType::class,$retrait);
+        $form->submit($data);
+        if(!$form->isSubmitted() || !$form->isValid()){
+            return $this->handleView($this->view($validator->validate($form)));
+        }
+        $montant = $retrait->getMontant();
+        $commissionRecep=$retrait->getCommissionEmetteur()/2;//car l'emetteur avait 20% et le recepteur doit en avoir 10 
+        $userComp=$repoUserComp->findUserComptActu($userConnecte);
+        $retrait->setDateReception(new \DateTime())
+                ->setCommissionRecepteur($commissionRecep)
+                ->setUserComptePartenaireRecepteur($userComp)
+                ->setStatus('Retirer');
+        $manager->persist($retrait);
+        $userComp->getCompte()->setSolde($userComp->getCompte()->getSolde()+$commissionRecep+$montant);
+        $manager->persist($userComp);
+        $manager->flush();
+        $afficher = [
+           $this->message => 201,
+           $this->status => 'Retrait éffectué !'
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
     }

@@ -1,1 +1,6 @@
 47741a,127.0.0.1,POST,http://127.0.0.1:8000/transation/envoie,1565483526,,201
+395df8,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565488872,,401
+66dc37,127.0.0.1,POST,http://127.0.0.1:8000/connexion,1565488884,,200
+cd2122,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565488911,,500
+c5669f,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565488957,,200
+9d054c,127.0.0.1,POST,http://127.0.0.1:8000/transation/retrait,1565489000,,201

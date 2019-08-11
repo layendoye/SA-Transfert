@@ -7,17 +7,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EnvoieType extends AbstractType
+class TransactionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nomClientEmetteur')
-            ->add('telephoneEmetteur')
-            ->add('nciEmetteur')
-            ->add('montant')
-            ->add('nomClientRecepteur')
-            ->add('telephoneRecepteur')
+            ->add('code')         
+            ->add('nciRecepteur')
         ;
     }
 
