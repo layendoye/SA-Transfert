@@ -43,7 +43,8 @@ class SecurityController extends AbstractFOSRestController
      */
     public function inscriptionUtilisateur(Request $request,ObjectManager $manager,UserPasswordEncoderInterface $encoder, UserInterface $Userconnecte, ProfilRepository $repoProfil,  ValidatorInterface $validator,CompteRepository $repoComp){          
         
-        /* Début traitement formulaire et envoie des données */
+        #####################----------Début traitement formulaire et envoie des données----------#####################
+            
             $user=new Utilisateur();
             $form = $this->createForm(UtilisateurType::class,$user);
             $data = json_decode($request->getContent(),true);//Récupère une chaîne encodée JSON et la convertit en une variable PHP
@@ -51,32 +52,33 @@ class SecurityController extends AbstractFOSRestController
                 $data=$request->request->all();
             }
             $form->submit($data);
+            if(!$form->isSubmitted() ||!$form->isValid()){
+                return $this->handleView($this->view($validator->validate($form)));
+            }
+
+        #####################-----------Fin traitement formulaire et envoie des données-----------#####################
+        
+        #####################----------------Début controle de saissie des profils----------------#####################
             
-        /* Fin traitement formulaire et envoie des données */
-        
-        if(!$form->isValid()){
-            return $this->handleView($this->view($validator->validate($form)));
-        }
-        
-        /* Début controle de saissie des profils*/
-            $idProfil = $user->getProfil();//recuperer via le formulaire
+            $idProfil = $user->getProfil();# recuperer via le formulaire
             if(!$profil=$repoProfil->find($idProfil)){
                 throw new HttpException(404,'Ce profil n\'existe pas !');
             }
 
-        /* Fin controle de saissie des profils*/
+        #####################-----------------Fin controle de saissie des profils-----------------#####################
 
-        /* Début gestion des roles pouvant ajouter */
+        #####################----------------Début gestion des roles pouvant ajouter -------------#####################
 
-            $roleUserConnecte[]=$Userconnecte->getRoles()[0];//on le met dans un tableau pour le comparer aux roles (qui sont des tableaux), le [1] est le role user par defaut
+            $roleUserConnecte[]=$Userconnecte->getRoles()[0];# on le met dans un tableau pour le comparer aux roles (qui sont des tableaux), le [1] est le role user par defaut
             $libelle=$profil->getLibelle();
             $roles=['ROLE_'.$libelle];
             $this->validationRole($roles,$roleUserConnecte);
             $user->setRoles($roles);
 
-        /* Fin gestion des roles pouvant ajouter */
+        #####################-----------------Fin gestion des roles pouvant ajouter --------------#####################
 
-        /*Début gestion des images */
+        #####################------------------------Début gestion des images --------------------#####################
+            
             if($requestFile=$request->files->all()){
                 $file=$requestFile['image'];
                 $extension=$file->guessExtension();
@@ -88,9 +90,11 @@ class SecurityController extends AbstractFOSRestController
                 $user->setImage($fileName);
                 $file->move($this->getParameter($this->image_directory),$fileName); //definir le image_directory dans service.yaml
             }
-        /*Début gestion des images */
 
-        /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
+        #####################-------------------------Fin gestion des images ---------------------#####################
+
+        #####################------------------Début finalisation de l'inscription----------------#####################
+            
             $user->setEntreprise($Userconnecte->getEntreprise());//si super admin ajout caissier (mm entreprise) si admin principal ajout admin ou user simple (mm entreprise)
             $user->setStatus($this->actif)
                  ->setEntreprise($Userconnecte->getEntreprise());
@@ -99,10 +103,68 @@ class SecurityController extends AbstractFOSRestController
 
             $manager->persist($user);
             $manager->flush();
-        /* Début finalisation de l'inscription (status, mot de passe, enregistrement définitif) */
-        return $this->handleView($this->view([$this->status=>'Enregistrer'],Response::HTTP_CREATED));
-        
+            return $this->handleView($this->view([$this->status=>'Enregistrer'],Response::HTTP_CREATED));
+
+        #####################-------------------Fin finalisation de l'inscription-----------------#####################
     }
+
+    /**
+     * @Route("/user/update/{id}", name="update_user", methods={"POST"})
+     */
+    public function updateUser(Utilisateur $user,Request $request, ObjectManager $manager, ValidatorInterface $validator,UserPasswordEncoderInterface $encoder){
+        #####################----------Début gestion formulaire---------------#####################
+            
+            if(!$user){
+                throw new HttpException(404,'Cet utilisateur n\'existe pas !');
+            }
+            $form = $this->createForm(UtilisateurType::class,$user);
+            $data=json_decode($request->getContent(),true);//si json
+            if(!$data){
+                $data=$request->request->all();//si non json
+            }
+            $ancienPhoto=$this->getParameter($this->image_directory)."/".$user->getImage();
+            $form->submit($data);
+            if(!$form->isSubmitted() || !$form->isValid()){
+                return $this->handleView($this->view($validator->validate($form)));
+            }
+
+        #####################-----------Fin gestion formulaire----------------#####################
+        
+        #####################----------Début gestion des images --------------#####################
+            
+            if($requestFile=$request->files->all()){
+                $file=$requestFile['image'];
+                if($file->guessExtension()!='png' && $file->guessExtension()!='jpeg'){
+                    throw new HttpException(400,'Entrer une image valide !! ');
+                }
+
+                $fileName=md5(uniqid()).'.'.$file->guessExtension();//on change le nom du fichier
+                $user->setImage($fileName);
+                $file->move($this->getParameter($this->image_directory),$fileName); //definir le image_directory dans service.yaml
+                unlink($ancienPhoto);//supprime l'ancienne
+            }
+
+        #####################-----------Fin gestion des images ---------------#####################
+
+        #####################------Début finalisation de l'inscription--------#####################
+            
+            $hash=$encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($hash);
+            $manager->persist($user); 
+            $manager->flush();
+            $afficher = [
+                $this->status => 200,
+                $this->message => 'L\'utilisateur a été correctement modifié !'
+            ];
+            return $this->handleView($this->view($afficher,Response::HTTP_OK));
+            
+        #####################-------Fin finalisation de l'inscription---------#####################
+    }
+
+    /**
+     *@Route("/connexion", name="connexion", methods={"POST"})
+     */
+    public function login(){ }
 
     public function validationRole($roles,$roleUserConnecte){
         $roleSupAdmi=['ROLE_Super-admin'];
@@ -122,50 +184,6 @@ class SecurityController extends AbstractFOSRestController
              throw new HttpException(403,'Votre profil ne vous permet pas de créer ce type d\'utilisateur');
         }
     }
-
-    /**
-     * @Route("/user/update/{id}", name="update_user", methods={"POST"})
-     */
-    public function updateUser(Utilisateur $user,Request $request, ObjectManager $manager, ValidatorInterface $validator,UserPasswordEncoderInterface $encoder){
-        if(!$user){
-            throw new HttpException(404,'Cet utilisateur n\'existe pas !');
-        }
-        $form = $this->createForm(UtilisateurType::class,$user);
-        $data=json_decode($request->getContent(),true);//si json
-        if(!$data){
-            $data=$request->request->all();//si non json
-        }
-        $ancienPhoto=$this->getParameter($this->image_directory)."/".$user->getImage();
-        $form->submit($data);
-        if(!$form->isSubmitted() || !$form->isValid()){
-            return $this->handleView($this->view($validator->validate($form)));
-        }
-        if($requestFile=$request->files->all()){
-            $file=$requestFile['image'];
-            if($file->guessExtension()!='png' && $file->guessExtension()!='jpeg'){
-                throw new HttpException(400,'Entrer une image valide !! ');
-            }
-            
-            $fileName=md5(uniqid()).'.'.$file->guessExtension();//on change le nom du fichier
-            $user->setImage($fileName);
-            $file->move($this->getParameter($this->image_directory),$fileName); //definir le image_directory dans service.yaml
-            unlink($ancienPhoto);//supprime l'ancienne
-        }
-        $hash=$encoder->encodePassword($user, $user->getPassword());
-        $user->setPassword($hash);
-        $manager->persist($user); 
-        $manager->flush();
-        $afficher = [
-            $this->status => 200,
-            $this->message => 'L\'utilisateur a été correctement modifié !'
-        ];
-        return $this->handleView($this->view($afficher,Response::HTTP_OK));
-    }
-
-    /**
-     *@Route("/connexion", name="connexion", methods={"POST"})
-     */
-    public function login(){ }
 }
      /*
         1 - Aller dans config -> packages -> fos_rest.yaml
