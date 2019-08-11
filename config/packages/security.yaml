@@ -2,11 +2,11 @@ security:
     encoders:
         App\Entity\Utilisateur:
             algorithm: auto
-    role_hierarchy:
-        ROLE_Super-admin: [ROLE_listeur-entreprise, ROLE_inscrir]
-        ROLE_Caissier: ROLE_listeur-entreprise
-        ROLE_admin-Principal: ROLE_inscrir
-        ROLE_admin: ROLE_inscrir
+    # role_hierarchy:
+    #     ROLE_Super-admin: [ROLE_listeur-entreprise, ROLE_inscrir]
+    #     ROLE_Caissier: ROLE_listeur-entreprise
+    #     ROLE_admin-Principal: ROLE_inscrir
+    #     ROLE_admin: ROLE_inscrir
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)

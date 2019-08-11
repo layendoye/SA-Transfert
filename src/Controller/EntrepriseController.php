@@ -48,6 +48,7 @@ class EntrepriseController extends AbstractFOSRestController
     /**
      * @Route("/entreprises/liste", name="entreprises", methods={"GET"})
      * @Route("/entreprise/{id}", name="entreprise", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_Caissier"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
     public function lister(EntrepriseRepository $repo, SerializerInterface $serializer,Entreprise $entreprise=null,$id=null)
     {
@@ -63,6 +64,7 @@ class EntrepriseController extends AbstractFOSRestController
     }
     /**
      * @Route("/partenaires/add", name="add_entreprise", methods={"POST"})
+     * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
     public function addPartenaire(Request $request, ObjectManager $manager, ValidatorInterface $validator,UserPasswordEncoderInterface $encoder)
     {
@@ -166,6 +168,7 @@ class EntrepriseController extends AbstractFOSRestController
     }
     /**
     * @Route("/nouveau/depot", methods={"POST"})
+    * @IsGranted({"ROLE_Caissier"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */
     public function depot (Request $request, ValidatorInterface $validator, UserInterface $Userconnecte,CompteRepository $repo, ObjectManager $manager)
     {
@@ -205,6 +208,7 @@ class EntrepriseController extends AbstractFOSRestController
 
     /**
     * @Route("/bloque/entreprises/{id}", name="bloque_entreprise", methods={"GET"})
+    * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */ 
     public function bloqueEntrep(ObjectManager $manager,Entreprise $entreprise=null )
     {
