@@ -74,7 +74,12 @@ class TransationController extends AbstractFOSRestController
 
         
         $userComp=$repoUserComp->findUserComptActu($userConnecte);
-        
+        if(!$userComp){
+            throw new HttpException(403,'Vous n\'etes rattachéà aucun compte !');
+        }
+        elseif($userComp->getCompte()->getSolde()<$montant){
+            throw new HttpException(403,'Le solde de votre compte ne vous permet pas de traiter cette transaction !');
+        }
         $code=date('s').date('i').' '.date('H').date('d').' '.date('m').date('Y');
         $envoie->setDateEnvoi(new \DateTime())
                ->setCode($code)
@@ -131,6 +136,9 @@ class TransationController extends AbstractFOSRestController
         $commissionRecep=$retrait->getCommissionEmetteur()/2;//car l'emetteur avait 20% et le recepteur doit en avoir 10 
         
         $userComp=$repoUserComp->findUserComptActu($userConnecte);
+        if(!$userComp){
+            throw new HttpException(403,'Vous n\'etes rattachéà aucun compte !');
+        }
         $retrait->setDateReception(new \DateTime())
                 ->setCommissionRecepteur($commissionRecep)
                 ->setUserComptePartenaireRecepteur($userComp)
