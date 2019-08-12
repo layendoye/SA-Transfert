@@ -35,6 +35,8 @@ class EntrepriseController extends AbstractFOSRestController
     private $saTransfert;
     private $groups;
     private $contentType;
+    private $utilisateurStr;
+    private $compteStr;
     public function __construct()
     {
         $this->actif="Actif";
@@ -43,6 +45,8 @@ class EntrepriseController extends AbstractFOSRestController
         $this->saTransfert="SA Transfert";
         $this->groups='groups';
         $this->contentType='Content-Type';
+        $this->utilisateurStr='utilisateur';
+        $this->compteStr='compte';
     }
 
     /**
@@ -183,14 +187,15 @@ class EntrepriseController extends AbstractFOSRestController
     * @IsGranted({"ROLE_Caissier"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */
     public function depot (Request $request, ValidatorInterface $validator, UserInterface $Userconnecte,CompteRepository $repo, ObjectManager $manager){
+        $compte='compte';
         $depot = new Depot();
         $form = $this->createForm(DepotType::class, $depot);
         $data=json_decode($request->getContent(),true);
         if(!$data){
             $data=$request->request->all();//si non json
         }
-        if($compte=$repo->findOneBy(['numeroCompte'=>$data['compte']])){
-            $data['compte']=$compte->getId();//on lui donne directement l'id
+        if($compte=$repo->findOneBy(['numeroCompte'=>$data[$compte]])){
+            $data[$compte]=$compte->getId();//on lui donne directement l'id
             if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
                 throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
             }
@@ -311,15 +316,17 @@ class EntrepriseController extends AbstractFOSRestController
      * @IsGranted("ROLE_admin-Principal", statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
     public function changeCompte(Request $request,ObjectManager $manager, UserInterface $Userconnecte,UtilisateurRepository $repoUser,CompteRepository $repoCompte,UserCompteActuelRepository $repoUserComp)
-    {   $utilisateur='utilisateur';
+    {   
+        
+        
         $data=json_decode($request->getContent(),true);
         if(!$data){
             $data=$request->request->all();//si non json
         }
-        if(!isset($data[$utilisateur],$data['compte'])){
+        if(!isset($data[$this->utilisateurStr],$data[$this->compteStr])){
             throw new HttpException(404,'Remplir un utilisateur et  cunompte existant!');
         }
-        elseif(!$user=$repoUser->find($data[$utilisateur])){
+        elseif(!$user=$repoUser->find($data[$this->utilisateurStr])){
             throw new HttpException(404,'Cet utilisateur n\'existe pas !');
         }
         elseif($user->getRoles()[0]=='ROLE_Super-admin' || $user->getRoles()[0]=='ROLE_Caissier'){
@@ -328,14 +335,14 @@ class EntrepriseController extends AbstractFOSRestController
         elseif($user->getEntreprise()!=$Userconnecte->getEntreprise()){
             throw new HttpException(403,'Cet utilisateur n\'appartient pas à votre entreprise !');
         }
-        if(!$compte=$repoCompte->find($data['compte'])){
+        if(!$compte=$repoCompte->find($data[$this->compteStr])){
             throw new HttpException(404,'Ce compte n\'existe pas !');
         }
         elseif($compte->getEntreprise()!=$Userconnecte->getEntreprise()){
             throw new HttpException(404,'Ce compte n\'appartient pas à votre entreprise !');
         }
         $idcompActuel=null;
-        if($userComp=$repoUserComp->findBy([$utilisateur=>$user])){
+        if($userComp=$repoUserComp->findBy([$this->utilisateurStr=>$user])){
             $idcompActuel=$userComp[count($userComp)-1]->getCompte()->getId();//l id du compte qu il utilise actuellement
         }
         

@@ -8,12 +8,18 @@ use App\Entity\Entreprise;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+    private $encoder;
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder=$encoder;
+    }
     public function load(ObjectManager $manager)
     {
-        $motDePass='$2y$13$ABDZmhTxOlcf4HHbTC3BJeNFZuL/ad/uMTdZgCJZLYYQcSQP0LTKG';
+        
         $actif='Actif';
         $profilSup=new Profil();
         $profilSup->setLibelle('Super-admin');
@@ -62,6 +68,7 @@ class AppFixtures extends Fixture
         $manager->persist($compte);
         
         $SupUser=new Utilisateur();
+        $motDePass=$this->encoder->encodePassword($SupUser, 'azerty');
         $SupUser->setUsername('Abdou')
              ->setRoles(['ROLE_Super-admin'])
              ->setPassword($motDePass)

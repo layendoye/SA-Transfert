@@ -25,18 +25,28 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
+
 class TransationController extends AbstractFOSRestController
 {
     private $message;
     private $status;
     private $saTransfert;
     private $groups;
+    private $envois;
+    private $retraits;
+    private $dateDebut;
+    private $dateFin;
     public function __construct()
     {
         $this->message="message";
         $this->status="status";
         $this->saTransfert="SA Transfert";
         $this->groups='groups';
+        $this->envois='envois';
+        $this->retraits='retraits';
+        $this->dateDebut='dateDebut';
+        $this->dateFin='dateFin';
     }
 
     /**
@@ -165,60 +175,107 @@ class TransationController extends AbstractFOSRestController
     * @Route("/transation/user/{action}/{id}", name="transation_user")
     * @IsGranted({"ROLE_utilisateur","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */
-    public function transactionUser($action,TransactionRepository $repoTrans,SerializerInterface $serializer,Utilisateur $user){
-        $envois='envois';
-        $retraits='retraits';
+    public function transactionUser(Request $request,$action,TransactionRepository $repoTrans,SerializerInterface $serializer,Utilisateur $user,UserInterface $userConnecte){
+
+        $data = json_decode($request->getContent(),true);
+        if(!$data){
+            $data=$request->request->all();
+        }
+
+        if(!isset($data[$this->dateDebut],$data[$this->dateFin])){
+            throw new HttpException(404,'Il y a une erreur sur les données transmises !');
+        }
+        $debut=$data[$this->dateDebut];
+        $fin=$data[$this->dateFin];
         if(!$user){
             throw new HttpException(404,'Cet utilisateur n\'existe pas !');
         }
-        elseif($action!= $envois && $action!=$retraits){
+        elseif($action!= $this->envois && $action!=$this->retraits){
             throw new HttpException(404,'Resource non trouvée !!');
         }
-        $transactionsUser=[];
-        $transactions=$repoTrans->findAll();
-        for($i=0;$i<count($transactions);$i++){
-            $userComptEmetteur=$transactions[$i]->getUserComptePartenaireEmetteur();
-            $userComptRecpt=$transactions[$i]->getUserComptePartenaireRecepteur();
-            if($userComptEmetteur && $userComptEmetteur->getUtilisateur()==$user && $action== $envois|| $userComptRecpt && $userComptRecpt->getUtilisateur()==$user && $action==$retraits){
-                $transactionsUser[]=$transactions[$i];
-            }
+        elseif($user->getEntreprise()!=$userConnecte->getEntreprise()){
+            throw new HttpException(403,'Cet utilisateur n\'est pas membre de votre entreprise !!');
         }
-        if($action== $envois){
-             $data = $serializer->serialize($transactionsUser,'json',[ $this->groups => ['list-envois']]);//chercher une alternative pour les groupes avec forest
+        elseif($userConnecte->getRoles()[0]=='ROLE_utilisateur' &&  $user!=$userConnecte){
+            throw new HttpException(403,'Vous n\'avez pas acces à ce contenu !!');
+        }
+        $transactionsUser=$this->transationDate($repoTrans,$debut,$fin,$action,$user);
+        if($transactionsUser==[]){
+            return $this->handleView($this->view(['Résultat'=>'Aucune transaction trouvée !!!!'],404));
+        }
+        if($action == $this->envois){
+             $values = $serializer->serialize($transactionsUser,'json',[ $this->groups => ['list-envois']]);//chercher une alternative pour les groupes avec forest
         }
         else{
-            $data = $serializer->serialize($transactionsUser,'json',[ $this->groups => ['list-retraits']]);//chercher une alternative pour les groupes avec forest
+            $values = $serializer->serialize($transactionsUser,'json',[ $this->groups => ['list-retraits']]);//chercher une alternative pour les groupes avec forest
         }
-        return new Response($data,200);
+        return new Response($values,200);
     }
+    
     /**
     * @Route("/transation/partenaire/{action}/{id}", name="transation_partenaire")
-    * @IsGranted({"ROLE_utilisateur","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+    * @IsGranted({"ROLE_Super-admin","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */
-    public function transactionPartenaire($action,TransactionRepository $repoTrans,SerializerInterface $serializer,Entreprise $entreprise){
-        $envois='envois';
-        $retraits='retraits';
+    public function transactionPartenaire(Request $request,$action,TransactionRepository $repoTrans,SerializerInterface $serializer,Entreprise $entreprise,UserInterface $userConnecte){
+        $data = json_decode($request->getContent(),true);
+        if(!$data){
+            $data=$request->request->all();
+        }
+
+        if(!isset($data[$this->dateDebut],$data[$this->dateFin])){
+            throw new HttpException(404,'Il y a une erreur sur les données transmises !');
+        }
+        $debut=$data[$this->dateDebut];
+        $fin=$data[$this->dateFin];
         if(!$entreprise){
             throw new HttpException(404,'Cette entreprise n\'existe pas !');
         }
-        elseif($action!= $envois && $action!=$retraits){
+        elseif($action!= $this->envois && $action!=$this->retraits){
             throw new HttpException(404,'Resource non trouvée !!!!');
         }
-        $transactionsPart=[];
-        $transactions=$repoTrans->findAll();
-        for($i=0;$i<count($transactions);$i++){
-            $userComptEmetteur=$transactions[$i]->getUserComptePartenaireEmetteur();
-            $userComptRecpt=$transactions[$i]->getUserComptePartenaireRecepteur();
-            if($userComptEmetteur && $userComptEmetteur->getUtilisateur()->getEntreprise()==$entreprise && $action== $envois|| $userComptRecpt && $userComptRecpt->getUtilisateur()->getEntreprise()==$entreprise && $action==$retraits){
-                $transactionsPart[]=$transactions[$i];
-            }
+        elseif($userConnecte->getRoles()[0]!='ROLE_Super-admin' &&  $entreprise!=$userConnecte->getEntreprise()){
+            throw new HttpException(403,'Vous n\'avez pas acces à ce contenu !!');
         }
-        if($action== $envois){
+        $transactionsPart=$this->transationDate($repoTrans,$debut,$fin,$action,null,$entreprise);
+        if($transactionsPart==[]){
+            return $this->handleView($this->view(['Résultat'=>'Aucune transaction trouvée !!!!'],404));
+        }
+        if($action== $this->envois){
              $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => ['list-envois']]);//chercher une alternative pour les groupes avec forest
         }
         else{
             $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => ['list-retraits']]);//chercher une alternative pour les groupes avec forest
         }
         return new Response($data,200);
-    }    
+    } 
+    public function transationDate(TransactionRepository $repoTrans,$debut,$fin,$action, Utilisateur $user=null,Entreprise $entreprise=null){
+        $transactionsAll=[];
+        $transactions=$repoTrans->findAll();
+        $debut=new \DateTime($debut);
+        $fin=new \DateTime($fin);
+        if($debut>$fin){
+            throw new HttpException(403,'Impossible car la date de début est superieure à la date de fin !');
+        }
+        elseif($fin>new \DateTime()){
+            throw new HttpException(403,'Impossible car la date de fin est superieure à la date actuelle !');
+        }
+        for($i=0;$i<count($transactions);$i++){
+            $dateEnvois=new \DateTime($transactions[$i]->getDateEnvoi()->format('Y-m-d'));//$transactions[$i]->getDateEnvoi() seulement renvois un objet de type date avec les minutes et les secondes donc 2019-08-11 < 2019-08-11 08h22 et $transactions[$i]->getDateEnvoi()->format('Y-m-d') renvois une chaine de caracteres pour le remettre en objet date j ai utilisé le new \DateTime()
+            $dateRetrait=new \DateTime($transactions[$i]->getDateReception()->format('Y-m-d'));
+            $userComptEmetteur=$transactions[$i]->getUserComptePartenaireEmetteur();
+            $userComptRecpt=$transactions[$i]->getUserComptePartenaireRecepteur();
+            $cas1 = ($action == $this->envois   && $userComptEmetteur && $debut <= $dateEnvois  && $dateEnvois  <= $fin);//si la transaction est un envois et que le $userComptEmetteur existe et que la date est entre le debut et la fin ça retourne true
+            $cas2 = ($action == $this->retraits && $userComptRecpt    && $debut <= $dateRetrait && $dateRetrait <= $fin);
+            
+            if($user       && $cas1 && $userComptEmetteur->getUtilisateur()                  == $user       || 
+               $user       && $cas2 && $userComptRecpt->getUtilisateur()                     == $user       ||
+               $entreprise && $cas1 && $userComptEmetteur->getUtilisateur()->getEntreprise() == $entreprise ||
+               $entreprise && $cas2 && $userComptRecpt->getUtilisateur()->getEntreprise()    == $entreprise   )
+            {
+                $transactionsAll[]=$transactions[$i];
+            } 
+            
+        }
+        return $transactionsAll;
+    }
 }
