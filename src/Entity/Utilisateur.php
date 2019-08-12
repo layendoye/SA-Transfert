@@ -117,7 +117,7 @@ class Utilisateur implements UserInterface
      */
     private $userCompteActuels;
     private $profil;
-    private $compte;
+
     public function __construct()
     {
         $this->depots = new ArrayCollection();
@@ -439,26 +439,4 @@ class Utilisateur implements UserInterface
 
         return $this;
     }
-
-    /**
-     * Get the value of compte
-     */ 
-    public function getCompte()
-    {
-        return $this->compte;
-    }
-
-    /**
-     * Set the value of compte
-     *
-     * @return  self
-     */ 
-    public function setCompte($compte)
-    {
-        $this->compte = $compte;
-
-        return $this;
-    }
-
-
 }

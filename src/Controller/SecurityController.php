@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Repository\UtilisateurRepository;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class SecurityController extends AbstractFOSRestController
 {
     private $actif;
@@ -122,7 +122,8 @@ class SecurityController extends AbstractFOSRestController
             if(!$data){
                 $data=$request->request->all();//si non json
             }
-            $ancienPhoto=$this->getParameter($this->image_directory)."/".$user->getImage();
+            $ancienNom=$user->getImage();//pour le supprimer
+            
             $form->submit($data);
             if(!$form->isSubmitted() || !$form->isValid()){
                 return $this->handleView($this->view($validator->validate($form)));
@@ -141,7 +142,11 @@ class SecurityController extends AbstractFOSRestController
                 $fileName=md5(uniqid()).'.'.$file->guessExtension();//on change le nom du fichier
                 $user->setImage($fileName);
                 $file->move($this->getParameter($this->image_directory),$fileName); //definir le image_directory dans service.yaml
-                unlink($ancienPhoto);//supprime l'ancienne
+                $ancienPhoto=$this->getParameter($this->image_directory)."/".$ancienNom;
+                if($ancienNom){
+                   unlink($ancienPhoto);//supprime l'ancienne 
+                }
+                
             }
 
         #####################-----------Fin gestion des images ---------------#####################

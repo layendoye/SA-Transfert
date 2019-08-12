@@ -2,11 +2,12 @@
 
 namespace App\Repository;
 
-use App\Entity\UserCompteActuel;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use App\Entity\Entreprise;
 use App\Entity\Utilisateur;
+use App\Entity\UserCompteActuel;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method UserCompteActuel|null find($id, $lockMode = null, $lockVersion = null)
@@ -32,6 +33,9 @@ class UserCompteActuelRepository extends ServiceEntityRepository
     }
     public function findUserComptActu(Utilisateur $user){
         $tous=$this->findBy(['utilisateur'=>$user]);
+        if(!$tous){
+            throw new HttpException(404,'Aucun compte n\'est alloué à cet utilisateur !!!!');
+        }
         return $tous[count($tous)-1];
     }
     // /**

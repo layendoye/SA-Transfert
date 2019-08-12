@@ -25,6 +25,7 @@ class Transaction
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le nom est trop court !!")
+     * @Groups({"list-envois"})
      */
     private $nomClientEmetteur;
 
@@ -32,6 +33,7 @@ class Transaction
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le téléphone est trop court !!")
+     * @Groups({"list-envois"})
      */
     private $telephoneEmetteur;
 
@@ -39,16 +41,19 @@ class Transaction
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le NCI est trop court !!")
+     * @Groups({"list-envois"})
      */
     private $nciEmetteur;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"list-envois"})
      */
     private $dateEnvoi;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"list-envois","list-retraits"})
      */
     private $code;
 
@@ -62,11 +67,13 @@ class Transaction
      * @ORM\Column(type="bigint")
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Range(min=500, max=3000000 ,minMessage="Il faut transferer 500 fr au moins!!" ,maxMessage="Montant maximum 3 000 000 de franc!!")
+     * @Groups({"list-envois","list-retraits"})
      */
     private $montant;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"list-envois"})
      */
     private $frais;
 
@@ -74,6 +81,7 @@ class Transaction
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le nom est trop court !!")
+     * @Groups({"list-envois","list-retraits"})
      */
     private $nomClientRecepteur;
 
@@ -81,16 +89,19 @@ class Transaction
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le téléphone est trop court !!")
+     * @Groups({"list-envois","list-retraits"})
      */
     private $telephoneRecepteur;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"list-retraits"})
      */
     private $nciRecepteur;
 
     /**
      * @ORM\Column(type="datetime" , nullable=true)
+     * @Groups({"list-retraits"})
      */
     private $dateReception;
 

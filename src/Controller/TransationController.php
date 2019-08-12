@@ -12,6 +12,7 @@ use App\Form\TransactionType;
 use App\Entity\UserCompteActuel;
 use App\Repository\CompteRepository;
 use App\Repository\TarifsRepository;
+use Symfony\Component\Serializer\SerializerInterface;
 use App\Repository\EntrepriseRepository;
 use App\Repository\TransactionRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,21 +24,24 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class TransationController extends AbstractFOSRestController
 {
     private $message;
     private $status;
     private $saTransfert;
+    private $groups;
     public function __construct()
     {
         $this->message="message";
         $this->status="status";
         $this->saTransfert="SA Transfert";
+        $this->groups='groups';
     }
 
     /**
      * @Route("/transation/envoie", name="transation_envoie")
+     * @IsGranted({"ROLE_utilisateur","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
     public function envois(Request $request,ObjectManager $manager,ValidatorInterface $validator,TarifsRepository $repoTarif,UserCompteActuelRepository $repoUserComp,CompteRepository $repoCompt,UserInterface $userConnecte)
     {   
@@ -108,10 +112,11 @@ class TransationController extends AbstractFOSRestController
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
     }
-     /**
-     * @Route("/transation/retrait", name="transation_retrait")
-     */
-    public function retrait(Request $request,TransactionRepository $repoTrans, ObjectManager $manager,ValidatorInterface $validator,UserCompteActuelRepository $repoUserComp,CompteRepository $repoCompt,UserInterface $userConnecte)
+    /**
+    * @Route("/transation/retrait", name="transation_retrait")
+    * @IsGranted({"ROLE_utilisateur","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+    */
+    public function retrait(Request $request,TransactionRepository $repoTrans, ObjectManager $manager,ValidatorInterface $validator,UserCompteActuelRepository $repoUserComp,UserInterface $userConnecte)
     {
         $data = json_decode($request->getContent(),true);
         if(!$data){
@@ -155,4 +160,65 @@ class TransationController extends AbstractFOSRestController
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
     }
+
+    /**
+    * @Route("/transation/user/{action}/{id}", name="transation_user")
+    * @IsGranted({"ROLE_utilisateur","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+    */
+    public function transactionUser($action,TransactionRepository $repoTrans,SerializerInterface $serializer,Utilisateur $user){
+        $envois='envois';
+        $retraits='retraits';
+        if(!$user){
+            throw new HttpException(404,'Cet utilisateur n\'existe pas !');
+        }
+        elseif($action!= $envois && $action!=$retraits){
+            throw new HttpException(404,'Resource non trouvée !!');
+        }
+        $transactionsUser=[];
+        $transactions=$repoTrans->findAll();
+        for($i=0;$i<count($transactions);$i++){
+            $userComptEmetteur=$transactions[$i]->getUserComptePartenaireEmetteur();
+            $userComptRecpt=$transactions[$i]->getUserComptePartenaireRecepteur();
+            if($userComptEmetteur && $userComptEmetteur->getUtilisateur()==$user && $action== $envois|| $userComptRecpt && $userComptRecpt->getUtilisateur()==$user && $action==$retraits){
+                $transactionsUser[]=$transactions[$i];
+            }
+        }
+        if($action== $envois){
+             $data = $serializer->serialize($transactionsUser,'json',[ $this->groups => ['list-envois']]);//chercher une alternative pour les groupes avec forest
+        }
+        else{
+            $data = $serializer->serialize($transactionsUser,'json',[ $this->groups => ['list-retraits']]);//chercher une alternative pour les groupes avec forest
+        }
+        return new Response($data,200);
+    }
+    /**
+    * @Route("/transation/partenaire/{action}/{id}", name="transation_partenaire")
+    * @IsGranted({"ROLE_utilisateur","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+    */
+    public function transactionPartenaire($action,TransactionRepository $repoTrans,SerializerInterface $serializer,Entreprise $entreprise){
+        $envois='envois';
+        $retraits='retraits';
+        if(!$entreprise){
+            throw new HttpException(404,'Cette entreprise n\'existe pas !');
+        }
+        elseif($action!= $envois && $action!=$retraits){
+            throw new HttpException(404,'Resource non trouvée !!!!');
+        }
+        $transactionsPart=[];
+        $transactions=$repoTrans->findAll();
+        for($i=0;$i<count($transactions);$i++){
+            $userComptEmetteur=$transactions[$i]->getUserComptePartenaireEmetteur();
+            $userComptRecpt=$transactions[$i]->getUserComptePartenaireRecepteur();
+            if($userComptEmetteur && $userComptEmetteur->getUtilisateur()->getEntreprise()==$entreprise && $action== $envois|| $userComptRecpt && $userComptRecpt->getUtilisateur()->getEntreprise()==$entreprise && $action==$retraits){
+                $transactionsPart[]=$transactions[$i];
+            }
+        }
+        if($action== $envois){
+             $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => ['list-envois']]);//chercher une alternative pour les groupes avec forest
+        }
+        else{
+            $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => ['list-retraits']]);//chercher une alternative pour les groupes avec forest
+        }
+        return new Response($data,200);
+    }    
 }

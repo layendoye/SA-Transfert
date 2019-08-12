@@ -68,57 +68,62 @@ class EntrepriseController extends AbstractFOSRestController
      */
     public function addPartenaire(Request $request, ObjectManager $manager, ValidatorInterface $validator,UserPasswordEncoderInterface $encoder)
     {
-        $raisonSociale='raisonSociale';
-        $ninea='ninea';
-        $adresse='adresse';
-        $telephoneEntreprise='telephoneEntreprise';
-        $emailEntreprise='emailEntreprise';
-        $entreprise = new Entreprise();
-        $form1=$this->createForm(EntrepriseType::class,$entreprise);
-        $data=json_decode($request->getContent(),true);
-        if(!$data){//s il n'existe pas donc on recupere directement le tableau via la request
-            $data=$request->request->all();
-        }
-        $dataPartenaire=array(
-            $raisonSociale=>$data[$raisonSociale],
-            $ninea=>$data[$ninea],
-            $adresse=>$data[$adresse],
-            $telephoneEntreprise=>$data[$telephoneEntreprise],
-            $emailEntreprise=>$data[$emailEntreprise]
-        );
-        $form1->submit($dataPartenaire);
-        if(!$form1->isSubmitted() || !$form1->isValid()){
-            return $this->handleView($this->view($validator->validate($form1)));
-        }
-        unset($data[$raisonSociale],$data[$ninea],$data[$adresse],$data[$telephoneEntreprise],$data[$emailEntreprise]);//on supprime les données du partenaire
-        $user=new Utilisateur();
-        $form2=$this->createForm(UtilisateurType::class,$user);
-        $form2->submit($data);
-        if(!$form2->isSubmitted() || !$form2->isValid()){
-            return $this->handleView($this->view($validator->validate($form2)));
-        }
-        
-        $entreprise->setStatus($this->actif); 
-        $compte=new Compte();
-        $compte->setNumeroCompte(date('y').date('m').' '.date('d').date('H').' '.date('i').date('s'))
-               ->setEntreprise($entreprise);
-        $manager->persist($entreprise);            
-        $manager->persist($compte);
-        
-        $user->setRoles(['ROLE_admin-Principal'])
-            ->setEntreprise($entreprise)
-            ->setStatus($this->actif);
-        $hash=$encoder->encodePassword($user, $user->getPassword());
-        $user->setPassword($hash);
-        $manager->persist($user);
+        #####################----------Début traitement formulaire et envoie des données----------#####################
+            $raisonSociale='raisonSociale';
+            $ninea='ninea';
+            $adresse='adresse';
+            $telephoneEntreprise='telephoneEntreprise';
+            $emailEntreprise='emailEntreprise';
+            $entreprise = new Entreprise();
+            $form1=$this->createForm(EntrepriseType::class,$entreprise);
+            $data=json_decode($request->getContent(),true);
+            if(!$data){//s il n'existe pas donc on recupere directement le tableau via la request
+                $data=$request->request->all();
+            }
+            ###########---Début données partenaire---###########
+                $dataPartenaire=array(
+                    $raisonSociale=>$data[$raisonSociale],
+                    $ninea=>$data[$ninea],
+                    $adresse=>$data[$adresse],
+                    $telephoneEntreprise=>$data[$telephoneEntreprise],
+                    $emailEntreprise=>$data[$emailEntreprise]
+                );
+                $form1->submit($dataPartenaire);
+                if(!$form1->isSubmitted() || !$form1->isValid()){
+                    return $this->handleView($this->view($validator->validate($form1)));
+                }
+            ###########----Fin données partenaire----###########
 
-        $userCompte=new UserCompteActuel();
-        $userCompte->setCompte($compte)
-                   ->setUtilisateur($user)
-                   ->setDateAffectation(new \DateTime());
-        $manager->persist($userCompte);
+            ###########---Début données utilisateur---###########
+                unset($data[$raisonSociale],$data[$ninea],$data[$adresse],$data[$telephoneEntreprise],$data[$emailEntreprise]);# on supprime les données du partenaire
+                $user=new Utilisateur();
+                $form2=$this->createForm(UtilisateurType::class,$user);
+                $form2->submit($data);
+                if(!$form2->isSubmitted() || !$form2->isValid()){
+                    return $this->handleView($this->view($validator->validate($form2)));
+                }
+            ###########----Fin données utilisateur----###########
+        #####################-----------Fin traitement formulaire et envoie des données-----------#####################
         
-        /*Début gestion des images */
+        #####################---------------Début gestion entreprise, compte et user--------------#####################
+        
+            $entreprise->setStatus($this->actif);
+            $manager->persist($entreprise); 
+            $compte=new Compte();
+            $compte->setNumeroCompte(date('y').date('m').' '.date('d').date('H').' '.date('i').date('s'))
+                   ->setEntreprise($entreprise);
+            $manager->persist($compte);
+
+            $user->setRoles(['ROLE_admin-Principal'])
+                ->setEntreprise($entreprise)
+                ->setStatus($this->actif);
+            $hash=$encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($hash);
+            $manager->persist($user);
+
+        #####################----------------Fin gestion entreprise, compte et user---------------#####################
+        #####################------------------------Début gestion des images---------------------#####################
+            
             if($requestFile=$request->files->all()){
                 $file=$requestFile['image'];
                 if($file->guessExtension()!='png' && $file->guessExtension()!='jpeg' ){
@@ -129,54 +134,62 @@ class EntrepriseController extends AbstractFOSRestController
                 $user->setImage($fileName);
                 $file->move($this->getParameter('image_directory'),$fileName); //definir le image_directory dans service.yaml
             }
-        /*Début gestion des images */
-        
 
-        $manager->flush();
-        $afficher = [
-            $this->status => 201,
-            $this->message => 'Le partenaire '.$entreprise->getRaisonSociale().' ainsi que son admin principal ont bien été ajouté !! ',
-           'Compte partenaire' =>'Le compte numéro '.$compte->getNumeroCompte().' lui a été assigné'
-        ];
-        return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
+        #####################-------------------------Fin gestion des images----------------------#####################
+        
+        #####################---------------------------Début finalisation------------------------#####################
+            $manager->flush();
+            $afficher = [
+                $this->status => 201,
+                $this->message => 'Le partenaire '.$entreprise->getRaisonSociale().' ainsi que son admin principal ont bien été ajouté !! ',
+               'Compte partenaire' =>'Le compte numéro '.$compte->getNumeroCompte().' lui a été assigné'
+            ];
+            return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
+        #####################----------------------------Fin finalisation-------------------------#####################
     }
     /**
     * @Route("/partenaires/update/{id}", name="update_entreprise", methods={"POST"})
     * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */
     public function updatePartenaire(Entreprise $entreprise,Request $request, ObjectManager $manager, ValidatorInterface $validator){
-        if(!$entreprise){
-            throw new HttpException(404,'Cette entreprise n\'existe pas !');
-        }
-        $form=$this->createForm(EntrepriseType::class,$entreprise);
-        $data=json_decode($request->getContent(),true);//si json
-        if(!$data){
-            $data=$request->request->all();//si non json
-        }
-        $form->submit($data);
-        if(!$form->isSubmitted() || !$form->isValid()){
-            return $this->handleView($this->view($validator->validate($form)));
-        }
-        $entreprise->setStatus($this->actif); 
-        $manager->persist($entreprise); 
-        $manager->flush();
-        $afficher = [
-            $this->status => 200,
-            $this->message => 'Le partenaire a été correctement modifié !'
-        ];
-        return $this->handleView($this->view($afficher,Response::HTTP_OK));
+        #####################----------Début traitement formulaire et envoie des données----------#####################
+            if(!$entreprise){
+                throw new HttpException(404,'Cette entreprise n\'existe pas !');
+            }
+            $form=$this->createForm(EntrepriseType::class,$entreprise);
+            $data=json_decode($request->getContent(),true);//si json
+            if(!$data){
+                $data=$request->request->all();//si non json
+            }
+            $form->submit($data);
+            if(!$form->isSubmitted() || !$form->isValid()){
+                return $this->handleView($this->view($validator->validate($form)));
+            }
+        #####################-----------Fin traitement formulaire et envoie des données-----------#####################
+
+        #####################---------------------------Début finalisation------------------------#####################
+            $entreprise->setStatus($this->actif); 
+            $manager->persist($entreprise); 
+            $manager->flush();
+            $afficher = [
+                $this->status => 200,
+                $this->message => 'Le partenaire a été correctement modifié !'
+            ];
+            return $this->handleView($this->view($afficher,Response::HTTP_OK));
+        #####################----------------------------Fin finalisation-------------------------#####################
     }
     /**
     * @Route("/nouveau/depot", methods={"POST"})
     * @IsGranted({"ROLE_Caissier"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */
-    public function depot (Request $request, ValidatorInterface $validator, UserInterface $Userconnecte,CompteRepository $repo, ObjectManager $manager)
-    {
+    public function depot (Request $request, ValidatorInterface $validator, UserInterface $Userconnecte,CompteRepository $repo, ObjectManager $manager){
         $depot = new Depot();
         $form = $this->createForm(DepotType::class, $depot);
         $data=json_decode($request->getContent(),true);
-        if($compte=$repo->findOneBy(['numeroCompte'=>$data['compte']]))
-        {
+        if(!$data){
+            $data=$request->request->all();//si non json
+        }
+        if($compte=$repo->findOneBy(['numeroCompte'=>$data['compte']])){
             $data['compte']=$compte->getId();//on lui donne directement l'id
             if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
                 throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
@@ -298,13 +311,15 @@ class EntrepriseController extends AbstractFOSRestController
      * @IsGranted("ROLE_admin-Principal", statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
     public function changeCompte(Request $request,ObjectManager $manager, UserInterface $Userconnecte,UtilisateurRepository $repoUser,CompteRepository $repoCompte,UserCompteActuelRepository $repoUserComp)
-    {   
-        $data=json_decode($request->getContent());
-        
-        if(!isset($data->utilisateur,$data->compte)){
-            throw new HttpException(404,'Remplir l\'utilisateur et le compte !');
+    {   $utilisateur='utilisateur';
+        $data=json_decode($request->getContent(),true);
+        if(!$data){
+            $data=$request->request->all();//si non json
         }
-        elseif(!$user=$repoUser->find($data->utilisateur)){
+        if(!isset($data[$utilisateur],$data['compte'])){
+            throw new HttpException(404,'Remplir un utilisateur et  cunompte existant!');
+        }
+        elseif(!$user=$repoUser->find($data[$utilisateur])){
             throw new HttpException(404,'Cet utilisateur n\'existe pas !');
         }
         elseif($user->getRoles()[0]=='ROLE_Super-admin' || $user->getRoles()[0]=='ROLE_Caissier'){
@@ -313,14 +328,17 @@ class EntrepriseController extends AbstractFOSRestController
         elseif($user->getEntreprise()!=$Userconnecte->getEntreprise()){
             throw new HttpException(403,'Cet utilisateur n\'appartient pas à votre entreprise !');
         }
-        if(!$compte=$repoCompte->find($data->compte)){
+        if(!$compte=$repoCompte->find($data['compte'])){
             throw new HttpException(404,'Ce compte n\'existe pas !');
         }
         elseif($compte->getEntreprise()!=$Userconnecte->getEntreprise()){
             throw new HttpException(404,'Ce compte n\'appartient pas à votre entreprise !');
         }
-        $userComp=$repoUserComp->findBy(['utilisateur'=>$user]);
-        $idcompActuel=$userComp[count($userComp)-1]->getCompte()->getId();//l id du compte qu il utilise actuellement
+        $idcompActuel=null;
+        if($userComp=$repoUserComp->findBy([$utilisateur=>$user])){
+            $idcompActuel=$userComp[count($userComp)-1]->getCompte()->getId();//l id du compte qu il utilise actuellement
+        }
+        
         if($idcompActuel==$compte->getId()){
             throw new HttpException(403,'Cet utilisateur utilise ce compte actuellement!');
         }
@@ -339,8 +357,9 @@ class EntrepriseController extends AbstractFOSRestController
     }
 
     /**
-     * @Route("/gestion/compte/liste", name="entreprises", methods={"GET"})
-     * @Route("/gestion/compte/{id}", name="entreprise", methods={"GET"})
+     * @Route("/gestion/comptes/liste", name="user_comptes", methods={"GET"})
+     * @Route("/gestion/compte/{id}", name="user_compte", methods={"GET"})
+     * @IsGranted({"ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
     public function listerUserCompt(UserCompteActuelRepository $repo, SerializerInterface $serializer,UserInterface $userConnecte,UserCompteActuel $userCompte=null,$id=null)
     {
@@ -356,11 +375,12 @@ class EntrepriseController extends AbstractFOSRestController
         return new Response($data,200);
     }
      /**
-     * @Route("/user/{id}", name="entreprise", methods={"GET"})
+     * @Route("/user/{id}", name="user_entreprise", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
     public function listerUser(SerializerInterface $serializer,Utilisateur $user,UserInterface $userConnecte)
     {
-        if(!$user instanceof Utilisateur) {
+        if(!$user instanceof Utilisateur) {//regler le cas du super admin qui liste les admins principaux
             throw new HttpException(404,'Resource non trouvée ! ');
         }
         elseif($user->getEntreprise()!=$userConnecte->getEntreprise()){
