@@ -116,12 +116,10 @@ class TransationController extends AbstractFOSRestController
         $userComp->getCompte()->setSolde($userComp->getCompte()->getSolde()+$commissionEmetteur-$montant);
         $manager->persist($userComp);
         $manager->flush();
-        $afficher = [
-           $this->message => 201,
-           $this->status => 'Transfert éffectué !'
-        ];
+        $afficher = $this->recuDeTransaction('envoi',$envoie);
         return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
     }
+    
     /**
     * @Route("/transation/retrait", name="transation_retrait")
     * @IsGranted({"ROLE_utilisateur","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -164,13 +162,10 @@ class TransationController extends AbstractFOSRestController
         $manager->persist($userComp);
         
         $manager->flush();
-        $afficher = [
-           $this->message => 201,
-           $this->status => 'Retrait éffectué !'
-        ];
+        $afficher =  $this->recuDeTransaction('retrait',$retrait);
         return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
     }
-
+    
     /**
     * @Route("/transation/user/{action}/{id}", name="transation_user")
     * @IsGranted({"ROLE_utilisateur","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -248,6 +243,9 @@ class TransationController extends AbstractFOSRestController
         }
         return new Response($data,200);
     } 
+
+
+    
     public function transationDate(TransactionRepository $repoTrans,$debut,$fin,$action, Utilisateur $user=null,Entreprise $entreprise=null){
         $transactionsAll=[];
         $transactions=$repoTrans->findAll();
@@ -277,5 +275,69 @@ class TransationController extends AbstractFOSRestController
             
         }
         return $transactionsAll;
+    }
+    public function formatMil($valeur){ //permet d afficher le separateur de millier
+        return strrev(wordwrap(strrev($valeur), 3, ' ', true));
+    }
+    public function recuDeTransaction($type,Transaction $transaction){
+        $senegal='Sénégal';
+        $tel='Téléphone';
+        if($type=='envoi'){
+            $libelle="Reçu d'envoi";
+            $guichetier=$transaction->getUserComptePartenaireEmetteur()->getUtilisateur();
+            $entreprise= $guichetier->getEntreprise();
+            $date=$transaction->getDateEnvoi();
+            $envoyeur=[
+                'Nom'=>$transaction->getNomClientEmetteur(),
+                'Pays'=>$senegal,
+                $tel=>$transaction->getTelephoneEmetteur(),
+                'NCI'=>$transaction->getNciEmetteur()
+            ];
+            $beneficiaire=[
+                'Nom'=>$transaction->getNomClientRecepteur(),
+                 'Pays'=>$senegal,
+                $tel=>$transaction->getTelephoneRecepteur(),
+            ];
+            $trans=[
+                'Code transaction'=>$transaction->getCode(),
+                'Montant Envoyé'=>$this->formatMil($transaction->getMontant()).' CFA',
+                'Commissions TTC'=>$this->formatMil($transaction->getFrais()).' CFA',
+                'Total'=>$this->formatMil($transaction->getMontant()+$transaction->getFrais()).' CFA'
+            ];
+        }
+        else{
+            $libelle="Reçu de retrait";
+            $guichetier=$transaction->getUserComptePartenaireRecepteur()->getUtilisateur();
+            $entreprise= $guichetier->getEntreprise();
+            $date=$transaction->getDateReception();
+            $envoyeur=[
+                'Nom'=>$transaction->getNomClientEmetteur(),
+                'Pays'=>$senegal,
+                $tel=>$transaction->getTelephoneEmetteur(),
+            ];
+            $beneficiaire=[
+                'Nom'=>$transaction->getNomClientRecepteur(),
+                'Pays'=>$senegal,
+                $tel=>$transaction->getTelephoneRecepteur(),
+                'NCI'=>$transaction->getNciRecepteur()
+            ];
+            $trans=[
+                'Code transaction'=>$transaction->getCode(),
+                'Montant Retiré'=> $this->formatMil($transaction->getMontant()).' CFA',
+            ];
+        }
+        return [
+            'Type'=>$libelle,
+            'Entreprise'=>[
+                'Raison sociale'=>$entreprise->getRaisonSociale(),
+                'Adresse'=>$entreprise->getAdresse(),
+                $tel=>$entreprise->getTelephoneEntreprise(),
+                'Guichetier'=>$guichetier->getNom(),
+                'Date'=> $date->format('d-m-Y H:i')
+            ],
+            'Envoyeur'=> $envoyeur,
+            'Bénéficiaire'=> $beneficiaire,
+            'Transaction'=>$trans
+        ];
     }
 }
