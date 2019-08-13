@@ -232,7 +232,7 @@ class EntrepriseController extends AbstractFOSRestController
     public function bloqueEntrep(ObjectManager $manager,Entreprise $entreprise=null)
     {
         if(!$entreprise){
-            throw new HttpException(404,'Ce partenaire n\'existe pas !');
+            throw new HttpException(404,'Ce partenaire n\'existe pas !!');
         }
         elseif($entreprise->getRaisonSociale()==$this->saTransfert){
             throw new HttpException(403,'Impossible de bloquer SA Transfert !');
