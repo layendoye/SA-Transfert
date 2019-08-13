@@ -27,6 +27,7 @@ return [
     'user_comptes' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::listerUserCompt'], [], [['text', '/gestion/comptes/liste']], [], []],
     'user_compte' => [['id'], ['id' => null, '_controller' => 'App\\Controller\\EntrepriseController::listerUserCompt'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/gestion/compte']], [], []],
     'user_entreprise' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::listerUser'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/user']], [], []],
+    'contrat' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::contrat'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/contrat']], [], []],
     'inscription' => [[], ['_controller' => 'App\\Controller\\SecurityController::inscriptionUtilisateur'], [], [['text', '/inscription']], [], []],
     'update_user' => [['id'], ['_controller' => 'App\\Controller\\SecurityController::updateUser'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/user/update']], [], []],
     'connexion' => [[], ['_controller' => 'App\\Controller\\SecurityController::login'], [], [['text', '/connexion']], [], []],

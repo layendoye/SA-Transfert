@@ -1,1 +1,0 @@
-<?php return [PHP_INT_MAX, 'api_user_compte_actuels_get_item'];

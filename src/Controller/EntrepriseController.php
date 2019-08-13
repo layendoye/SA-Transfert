@@ -151,6 +151,7 @@ class EntrepriseController extends AbstractFOSRestController
             return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
         #####################----------------------------Fin finalisation-------------------------#####################
     }
+
     /**
     * @Route("/partenaires/update/{id}", name="update_entreprise", methods={"POST"})
     * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -228,7 +229,7 @@ class EntrepriseController extends AbstractFOSRestController
     * @Route("/bloque/entreprises/{id}", name="bloque_entreprise", methods={"GET"})
     * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */ 
-    public function bloqueEntrep(ObjectManager $manager,Entreprise $entreprise=null )
+    public function bloqueEntrep(ObjectManager $manager,Entreprise $entreprise=null)
     {
         if(!$entreprise){
             throw new HttpException(404,'Ce partenaire n\'existe pas !');
@@ -395,5 +396,63 @@ class EntrepriseController extends AbstractFOSRestController
         }
         $data = $serializer->serialize($user,'json',[ $this->groups => ['list-user']]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
+    }
+    /**
+     * @Route("/contrat/{id}", name="contrat", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function contrat(Entreprise $entreprise){
+        if(!$entreprise){
+            throw new HttpException(404,'Ce partenaire n\'existe pas !');
+        }
+        elseif($entreprise->getRaisonSociale()=='SA Transfert' || $entreprise->getRaisonSociale()=='Etat du Sénégal'){
+            throw new HttpException(404,'Ces contrats sont pour les partenaires de la SA Transfert uniquement !');
+        }
+        return [
+            'Type de contrat'=>'CONTRAT DE PRESTATION DE SERVICE DE TRANSFERT D\'ARGENT',
+            'Contenu'=>"CONTRAT DE PRESTATION DE SERVICE DE TRANSFERT D'ARGENT
+                Cet accord est fait le ".date("d-m-Y")." à Dakar
+                Par et entre la société SA Transfert  (le fournisseur) et la société ".$entreprise->getRaisonSociale()." (le client).
+                PRÉAMBULE :
+                CONSIDÉRANT QUE, le fournisseur fournit des services de transactions monétaires aux clients par l’intermédiaire du réseau du fournisseur , et considérant que  le client souhaite effectuer des opérations d’envoi et de retrait d’argent pour le compte de sa clientèle grâce à la plateforme du fournisseur.
+                MAINTENANT, ET PAR CONSÉQUENT, dans la considération des engagements et des accords antérieurs et mutuels ci-dessus explicités, les parties, ainsi légalement liées, conviennent mutuellement comme suit :
+                DÉFINITIONS ET INTERPRÉTATION
+                Dans cet accord, à moins que le contexte n’exige autrement, les mots suivants et les expressions auront les significations suivantes :
+                « Espèces » fait référence aux billets et pièces de monnaie relatifs à la devise... ;
+                « Date effective » signifie, nonobstant la date de signature des accords définitifs, la date de signature ;
+                « Service du fournisseur » signifie les services de transfert d’argent fournis par la SA Transfert ;
+                « Code de transaction » signifie le code envoyé au bénéficiaire pour lui permettre de retirer le montant transféré;
+                DURÉE DE L’ACCORD
+                Cette accord à une durée de 5 ans à partir de la date effective et renouvelable par les partis concernés.
+                OPÉRATION ET PORTÉE
+                Ce présent contrat donne au client le droit d’utiliser la plateforme mise en place par la société SA Transfert dans le but d’effectuer des opérations d’envois et de retraits pour le compte de sa clientèle.  
+                Il est formellement interdit au client de signer des accords de sous-traitance basé sur ce dit contrat sans en avisé le fournisseur.
+                Les transactions vont se déroulées comme suit :
+                En cas d’envoi,
+                Après encaissement du montant  à envoyer et des frais (en espèce), le client devra procéder à  l’enregistrement des informations de l’envoyeur et de ceux du bénéficiaires. Un message sera dès lors envoyé à ces derniers pour leurs communiqués certaines informations sur la transaction.
+                Le compte du client sera débiter du montant de l’opération ainsi que de 80% des frais payés par l’envoyeur (les 20% représentant la commission du client).
+                En cas de retrait,
+                Les retraits seront effectués sur la base du code de transaction présenté par le bénéficiaire, si celui ci est valide le client devra compléter les informations du bénéficiaire avant de procéder au paiement. Après cela, le compte du client sera crédité du montant retiré et de 10% des frais payés par l’envoyeur.
+                NB : En cas d’annulation, seul le montant transféré sera remboursé, les frais encaissés sont non remboursable.
+                CONFIDENTIALITÉ
+                Il est formellement interdit au client de communiquer les données de sa clientèle (numéro de téléphone, numéro de pièce d’identité, montant envoyé ou reçu…). Le non respect de cette close peut faire l’objet de poursuit civile et pénale.
+                PROPRIÉTÉ INTELLECTUELLE :
+                Il est formellement interdit au client de copier la technologie du fournisseur, en cas de plagiat, des sanctions civiles, pénales et pécuniaires (dommages et intérêts) seront encourus par le dit client.
+                SUSPENSION
+                Le fournisseur à le droit de bloquer à tout moment le compte du client pour les causes suivantes :
+                - manque d’étique
+                - fraude
+                - cas de blanchiment d’argent ou de financement d’activité terroriste
+                - Et pour tout autre cause pouvant entraîner la rupture du contrat liant le client et le fournisseur
+                INDEMNITÉ
+                Le client accepte ici d’indemniser le fournisseur pour tout conflit légal prenant place en raison de l’abus du service par le client.
+                AUTRES :
+                - Le client sera assigné un code qui correspondra au numéro de compte du client.
+                - Si besoin le client peut demander l’ouverture d’autres comptes à son nom.
+                - Pour effectuer des transactions le client devra déposer l’argent sur le(s) compte(s) tenu par le fournisseur.
+                - Le fournisseur devra alors délivrer le montant sur le compte du client équivalent au paiement en espèces dans un délai de six (6) heures suivant la transaction.
+                - L’envoyeur et le bénéficiaire seront informés des éléments de la transaction par un message texte émanant du fournisseur."
+
+        ];
     }
 }

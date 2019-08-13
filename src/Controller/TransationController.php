@@ -113,7 +113,7 @@ class TransationController extends AbstractFOSRestController
         $compteEtat->setSolde($compteEtat->getSolde()+$taxesEtat);
         $manager->persist($compteEtat);
 
-        $userComp->getCompte()->setSolde($userComp->getCompte()->getSolde()+$commissionEmetteur-$montant);
+        $userComp->getCompte()->setSolde($userComp->getCompte()->getSolde()+$commissionEmetteur-$montant-$frais);//ancien solde - montant - 80% frais
         $manager->persist($userComp);
         $manager->flush();
         $afficher = $this->recuDeTransaction('envoi',$envoie);
