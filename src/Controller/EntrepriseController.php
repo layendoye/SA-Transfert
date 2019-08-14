@@ -188,15 +188,14 @@ class EntrepriseController extends AbstractFOSRestController
     * @IsGranted({"ROLE_Caissier"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */
     public function depot (Request $request, ValidatorInterface $validator, UserInterface $Userconnecte,CompteRepository $repo, ObjectManager $manager){
-        $compte='compte';
         $depot = new Depot();
         $form = $this->createForm(DepotType::class, $depot);
         $data=json_decode($request->getContent(),true);
         if(!$data){
             $data=$request->request->all();//si non json
         }
-        if($compte=$repo->findOneBy(['numeroCompte'=>$data[$compte]])){
-            $data[$compte]=$compte->getId();//on lui donne directement l'id
+        if($compte=$repo->findOneBy(['numeroCompte'=>$data[$this->compteStr]])){
+            $data[$this->compteStr]=$compte->getId();//on lui donne directement l'id
             if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
                 throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
             }
@@ -236,6 +235,9 @@ class EntrepriseController extends AbstractFOSRestController
         }
         elseif($entreprise->getRaisonSociale()==$this->saTransfert){
             throw new HttpException(403,'Impossible de bloquer SA Transfert !');
+        }
+        elseif($entreprise->getRaisonSociale()=='Etat du Sénégal'){
+            throw new HttpException(403,'Impossible de bloquer l\'etat du Sénégal !');
         }
         elseif($entreprise->getStatus() == $this->actif){
             $entreprise->setStatus("bloqué");

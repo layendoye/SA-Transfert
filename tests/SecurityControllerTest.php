@@ -29,6 +29,75 @@ class SecurityControllerTest extends WebTestCase
         var_dump($rep);
         $this->assertSame(201,$client->getResponse()->getStatusCode());
     }
+    public function testUpdateUtilisateurok1()
+    {//update abdou
+        $client = static::createClient([],[ 
+                'PHP_AUTH_USER' => 'Abdou' ,
+                'PHP_AUTH_PW'   => 'azerty'
+            ]);
+        $client->request('POST', '/user/update/1',[],[],['CONTENT_TYPE'=>"application/json"],
+            '{
+                	"nom":"Abdoulaye Ndoye",
+                    "username": "abdou",
+                    "password": "azerty",
+                    "confirmPassword": "azerty",
+                    "email":"layendoyesn1@gmail.com",
+                    "telephone": "77 105 0106",
+                    "nci":"362388369",
+                    "profil": 1
+            }'
+        );
+
+        $rep=$client->getResponse();
+        var_dump($rep);
+        $this->assertSame(200,$client->getResponse()->getStatusCode());
+    }
+    public function testUpdateUtilisateurko1()
+    {//update erreur username
+        $client = static::createClient([],[ 
+                'PHP_AUTH_USER' => 'Abdou' ,
+                'PHP_AUTH_PW'   => 'azerty'
+            ]);
+        $client->request('POST', '/user/update/1',[],[],['CONTENT_TYPE'=>"application/json"],
+            '{
+                	"nom":"Abdoulaye Ndoye",
+                    "usernamee": "abdou",
+                    "password": "azerty",
+                    "confirmPassword": "azerty",
+                    "email":"layendoyesn1@gmail.com",
+                    "telephone": "77 105 0106",
+                    "nci":"362388369",
+                    "profil": 1
+            }'
+        );
+
+        $rep=$client->getResponse();
+        var_dump($rep);
+        $this->assertSame(500,$client->getResponse()->getStatusCode());
+    }
+    public function testUpdateUtilisateurko2()
+    {//update user n existe pas
+        $client = static::createClient([],[ 
+                'PHP_AUTH_USER' => 'Abdou' ,
+                'PHP_AUTH_PW'   => 'azerty'
+            ]);
+        $client->request('POST', '/user/update/1000',[],[],['CONTENT_TYPE'=>"application/json"],
+            '{
+                	"nom":"Abdoulaye Ndoye",
+                    "username": "abdou",
+                    "password": "azerty",
+                    "confirmPassword": "azerty",
+                    "email":"layendoyesn1@gmail.com",
+                    "telephone": "77 105 0106",
+                    "nci":"362388369",
+                    "profil": 1
+            }'
+        );
+
+        $rep=$client->getResponse();
+        var_dump($rep);
+        $this->assertSame(404,$client->getResponse()->getStatusCode());
+    }
     public function testInscriptionUtilisateurko1()
     {//le profil n existe pas
         $client = static::createClient([],[ 
@@ -102,102 +171,7 @@ class SecurityControllerTest extends WebTestCase
         var_dump($rep);
         $this->assertSame(201,$client->getResponse()->getStatusCode());
     }
-    public function testInscriptionUtilisateurko4()
-    {//404 car il n y pas de compte definit
-        $client = static::createClient([],[ 
-                'PHP_AUTH_USER' => 'adminPTest1' ,
-                'PHP_AUTH_PW'   => 'azerty'
-            ]);
-        $client->request('POST', '/inscription',[],[],['CONTENT_TYPE'=>"application/json"],
-            '{
-                	"nom":"Test",
-                    "username": "Test",
-                    "password": "azerty",
-                    "confirmPassword": "azerty",
-                    "email":"Test@gmail.com",
-                    "telephone": 77223,
-                    "nci":"77223",
-                    "profil": 5
-            }'
-        );
-
-        $rep=$client->getResponse();
-        var_dump($rep);
-        $this->assertSame(404,$client->getResponse()->getStatusCode());
-    }
-    public function testInscriptionUtilisateurko5()
-    {//le compte n'est pas celui de l'entreprise
-        $client = static::createClient([],[ 
-                'PHP_AUTH_USER' => 'adminPTest1' ,
-                'PHP_AUTH_PW'   => 'azerty'
-            ]);
-        $client->request('POST', '/inscription',[],[],['CONTENT_TYPE'=>"application/json"],
-            '{
-                	"nom":"Test",
-                    "username": "Test",
-                    "password": "azerty",
-                    "confirmPassword": "azerty",
-                    "email":"Test@gmail.com",
-                    "telephone": 77223,
-                    "nci":"77223",
-                    "compte":1,
-                    "profil": 5
-            }'
-        );
-
-        $rep=$client->getResponse();
-        var_dump($rep);
-        $this->assertSame(403,$client->getResponse()->getStatusCode());
-    }
-    public function testInscriptionUtilisateurko6()
-    {//impossible de lui assigner un compte
-        $client = static::createClient([],[ 
-                'PHP_AUTH_USER' => 'Abdou' ,
-                'PHP_AUTH_PW'   => 'azerty'
-            ]);
-        $client->request('POST', '/inscription',[],[],['CONTENT_TYPE'=>"application/json"],
-            '{
-                	"nom":"Test",
-                    "username": "Test",
-                    "password": "azerty",
-                    "confirmPassword": "azerty",
-                    "email":"Test@gmail.com",
-                    "telephone": 7722,
-                    "nci":"7722",
-                    "compte":1,
-                    "profil": 2
-            }'
-        );
-
-        $rep=$client->getResponse();
-        var_dump($rep);
-        $this->assertSame(403,$client->getResponse()->getStatusCode());
-    }
-    public function testInscriptionUtilisateurko7()
-    {//compte inexistant
-        $client = static::createClient([],[ 
-                'PHP_AUTH_USER' => 'adminPTest1' ,
-                'PHP_AUTH_PW'   => 'azerty'
-            ]);
-        $client->request('POST', '/inscription',[],[],['CONTENT_TYPE'=>"application/json"],
-            '{
-                	"nom":"Test",
-                    "username": "Test",
-                    "password": "azerty",
-                    "confirmPassword": "azerty",
-                    "email":"Test@gmail.com",
-                    "telephone": 7722,
-                    "nci":"7722",
-                    "compte":1000,
-                    "profil": 5
-            }'
-        );
-
-        $rep=$client->getResponse();
-        var_dump($rep);
-        $this->assertSame(404,$client->getResponse()->getStatusCode());
-    }
-    public function testInscriptionUtilisateurko8()
+    public function testInscriptionUtilisateurko3()
     {//erreur form
         $client = static::createClient([],[ 
                 'PHP_AUTH_USER' => 'adminPTest1' ,
@@ -212,7 +186,6 @@ class SecurityControllerTest extends WebTestCase
                     "email":"Test@gmail.com",
                     "telephone": 7722,
                     "nci":"7722",
-                    "compte":2,
                     "profil": 5
             }'
         );
@@ -221,30 +194,7 @@ class SecurityControllerTest extends WebTestCase
         var_dump($rep);
         $this->assertSame(200,$client->getResponse()->getStatusCode());
     }
-    public function testInscriptionUtilisateurko9()
-    {//impossible de lui assigner un compte
-        $client = static::createClient([],[ 
-                'PHP_AUTH_USER' => 'Abdou' ,
-                'PHP_AUTH_PW'   => 'azerty'
-            ]);
-        $client->request('POST', '/inscription',[],[],['CONTENT_TYPE'=>"application/json"],
-            '{
-                	"nom":"Test",
-                    "username": "Test",
-                    "password": "azerty",
-                    "confirmPassword": "azerty",
-                    "email":"Test@gmail.com",
-                    "telephone": 7722,
-                    "nci":"7722",
-                    "compte":1,
-                    "profil": 3
-            }'
-        );
 
-        $rep=$client->getResponse();
-        var_dump($rep);
-        $this->assertSame(403,$client->getResponse()->getStatusCode());
-    }
 }
     /*
         Pour le créer faire : php bin/console make:functional-test

@@ -5,6 +5,7 @@
             clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Mapping\\Column'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Column')),
             clone ($p['Symfony\\Component\\Validator\\Constraints\\NotBlank'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Validator\\Constraints\\NotBlank')),
             clone ($p['Symfony\\Component\\Validator\\Constraints\\Range'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Validator\\Constraints\\Range')),
+            clone ($p['Symfony\\Component\\Serializer\\Annotation\\Groups'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Annotation\\Groups')),
         ],
         null,
         [
@@ -26,8 +27,22 @@
                 'minMessage' => [
                     2 => 'Il faut transferer 500 fr au moins!!',
                 ],
+                'maxMessage' => [
+                    2 => 'Montant maximum 3 000 000 de franc!!',
+                ],
                 'min' => [
                     2 => 500,
+                ],
+                'max' => [
+                    2 => 3000000,
+                ],
+            ],
+            'Symfony\\Component\\Serializer\\Annotation\\Groups' => [
+                'groups' => [
+                    3 => [
+                        'list-envois',
+                        'list-retraits',
+                    ],
                 ],
             ],
         ],
@@ -35,6 +50,7 @@
             $o[0],
             $o[1],
             $o[2],
+            $o[3],
         ],
         []
     );

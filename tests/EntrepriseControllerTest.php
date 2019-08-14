@@ -1,15 +1,13 @@
 <?php
 
 namespace App\Tests;
-
-use App\Entity\Compte;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 
 class EntrepriseControllerTest extends WebTestCase
 {
     public function testlisterok1()
-    {//lister tous
+    {
         $client = static::createClient([],[ 
                 'PHP_AUTH_USER' => 'Abdou' ,
                 'PHP_AUTH_PW'   => 'azerty'
@@ -157,7 +155,7 @@ class EntrepriseControllerTest extends WebTestCase
             ]);
         $client->request('POST', '/nouveau/depot',[],[],['CONTENT_TYPE'=>"application/json"],
             '{
-                "compte":"1908 0520 4722",
+                "compte":"1908 0920 3342",
 	            "montant":5000000
             }'
         );
@@ -201,14 +199,14 @@ class EntrepriseControllerTest extends WebTestCase
         $this->assertSame(404,$client->getResponse()->getStatusCode());
     }
     public function testDepotko3()
-    {//depot dans compte inexistant remplir le numero de compte!!!!!!!!!!!!!!!
+    {//depot moins de 75k dans compte existant remplir le numero de compte!!!!!!!!!!!!!!!
         $client = static::createClient([],[ 
                 'PHP_AUTH_USER' => 'caissierTest2' ,
                 'PHP_AUTH_PW'   => 'azerty'
             ]);
         $client->request('POST', '/nouveau/depot',[],[],['CONTENT_TYPE'=>"application/json"],
             '{
-                "compte":"1908 0520 4722",
+                "compte":"1908 0920 3342",
 	            "montant":5000
             }'
         );
@@ -217,18 +215,29 @@ class EntrepriseControllerTest extends WebTestCase
         $this->assertSame(200,$client->getResponse()->getStatusCode());
     }
     public function testbloquerok1()
-    {//bloquer l'entreprise 2
+    {//bloquer l'entreprise 3
         $client = static::createClient([],[ 
                 'PHP_AUTH_USER' => 'Abdou' ,
                 'PHP_AUTH_PW'   => 'azerty'
             ]);
-        $client->request('GET', '/bloque/entreprises/2');
+        $client->request('GET', '/bloque/entreprises/3');
         $rep=$client->getResponse();
         var_dump($rep);
         $this->assertSame(200,$client->getResponse()->getStatusCode());
     }
     public function testbloquerok2()
-    {//debloquer l'entreprise 2
+    {//debloquer l'entreprise 3
+        $client = static::createClient([],[ 
+                'PHP_AUTH_USER' => 'Abdou' ,
+                'PHP_AUTH_PW'   => 'azerty'
+            ]);
+        $client->request('GET', '/bloque/entreprises/3');
+        $rep=$client->getResponse();
+        var_dump($rep);
+        $this->assertSame(200,$client->getResponse()->getStatusCode());
+    }
+    public function testbloquerko()
+    {//bloquer l'entreprise etat
         $client = static::createClient([],[ 
                 'PHP_AUTH_USER' => 'Abdou' ,
                 'PHP_AUTH_PW'   => 'azerty'
@@ -236,7 +245,7 @@ class EntrepriseControllerTest extends WebTestCase
         $client->request('GET', '/bloque/entreprises/2');
         $rep=$client->getResponse();
         var_dump($rep);
-        $this->assertSame(200,$client->getResponse()->getStatusCode());
+        $this->assertSame(403,$client->getResponse()->getStatusCode());
     }
     public function testbloquerko1()
     {//bloquer entreprise inexistante
@@ -260,5 +269,4 @@ class EntrepriseControllerTest extends WebTestCase
         var_dump($rep);
         $this->assertSame(403,$client->getResponse()->getStatusCode());
     }
-    
 }

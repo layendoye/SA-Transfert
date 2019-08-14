@@ -13,4 +13,5 @@ composer require profiler
 composer require orm-fixtures --dev 
 composer req --dev fzaninotto/faker
 composer require validator
+composer require dompdf/dompdf
 

@@ -3,26 +3,36 @@
     return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
         $o = [
             clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Routing\\Annotation\\Route'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Routing\\Annotation\\Route')),
-            clone $p['Symfony\\Component\\Routing\\Annotation\\Route'],
+            clone ($p['Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted')),
         ],
         null,
         [
             'Symfony\\Component\\Routing\\Annotation\\Route' => [
                 'path' => [
                     '/inscription',
-                    '/add/admin-partenaire/{id}',
                 ],
                 'name' => [
                     'inscription',
-                    'add_adminPrinc',
                 ],
                 'methods' => [
                     [
                         'POST',
                     ],
-                    [
-                        'POST',
+                ],
+            ],
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted' => [
+                'attributes' => [
+                    1 => [
+                        'ROLE_Super-admin',
+                        'ROLE_admin-Principal',
+                        'ROLE_admin',
                     ],
+                ],
+                'message' => [
+                    1 => 'Vous n\'avez pas accès à cette page !',
+                ],
+                'statusCode' => [
+                    1 => 403,
                 ],
             ],
         ],

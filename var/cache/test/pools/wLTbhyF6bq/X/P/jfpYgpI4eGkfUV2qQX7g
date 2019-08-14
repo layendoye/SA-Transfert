@@ -14,7 +14,7 @@
                         'solde',
                         'entreprise',
                         'depots',
-                        'utilisateurs',
+                        'userCompteActuels',
                     ],
                 ],
             ],

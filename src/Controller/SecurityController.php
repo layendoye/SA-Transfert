@@ -2,12 +2,8 @@
 
 namespace App\Controller;
 
-
-use App\Entity\Compte;
-use App\Entity\Entreprise;
 use App\Entity\Utilisateur;
 use App\Form\UtilisateurType;
-use App\Entity\UserCompteActuel;
 use App\Repository\CompteRepository;
 use App\Repository\ProfilRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +15,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use App\Repository\UtilisateurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class SecurityController extends AbstractFOSRestController
 {

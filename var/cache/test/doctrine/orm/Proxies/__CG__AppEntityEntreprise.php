@@ -279,39 +279,6 @@ class Entreprise extends \App\Entity\Entreprise implements \Doctrine\ORM\Proxy\P
     /**
      * {@inheritDoc}
      */
-    public function getComptes(): \Doctrine\Common\Collections\Collection
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getComptes', []);
-
-        return parent::getComptes();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addCompte(\App\Entity\Compte $compte): \App\Entity\Entreprise
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addCompte', [$compte]);
-
-        return parent::addCompte($compte);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeCompte(\App\Entity\Compte $compte): \App\Entity\Entreprise
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeCompte', [$compte]);
-
-        return parent::removeCompte($compte);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getSoldeGlobal()
     {
 
@@ -395,6 +362,39 @@ class Entreprise extends \App\Entity\Entreprise implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmailEntreprise', [$emailEntreprise]);
 
         return parent::setEmailEntreprise($emailEntreprise);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getComptes(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getComptes', []);
+
+        return parent::getComptes();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addCompte(\App\Entity\Compte $compte): \App\Entity\Entreprise
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addCompte', [$compte]);
+
+        return parent::addCompte($compte);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeCompte(\App\Entity\Compte $compte): \App\Entity\Entreprise
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeCompte', [$compte]);
+
+        return parent::removeCompte($compte);
     }
 
 }

@@ -4,6 +4,7 @@
         $o = [
             clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Routing\\Annotation\\Route'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Routing\\Annotation\\Route')),
             clone $p['Symfony\\Component\\Routing\\Annotation\\Route'],
+            clone ($p['Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted')),
         ],
         null,
         [
@@ -25,10 +26,25 @@
                     ],
                 ],
             ],
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted' => [
+                'attributes' => [
+                    2 => [
+                        'ROLE_Super-admin',
+                        'ROLE_Caissier',
+                    ],
+                ],
+                'message' => [
+                    2 => 'Vous n\'avez pas accès à cette page !',
+                ],
+                'statusCode' => [
+                    2 => 403,
+                ],
+            ],
         ],
         [
             $o[0],
             $o[1],
+            $o[2],
         ],
         []
     );

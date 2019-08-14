@@ -25,6 +25,7 @@
                 'groups' => [
                     2 => [
                         'list-entreprise',
+                        'list-userCmpt',
                     ],
                 ],
             ],

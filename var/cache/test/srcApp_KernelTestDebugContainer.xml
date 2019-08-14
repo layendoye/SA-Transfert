@@ -134,21 +134,7 @@
     <parameter key="twig.default_path">/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/templates</parameter>
     <parameter key="security.authentication.trust_resolver.anonymous_class">null</parameter>
     <parameter key="security.authentication.trust_resolver.rememberme_class">null</parameter>
-    <parameter key="security.role_hierarchy.roles" type="collection">
-      <parameter key="ROLE_Super-admin" type="collection">
-        <parameter>ROLE_listeur-entreprise</parameter>
-        <parameter>ROLE_inscrir</parameter>
-      </parameter>
-      <parameter key="ROLE_Caissier" type="collection">
-        <parameter>ROLE_listeur-entreprise</parameter>
-      </parameter>
-      <parameter key="ROLE_admin-Principal" type="collection">
-        <parameter>ROLE_inscrir</parameter>
-      </parameter>
-      <parameter key="ROLE_admin" type="collection">
-        <parameter>ROLE_inscrir</parameter>
-      </parameter>
-    </parameter>
+    <parameter key="security.role_hierarchy.roles" type="collection"/>
     <parameter key="security.access.denied_url">null</parameter>
     <parameter key="security.authentication.manager.erase_credentials">true</parameter>
     <parameter key="security.authentication.session_strategy.strategy">migrate</parameter>
@@ -499,7 +485,18 @@
         <argument type="service" id=".service_locator.4RGsIK0.App\Controller\SecurityController"/>
       </call>
     </service>
+    <service id="App\Controller\TransationController" class="App\Controller\TransationController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.4RGsIK0.App\Controller\TransationController"/>
+      </call>
+    </service>
     <service id="App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+      <argument type="service" id="security.user_password_encoder.generic"/>
+    </service>
+    <service id="App\DataFixtures\PrixFixtures" class="App\DataFixtures\PrixFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
     </service>
     <service id="App\EventSubscriber\ExceptionSubscriber" class="App\EventSubscriber\ExceptionSubscriber" autowire="true" autoconfigure="true">
@@ -509,6 +506,12 @@
       <tag name="form.type"/>
     </service>
     <service id="App\Form\EntrepriseType" class="App\Form\EntrepriseType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
+    <service id="App\Form\EnvoieType" class="App\Form\EnvoieType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
+    <service id="App\Form\TransactionType" class="App\Form\TransactionType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
     <service id="App\Form\UtilisateurType" class="App\Form\UtilisateurType" autowire="true" autoconfigure="true">
@@ -534,7 +537,15 @@
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
+    <service id="App\Repository\TarifsRepository" class="App\Repository\TarifsRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\TransactionRepository" class="App\Repository\TransactionRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\UserCompteActuelRepository" class="App\Repository\UserCompteActuelRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -804,6 +815,8 @@
       <argument type="collection">
         <argument>App\Form\DepotType</argument>
         <argument>App\Form\EntrepriseType</argument>
+        <argument>App\Form\EnvoieType</argument>
+        <argument>App\Form\TransactionType</argument>
         <argument>App\Form\UtilisateurType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FormType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\ChoiceType</argument>
@@ -1039,16 +1052,21 @@
         <argument key="ApiPlatform\Core\Serializer\SerializerContextBuilderInterface" type="service" id="api_platform.serializer.context_builder.filter" on-invalid="ignore_uninitialized"/>
         <argument key="ApiPlatform\Core\Validator\ValidatorInterface" type="service" id="api_platform.validator" on-invalid="ignore_uninitialized"/>
         <argument key="App\DataFixtures\AppFixtures" type="service" id="App\DataFixtures\AppFixtures" on-invalid="ignore_uninitialized"/>
+        <argument key="App\DataFixtures\PrixFixtures" type="service" id="App\DataFixtures\PrixFixtures" on-invalid="ignore_uninitialized"/>
         <argument key="App\EventSubscriber\ExceptionSubscriber" type="service" id="App\EventSubscriber\ExceptionSubscriber" on-invalid="ignore_uninitialized"/>
         <argument key="App\Form\DepotType" type="service" id="App\Form\DepotType" on-invalid="ignore_uninitialized"/>
         <argument key="App\Form\EntrepriseType" type="service" id="App\Form\EntrepriseType" on-invalid="ignore_uninitialized"/>
+        <argument key="App\Form\EnvoieType" type="service" id="App\Form\EnvoieType" on-invalid="ignore_uninitialized"/>
+        <argument key="App\Form\TransactionType" type="service" id="App\Form\TransactionType" on-invalid="ignore_uninitialized"/>
         <argument key="App\Form\UtilisateurType" type="service" id="App\Form\UtilisateurType" on-invalid="ignore_uninitialized"/>
         <argument key="App\Repository\CompteRepository" type="service" id="App\Repository\CompteRepository" on-invalid="ignore_uninitialized"/>
         <argument key="App\Repository\DepotRepository" type="service" id="App\Repository\DepotRepository" on-invalid="ignore_uninitialized"/>
         <argument key="App\Repository\EntrepriseRepository" type="service" id="App\Repository\EntrepriseRepository" on-invalid="ignore_uninitialized"/>
         <argument key="App\Repository\NomRepository" type="service" id="App\Repository\NomRepository" on-invalid="ignore_uninitialized"/>
         <argument key="App\Repository\ProfilRepository" type="service" id="App\Repository\ProfilRepository" on-invalid="ignore_uninitialized"/>
+        <argument key="App\Repository\TarifsRepository" type="service" id="App\Repository\TarifsRepository" on-invalid="ignore_uninitialized"/>
         <argument key="App\Repository\TransactionRepository" type="service" id="App\Repository\TransactionRepository" on-invalid="ignore_uninitialized"/>
+        <argument key="App\Repository\UserCompteActuelRepository" type="service" id="App\Repository\UserCompteActuelRepository" on-invalid="ignore_uninitialized"/>
         <argument key="App\Repository\UtilisateurRepository" type="service" id="App\Repository\UtilisateurRepository" on-invalid="ignore_uninitialized"/>
         <argument key="Doctrine\Common\Annotations\Reader" type="service" id="annotations.cached_reader" on-invalid="ignore_uninitialized"/>
         <argument key="Doctrine\Common\Persistence\ManagerRegistry" type="service" id="doctrine" on-invalid="ignore_uninitialized"/>
@@ -1312,7 +1330,7 @@
         <argument key="app.user_checker" type="service" id="app.user_checker" on-invalid="ignore_uninitialized"/>
         <argument key="argument_metadata_factory" type="service" id="argument_metadata_factory" on-invalid="ignore_uninitialized"/>
         <argument key="argument_resolver" type="service" id="debug.argument_resolver" on-invalid="ignore_uninitialized"/>
-        <argument key="argument_resolver.controller_locator" type="service" id=".service_locator.5zcue4K" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.controller_locator" type="service" id=".service_locator.UuOmZTl" on-invalid="ignore_uninitialized"/>
         <argument key="argument_resolver.default" type="service" id="debug.argument_resolver.default" on-invalid="ignore_uninitialized"/>
         <argument key="argument_resolver.not_tagged_controller" type="service" id="debug.argument_resolver.not_tagged_controller" on-invalid="ignore_uninitialized"/>
         <argument key="argument_resolver.request" type="service" id="debug.argument_resolver.request" on-invalid="ignore_uninitialized"/>
@@ -1424,7 +1442,7 @@
         <argument key="debug.security.user_value_resolver.inner" type="service" id="debug.security.user_value_resolver.inner" on-invalid="ignore_uninitialized"/>
         <argument key="debug.security.voter.security.access.authenticated_voter" type="service" id="debug.security.voter.security.access.authenticated_voter" on-invalid="ignore_uninitialized"/>
         <argument key="debug.security.voter.security.access.expression_voter" type="service" id="debug.security.voter.security.access.expression_voter" on-invalid="ignore_uninitialized"/>
-        <argument key="debug.security.voter.security.access.role_hierarchy_voter" type="service" id="debug.security.voter.security.access.role_hierarchy_voter" on-invalid="ignore_uninitialized"/>
+        <argument key="debug.security.voter.security.access.simple_role_voter" type="service" id="debug.security.voter.security.access.simple_role_voter" on-invalid="ignore_uninitialized"/>
         <argument key="debug.security.voter.vote_listener" type="service" id="debug.security.voter.vote_listener" on-invalid="ignore_uninitialized"/>
         <argument key="debug.stopwatch" type="service" id="debug.stopwatch" on-invalid="ignore_uninitialized"/>
         <argument key="debug.validator" type="service" id="debug.validator" on-invalid="ignore_uninitialized"/>
@@ -1651,7 +1669,7 @@
         <argument key="security.access.authenticated_voter" type="service" id="security.access.authenticated_voter" on-invalid="ignore_uninitialized"/>
         <argument key="security.access.decision_manager" type="service" id="debug.security.access.decision_manager" on-invalid="ignore_uninitialized"/>
         <argument key="security.access.expression_voter" type="service" id="security.access.expression_voter" on-invalid="ignore_uninitialized"/>
-        <argument key="security.access.role_hierarchy_voter" type="service" id="security.access.role_hierarchy_voter" on-invalid="ignore_uninitialized"/>
+        <argument key="security.access.simple_role_voter" type="service" id="security.access.simple_role_voter" on-invalid="ignore_uninitialized"/>
         <argument key="security.access_listener" type="service" id="security.access_listener" on-invalid="ignore_uninitialized"/>
         <argument key="security.access_map" type="service" id="security.access_map" on-invalid="ignore_uninitialized"/>
         <argument key="security.authentication.basic_entry_point" type="service" id="security.authentication.basic_entry_point" on-invalid="ignore_uninitialized"/>
@@ -1877,7 +1895,7 @@
       <argument type="service" id="form.registry"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension" public="false">
-      <argument type="service" id=".service_locator.dF9wC97"/>
+      <argument type="service" id=".service_locator..qc.lUt"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
@@ -4268,15 +4286,14 @@
       <argument type="service" id="request_stack"/>
     </service>
     <service id="security.role_hierarchy" class="Symfony\Component\Security\Core\Role\RoleHierarchy" public="false">
-      <argument>%security.role_hierarchy.roles%</argument>
+      <argument type="collection"/>
+    </service>
+    <service id="security.access.simple_role_voter" class="Symfony\Component\Security\Core\Authorization\Voter\RoleVoter" public="false">
+      <tag name="security.voter" priority="245"/>
     </service>
     <service id="security.access.authenticated_voter" class="Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter" public="false">
       <tag name="security.voter" priority="250"/>
       <argument type="service" id="security.authentication.trust_resolver"/>
-    </service>
-    <service id="security.access.role_hierarchy_voter" class="Symfony\Component\Security\Core\Authorization\Voter\RoleHierarchyVoter" public="false">
-      <tag name="security.voter" priority="245"/>
-      <argument type="service" id="security.role_hierarchy"/>
     </service>
     <service id="security.access.expression_voter" class="Symfony\Component\Security\Core\Authorization\Voter\ExpressionVoter" public="false">
       <tag name="security.voter" priority="245"/>
@@ -4372,57 +4389,7 @@
       <argument type="service" id="security.authentication.retry_entry_point"/>
       <argument type="service" id="logger" on-invalid="null"/>
     </service>
-    <service id="security.access_map" class="Symfony\Component\Security\Http\AccessMap" public="false">
-      <call method="add">
-        <argument type="service" id=".security.request_matcher.b8yg0Fk"/>
-        <argument type="collection">
-          <argument>ROLE_Super-admin</argument>
-        </argument>
-        <argument>null</argument>
-      </call>
-      <call method="add">
-        <argument type="service" id=".security.request_matcher.38X.oWv"/>
-        <argument type="collection">
-          <argument>ROLE_Caissier</argument>
-        </argument>
-        <argument>null</argument>
-      </call>
-      <call method="add">
-        <argument type="service" id=".security.request_matcher.kGrIsYm"/>
-        <argument type="collection">
-          <argument>ROLE_Super-admin</argument>
-        </argument>
-        <argument>null</argument>
-      </call>
-      <call method="add">
-        <argument type="service" id=".security.request_matcher.ogCU.kG"/>
-        <argument type="collection">
-          <argument>ROLE_listeur-entreprise</argument>
-        </argument>
-        <argument>null</argument>
-      </call>
-      <call method="add">
-        <argument type="service" id=".security.request_matcher.t3c39gS"/>
-        <argument type="collection">
-          <argument>ROLE_listeur-entreprise</argument>
-        </argument>
-        <argument>null</argument>
-      </call>
-      <call method="add">
-        <argument type="service" id=".security.request_matcher.fwV856b"/>
-        <argument type="collection">
-          <argument>ROLE_inscrir</argument>
-        </argument>
-        <argument>null</argument>
-      </call>
-      <call method="add">
-        <argument type="service" id=".security.request_matcher.Ynqpvg_"/>
-        <argument type="collection">
-          <argument>ROLE_Super-admin</argument>
-        </argument>
-        <argument>null</argument>
-      </call>
-    </service>
+    <service id="security.access_map" class="Symfony\Component\Security\Http\AccessMap" public="false"/>
     <service id="security.context_listener" class="Symfony\Component\Security\Http\Firewall\ContextListener" public="false">
       <tag name="monolog.logger" channel="security"/>
       <argument type="service" id="security.token_storage"/>
@@ -4937,27 +4904,6 @@
         <argument key="security.firewall.map.context.login" type="service" id="security.firewall.map.context.login"/>
       </argument>
     </service>
-    <service id=".security.request_matcher.b8yg0Fk" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/partenaires/add</argument>
-    </service>
-    <service id=".security.request_matcher.38X.oWv" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/nouveau/depot</argument>
-    </service>
-    <service id=".security.request_matcher.kGrIsYm" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/bloque/entreprises</argument>
-    </service>
-    <service id=".security.request_matcher.ogCU.kG" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/entreprises/liste</argument>
-    </service>
-    <service id=".security.request_matcher.t3c39gS" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/entreprise/</argument>
-    </service>
-    <service id=".security.request_matcher.fwV856b" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/inscription</argument>
-    </service>
-    <service id=".security.request_matcher.Ynqpvg_" class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-      <argument>^/add/admin-partenaire/</argument>
-    </service>
     <service id="security.command.user_password_encoder" class="Symfony\Bundle\SecurityBundle\Command\UserPasswordEncoderCommand" public="false">
       <tag name="console.command" command="security:encode-password"/>
       <argument type="service" id="security.encoder_factory.generic"/>
@@ -5147,7 +5093,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory" public="false">
-      <argument type="service" id=".service_locator.x1ewjgs"/>
+      <argument type="service" id=".service_locator.caSzHJK"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -6298,6 +6244,10 @@
             <argument key="fixture" type="service" id="App\DataFixtures\AppFixtures"/>
             <argument key="groups" type="collection"/>
           </argument>
+          <argument type="collection">
+            <argument key="fixture" type="service" id="App\DataFixtures\PrixFixtures"/>
+            <argument key="groups" type="collection"/>
+          </argument>
         </argument>
       </call>
     </service>
@@ -6307,14 +6257,23 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\TransationController" class="App\Controller\TransationController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\TransationController" class="App\Controller\TransationController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\TransationController" class="App\Controller\TransationController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\PrixFixtures" class="App\DataFixtures\PrixFixtures" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\DataFixtures\PrixFixtures" class="App\DataFixtures\PrixFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\EventDispatcher\EventSubscriberInterface.0.App\EventSubscriber\ExceptionSubscriber" class="App\EventSubscriber\ExceptionSubscriber" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\EventSubscriber\ExceptionSubscriber" class="App\EventSubscriber\ExceptionSubscriber" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\DepotType" class="App\Form\DepotType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\DepotType" class="App\Form\DepotType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\EntrepriseType" class="App\Form\EntrepriseType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\EntrepriseType" class="App\Form\EntrepriseType" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\EnvoieType" class="App\Form\EnvoieType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\EnvoieType" class="App\Form\EnvoieType" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\TransactionType" class="App\Form\TransactionType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\TransactionType" class="App\Form\TransactionType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\UtilisateurType" class="App\Form\UtilisateurType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\UtilisateurType" class="App\Form\UtilisateurType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\CompteRepository" class="App\Repository\CompteRepository" autowire="true" abstract="true"/>
@@ -6327,8 +6286,12 @@
     <service id=".abstract.instanceof.App\Repository\NomRepository" class="App\Repository\NomRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ProfilRepository" class="App\Repository\ProfilRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\ProfilRepository" class="App\Repository\ProfilRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TarifsRepository" class="App\Repository\TarifsRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\TarifsRepository" class="App\Repository\TarifsRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TransactionRepository" class="App\Repository\TransactionRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\TransactionRepository" class="App\Repository\TransactionRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UserCompteActuelRepository" class="App\Repository\UserCompteActuelRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\UserCompteActuelRepository" class="App\Repository\UserCompteActuelRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UtilisateurRepository" class="App\Repository\UtilisateurRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UtilisateurRepository" class="App\Repository\UtilisateurRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.6tT8guL" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
@@ -6342,6 +6305,14 @@
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="encoder" type="service" id="security.user_password_encoder.generic"/>
+        <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+        <argument key="validator" type="service" id="debug.validator"/>
+      </argument>
+    </service>
+    <service id=".service_locator.wI8CRMK" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="entreprise" type="service" id=".errored..service_locator.wI8CRMK.App\Entity\Entreprise"/>
         <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
         <argument key="validator" type="service" id="debug.validator"/>
       </argument>
@@ -6361,11 +6332,50 @@
         <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
       </argument>
     </service>
+    <service id=".service_locator.nnGY_tz" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="Userconnecte" type="service" id=".errored..service_locator.nnGY_tz.Symfony\Component\Security\Core\User\UserInterface"/>
+        <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
     <service id=".service_locator.pV4HNdF" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="entreprise" type="service" id=".errored..service_locator.pV4HNdF.App\Entity\Entreprise"/>
         <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
+    <service id=".service_locator.ymGayJp" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="Userconnecte" type="service" id=".errored..service_locator.ymGayJp.Symfony\Component\Security\Core\User\UserInterface"/>
+        <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+        <argument key="repoCompte" type="service" id="App\Repository\CompteRepository"/>
+        <argument key="repoUser" type="service" id="App\Repository\UtilisateurRepository"/>
+        <argument key="repoUserComp" type="service" id="App\Repository\UserCompteActuelRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.aTNbF6n" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="repo" type="service" id="App\Repository\UserCompteActuelRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
+        <argument key="userConnecte" type="service" id=".errored..service_locator.aTNbF6n.Symfony\Component\Security\Core\User\UserInterface"/>
+      </argument>
+    </service>
+    <service id=".service_locator.UomhiZc" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="serializer" type="service" id="serializer"/>
+        <argument key="user" type="service" id=".errored..service_locator.UomhiZc.App\Entity\Utilisateur"/>
+        <argument key="userConnecte" type="service" id=".errored..service_locator.UomhiZc.Symfony\Component\Security\Core\User\UserInterface"/>
+      </argument>
+    </service>
+    <service id=".service_locator.2JXh8BC" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="entreprise" type="service" id=".errored..service_locator.2JXh8BC.App\Entity\Entreprise"/>
       </argument>
     </service>
     <service id=".service_locator.l2alLEu" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
@@ -6374,35 +6384,124 @@
         <argument key="viewhandler" type="service" id="fos_rest.view_handler.default"/>
       </argument>
     </service>
-    <service id=".service_locator.5FGfkQK" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.dbg_bpF" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="Userconnecte" type="service" id=".errored..service_locator.5FGfkQK.Symfony\Component\Security\Core\User\UserInterface"/>
+        <argument key="Userconnecte" type="service" id=".errored..service_locator.dbg_bpF.Symfony\Component\Security\Core\User\UserInterface"/>
         <argument key="encoder" type="service" id="security.user_password_encoder.generic"/>
         <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+        <argument key="repoComp" type="service" id="App\Repository\CompteRepository"/>
         <argument key="repoProfil" type="service" id="App\Repository\ProfilRepository"/>
         <argument key="validator" type="service" id="debug.validator"/>
       </argument>
     </service>
-    <service id=".service_locator.5zcue4K" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.bhTckp7" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="App\Controller\EntrepriseController::add" type="service" id=".service_locator.NpJNP1H"/>
+        <argument key="encoder" type="service" id="security.user_password_encoder.generic"/>
+        <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+        <argument key="user" type="service" id=".errored..service_locator.bhTckp7.App\Entity\Utilisateur"/>
+        <argument key="validator" type="service" id="debug.validator"/>
+      </argument>
+    </service>
+    <service id=".service_locator.8UlaI9m" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+        <argument key="repoCompt" type="service" id="App\Repository\CompteRepository"/>
+        <argument key="repoTarif" type="service" id="App\Repository\TarifsRepository"/>
+        <argument key="repoUserComp" type="service" id="App\Repository\UserCompteActuelRepository"/>
+        <argument key="userConnecte" type="service" id=".errored..service_locator.8UlaI9m.Symfony\Component\Security\Core\User\UserInterface"/>
+        <argument key="validator" type="service" id="debug.validator"/>
+      </argument>
+    </service>
+    <service id=".service_locator.3GSHdrB" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="manager" type="service" id="doctrine.orm.default_entity_manager"/>
+        <argument key="repoTrans" type="service" id="App\Repository\TransactionRepository"/>
+        <argument key="repoUserComp" type="service" id="App\Repository\UserCompteActuelRepository"/>
+        <argument key="userConnecte" type="service" id=".errored..service_locator.3GSHdrB.Symfony\Component\Security\Core\User\UserInterface"/>
+        <argument key="validator" type="service" id="debug.validator"/>
+      </argument>
+    </service>
+    <service id=".service_locator._399Gt1" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="repoTrans" type="service" id="App\Repository\TransactionRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
+        <argument key="user" type="service" id=".errored..service_locator._399Gt1.App\Entity\Utilisateur"/>
+        <argument key="userConnecte" type="service" id=".errored..service_locator._399Gt1.Symfony\Component\Security\Core\User\UserInterface"/>
+      </argument>
+    </service>
+    <service id=".service_locator.pOqsW2f" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="entreprise" type="service" id=".errored..service_locator.pOqsW2f.App\Entity\Entreprise"/>
+        <argument key="repoTrans" type="service" id="App\Repository\TransactionRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
+        <argument key="userConnecte" type="service" id=".errored..service_locator.pOqsW2f.Symfony\Component\Security\Core\User\UserInterface"/>
+      </argument>
+    </service>
+    <service id=".service_locator.LP6MjeK" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="repoTrans" type="service" id="App\Repository\TransactionRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.EWX.KyZ" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="transaction" type="service" id=".errored..service_locator.EWX.KyZ.App\Entity\Transaction"/>
+      </argument>
+    </service>
+    <service id=".service_locator.UuOmZTl" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
         <argument key="App\Controller\EntrepriseController::addCompte" type="service" id=".service_locator.pV4HNdF"/>
-        <argument key="App\Controller\EntrepriseController::bloque" type="service" id=".service_locator.ut29XRA"/>
+        <argument key="App\Controller\EntrepriseController::addPartenaire" type="service" id=".service_locator.NpJNP1H"/>
+        <argument key="App\Controller\EntrepriseController::bloqueEntrep" type="service" id=".service_locator.ut29XRA"/>
+        <argument key="App\Controller\EntrepriseController::bloqueUser" type="service" id=".service_locator.nnGY_tz"/>
+        <argument key="App\Controller\EntrepriseController::changeCompte" type="service" id=".service_locator.ymGayJp"/>
+        <argument key="App\Controller\EntrepriseController::contrat" type="service" id=".service_locator.2JXh8BC"/>
         <argument key="App\Controller\EntrepriseController::depot" type="service" id=".service_locator.vD8Uu7b"/>
         <argument key="App\Controller\EntrepriseController::lister" type="service" id=".service_locator.6tT8guL"/>
+        <argument key="App\Controller\EntrepriseController::listerUser" type="service" id=".service_locator.UomhiZc"/>
+        <argument key="App\Controller\EntrepriseController::listerUserCompt" type="service" id=".service_locator.aTNbF6n"/>
         <argument key="App\Controller\EntrepriseController::setViewHandler" type="service" id=".service_locator.l2alLEu"/>
-        <argument key="App\Controller\SecurityController::inscriptionUtilisateur" type="service" id=".service_locator.5FGfkQK"/>
+        <argument key="App\Controller\EntrepriseController::updatePartenaire" type="service" id=".service_locator.wI8CRMK"/>
+        <argument key="App\Controller\SecurityController::inscriptionUtilisateur" type="service" id=".service_locator.dbg_bpF"/>
         <argument key="App\Controller\SecurityController::setViewHandler" type="service" id=".service_locator.l2alLEu"/>
-        <argument key="App\Controller\EntrepriseController:add" type="service" id=".service_locator.NpJNP1H"/>
+        <argument key="App\Controller\SecurityController::updateUser" type="service" id=".service_locator.bhTckp7"/>
+        <argument key="App\Controller\TransationController::envois" type="service" id=".service_locator.8UlaI9m"/>
+        <argument key="App\Controller\TransationController::recuDeTransaction" type="service" id=".service_locator.EWX.KyZ"/>
+        <argument key="App\Controller\TransationController::retrait" type="service" id=".service_locator.3GSHdrB"/>
+        <argument key="App\Controller\TransationController::setViewHandler" type="service" id=".service_locator.l2alLEu"/>
+        <argument key="App\Controller\TransationController::transactionPartenaire" type="service" id=".service_locator.pOqsW2f"/>
+        <argument key="App\Controller\TransationController::transactionUser" type="service" id=".service_locator._399Gt1"/>
+        <argument key="App\Controller\TransationController::transationDate" type="service" id=".service_locator.LP6MjeK"/>
         <argument key="App\Controller\EntrepriseController:addCompte" type="service" id=".service_locator.pV4HNdF"/>
-        <argument key="App\Controller\EntrepriseController:bloque" type="service" id=".service_locator.ut29XRA"/>
+        <argument key="App\Controller\EntrepriseController:addPartenaire" type="service" id=".service_locator.NpJNP1H"/>
+        <argument key="App\Controller\EntrepriseController:bloqueEntrep" type="service" id=".service_locator.ut29XRA"/>
+        <argument key="App\Controller\EntrepriseController:bloqueUser" type="service" id=".service_locator.nnGY_tz"/>
+        <argument key="App\Controller\EntrepriseController:changeCompte" type="service" id=".service_locator.ymGayJp"/>
+        <argument key="App\Controller\EntrepriseController:contrat" type="service" id=".service_locator.2JXh8BC"/>
         <argument key="App\Controller\EntrepriseController:depot" type="service" id=".service_locator.vD8Uu7b"/>
         <argument key="App\Controller\EntrepriseController:lister" type="service" id=".service_locator.6tT8guL"/>
+        <argument key="App\Controller\EntrepriseController:listerUser" type="service" id=".service_locator.UomhiZc"/>
+        <argument key="App\Controller\EntrepriseController:listerUserCompt" type="service" id=".service_locator.aTNbF6n"/>
         <argument key="App\Controller\EntrepriseController:setViewHandler" type="service" id=".service_locator.l2alLEu"/>
-        <argument key="App\Controller\SecurityController:inscriptionUtilisateur" type="service" id=".service_locator.5FGfkQK"/>
+        <argument key="App\Controller\EntrepriseController:updatePartenaire" type="service" id=".service_locator.wI8CRMK"/>
+        <argument key="App\Controller\SecurityController:inscriptionUtilisateur" type="service" id=".service_locator.dbg_bpF"/>
         <argument key="App\Controller\SecurityController:setViewHandler" type="service" id=".service_locator.l2alLEu"/>
+        <argument key="App\Controller\SecurityController:updateUser" type="service" id=".service_locator.bhTckp7"/>
+        <argument key="App\Controller\TransationController:envois" type="service" id=".service_locator.8UlaI9m"/>
+        <argument key="App\Controller\TransationController:recuDeTransaction" type="service" id=".service_locator.EWX.KyZ"/>
+        <argument key="App\Controller\TransationController:retrait" type="service" id=".service_locator.3GSHdrB"/>
+        <argument key="App\Controller\TransationController:setViewHandler" type="service" id=".service_locator.l2alLEu"/>
+        <argument key="App\Controller\TransationController:transactionPartenaire" type="service" id=".service_locator.pOqsW2f"/>
+        <argument key="App\Controller\TransationController:transactionUser" type="service" id=".service_locator._399Gt1"/>
+        <argument key="App\Controller\TransationController:transationDate" type="service" id=".service_locator.LP6MjeK"/>
       </argument>
     </service>
     <service id=".service_locator.LtnrEkg" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
@@ -6464,11 +6563,13 @@
       <argument type="service" id="debug.argument_resolver.not_tagged_controller.inner"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
-    <service id=".service_locator.dF9wC97" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator..qc.lUt" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Form\DepotType" type="service" id="App\Form\DepotType"/>
         <argument key="App\Form\EntrepriseType" type="service" id="App\Form\EntrepriseType"/>
+        <argument key="App\Form\EnvoieType" type="service" id="App\Form\EnvoieType"/>
+        <argument key="App\Form\TransactionType" type="service" id="App\Form\TransactionType"/>
         <argument key="App\Form\UtilisateurType" type="service" id="App\Form\UtilisateurType"/>
         <argument key="Symfony\Bridge\Doctrine\Form\Type\EntityType" type="service" id="form.type.entity"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ChoiceType" type="service" id="form.type.choice"/>
@@ -6491,8 +6592,8 @@
       <argument type="service" id="security.access.authenticated_voter"/>
       <argument type="service" id="debug.event_dispatcher"/>
     </service>
-    <service id="debug.security.voter.security.access.role_hierarchy_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
-      <argument type="service" id="security.access.role_hierarchy_voter"/>
+    <service id="debug.security.voter.security.access.simple_role_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
+      <argument type="service" id="security.access.simple_role_voter"/>
       <argument type="service" id="debug.event_dispatcher"/>
     </service>
     <service id="debug.security.voter.security.access.expression_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
@@ -6508,7 +6609,7 @@
         <argument key="doctrine.orm.default_listeners.attach_entity_listeners" type="service" id="doctrine.orm.default_listeners.attach_entity_listeners"/>
       </argument>
     </service>
-    <service id=".service_locator.x1ewjgs" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.caSzHJK" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\CompteRepository" type="service" id="App\Repository\CompteRepository"/>
@@ -6516,7 +6617,9 @@
         <argument key="App\Repository\EntrepriseRepository" type="service" id="App\Repository\EntrepriseRepository"/>
         <argument key="App\Repository\NomRepository" type="service" id="App\Repository\NomRepository"/>
         <argument key="App\Repository\ProfilRepository" type="service" id="App\Repository\ProfilRepository"/>
+        <argument key="App\Repository\TarifsRepository" type="service" id="App\Repository\TarifsRepository"/>
         <argument key="App\Repository\TransactionRepository" type="service" id="App\Repository\TransactionRepository"/>
+        <argument key="App\Repository\UserCompteActuelRepository" type="service" id="App\Repository\UserCompteActuelRepository"/>
         <argument key="App\Repository\UtilisateurRepository" type="service" id="App\Repository\UtilisateurRepository"/>
       </argument>
     </service>
@@ -6576,6 +6679,12 @@
     <service id=".service_locator.4RGsIK0.App\Controller\SecurityController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator_context" id="App\Controller\SecurityController"/>
       <argument>App\Controller\SecurityController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.4RGsIK0" method="withContext"/>
+    </service>
+    <service id=".service_locator.4RGsIK0.App\Controller\TransationController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator_context" id="App\Controller\TransationController"/>
+      <argument>App\Controller\TransationController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.4RGsIK0" method="withContext"/>
     </service>
@@ -6646,7 +6755,7 @@
     <service id="debug.security.access.decision_manager.inner" class="Symfony\Component\Security\Core\Authorization\AccessDecisionManager" public="false">
       <argument type="iterator">
         <argument type="service" id="debug.security.voter.security.access.authenticated_voter"/>
-        <argument type="service" id="debug.security.voter.security.access.role_hierarchy_voter"/>
+        <argument type="service" id="debug.security.voter.security.access.simple_role_voter"/>
         <argument type="service" id="debug.security.voter.security.access.expression_voter"/>
       </argument>
       <argument>affirmative</argument>
@@ -6686,12 +6795,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.5zcue4K"/>
+      <argument type="service" id=".service_locator.UuOmZTl"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.5zcue4K"/>
+      <argument type="service" id=".service_locator.UuOmZTl"/>
     </service>
     <service id="fos_rest.serializer.form_error_handler.inner" class="JMS\Serializer\Handler\FormErrorHandler" public="false">
       <argument>null</argument>
@@ -6732,9 +6841,24 @@
       <argument type="service" id="api_platform.metadata.property.metadata_factory.cached"/>
       <argument type="service" id="api_platform.path_segment_name_generator.underscore"/>
     </service>
+    <service id=".errored..service_locator.wI8CRMK.App\Entity\Entreprise" class="App\Entity\Entreprise"/>
     <service id=".errored..service_locator.vD8Uu7b.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.nnGY_tz.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
     <service id=".errored..service_locator.pV4HNdF.App\Entity\Entreprise" class="App\Entity\Entreprise"/>
-    <service id=".errored..service_locator.5FGfkQK.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.ymGayJp.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.aTNbF6n.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.UomhiZc.App\Entity\Utilisateur" class="App\Entity\Utilisateur"/>
+    <service id=".errored..service_locator.UomhiZc.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.2JXh8BC.App\Entity\Entreprise" class="App\Entity\Entreprise"/>
+    <service id=".errored..service_locator.dbg_bpF.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.bhTckp7.App\Entity\Utilisateur" class="App\Entity\Utilisateur"/>
+    <service id=".errored..service_locator.8UlaI9m.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.3GSHdrB.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator._399Gt1.App\Entity\Utilisateur" class="App\Entity\Utilisateur"/>
+    <service id=".errored..service_locator._399Gt1.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.pOqsW2f.App\Entity\Entreprise" class="App\Entity\Entreprise"/>
+    <service id=".errored..service_locator.pOqsW2f.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.EWX.KyZ.App\Entity\Transaction" class="App\Entity\Transaction"/>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <argument type="service" id=".service_locator.0_FvmF1"/>
       <argument type="collection">
@@ -7140,7 +7264,7 @@
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.5zcue4K"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.UuOmZTl"/>
     <service id="fos_rest.serializer" alias="fos_rest.serializer.jms"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>

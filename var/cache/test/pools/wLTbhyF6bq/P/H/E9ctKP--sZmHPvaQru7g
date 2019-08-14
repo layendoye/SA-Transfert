@@ -32,7 +32,7 @@
                     1 => 'object',
                 ],
                 'nullable' => [
-                    1 => false,
+                    1 => true,
                 ],
                 'class' => [
                     1 => 'DateTime',
