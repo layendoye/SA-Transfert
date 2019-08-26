@@ -37,6 +37,7 @@ class EntrepriseController extends AbstractFOSRestController
     private $contentType;
     private $utilisateurStr;
     private $compteStr;
+    private $bloqueStr;
     public function __construct()
     {
         $this->actif="Actif";
@@ -47,8 +48,8 @@ class EntrepriseController extends AbstractFOSRestController
         $this->contentType='Content-Type';
         $this->utilisateurStr='utilisateur';
         $this->compteStr='compte';
+        $this->bloqueStr='Bloqué';
     }
-
     /**
      * @Route("/entreprises/liste", name="entreprises", methods={"GET"})
      * @Route("/entreprise/{id}", name="entreprise", methods={"GET"})
@@ -61,7 +62,7 @@ class EntrepriseController extends AbstractFOSRestController
             throw new HttpException(404,'Ce partenaire n\'existe pas!');
         }
         if(!$entreprise){
-            $entreprise=$repo->findAll();
+            $entreprise=$repo->findPartenaire();
         }
         $data = $serializer->serialize($entreprise,'json',[ $this->groups => ['list-entreprise']]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200,[$this->contentType => 'application/json']);
@@ -146,7 +147,7 @@ class EntrepriseController extends AbstractFOSRestController
             $afficher = [
                 $this->status => 201,
                 $this->message => 'Le partenaire '.$entreprise->getRaisonSociale().' ainsi que son admin principal ont bien été ajouté !! ',
-               'Compte partenaire' =>'Le compte numéro '.$compte->getNumeroCompte().' lui a été assigné'
+               'compte' =>'Le compte numéro '.$compte->getNumeroCompte().' lui a été assigné'
             ];
             return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
         #####################----------------------------Fin finalisation-------------------------#####################
@@ -223,7 +224,6 @@ class EntrepriseController extends AbstractFOSRestController
         }
         return $this->handleView($this->view($validator->validate($form)));
     }
-
     /**
     * @Route("/bloque/entreprises/{id}", name="bloque_entreprise", methods={"GET"})
     * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -240,7 +240,7 @@ class EntrepriseController extends AbstractFOSRestController
             throw new HttpException(403,'Impossible de bloquer l\'etat du Sénégal !');
         }
         elseif($entreprise->getStatus() == $this->actif){
-            $entreprise->setStatus("bloqué");
+            $entreprise->setStatus($this->bloqueStr);
             $texte= 'Partenaire bloqué';
         }
         else{
@@ -277,8 +277,8 @@ class EntrepriseController extends AbstractFOSRestController
         }
         
         if($user->getStatus() == $this->actif){
-            $user->setStatus("bloqué");
-            $texte='Bloqué';
+            $user->setStatus($this->bloqueStr);
+            $texte=$this->bloqueStr;
         }
         else{
             $user->setStatus($this->actif);
@@ -397,6 +397,17 @@ class EntrepriseController extends AbstractFOSRestController
             throw new HttpException(404,'Cet utilisateur n\'est pas membre de votre entreprise ! ');
         }
         $data = $serializer->serialize($user,'json',[ $this->groups => ['list-user']]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200);
+    }
+    /**
+     * @Route("/lister/users", name="user_entreprise", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function listerLesUser(SerializerInterface $serializer,UserInterface $userConnecte,UtilisateurRepository $repo)
+    {
+        $entreprise=$userConnecte->getEntreprise();
+        $users=$repo->findUserEntreprise($entreprise,$userConnecte);
+        $data = $serializer->serialize($users,'json',[ $this->groups => ['list-user']]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
     /**

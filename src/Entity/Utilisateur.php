@@ -23,37 +23,39 @@ class Utilisateur implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"list-user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\NotBlank(message="Le login ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le login est trop court !!")
      */
     private $username;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"list-user"})
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\NotBlank(message="Le mot de passe ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le mot de passe est trop court !!")
      */
     private $password;
 
     /**
-    *@Assert\EqualTo(propertyPath="password",message="Les mots de passes ne correspondent pas !")
-    */
+     * @Assert\EqualTo(propertyPath="password",message="Les mots de passes ne correspondent pas !")
+     */
     private $confirmPassword; //créé le getter et setter!
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\NotBlank(message="Le nom du responsable ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le nom est trop court !!")
      * @Groups({"list-userCmpt","list-user"})
      */
@@ -61,6 +63,7 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="L'email du responsable ne doit pas être vide")
      * @Assert\Email(message="Veuillez mettre un email valide !!")
      * @Groups({"list-user"})
      */
@@ -68,13 +71,14 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\NotBlank(message="Le téléphone du responsable ne doit pas être vide")
      * @Groups({"list-user"})
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le NCI du responsable ne doit pas être vide")
      * @Groups({"list-user"})
      */
     private $nci;

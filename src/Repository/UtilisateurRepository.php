@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Proxies\__CG__\App\Entity\Entreprise;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,6 +20,22 @@ class UtilisateurRepository extends ServiceEntityRepository
         parent::__construct($registry, Utilisateur::class);
     }
 
+     /**
+     * @return Utilisateur[] Returns an array of Utilisateur objects
+     */
+
+    public function findUserEntreprise(Entreprise $entreprise,Utilisateur $user)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.entreprise = :val')
+            ->andWhere('u != :val2')
+            ->setParameter('val', $entreprise)
+            ->setParameter('val2', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
     // /**
     //  * @return Utilisateur[] Returns an array of Utilisateur objects
     //  */

@@ -22,12 +22,13 @@ class Entreprise
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"list-entreprise"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\NotBlank(message="La raison sociale ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="La raison sociale est trop courte !!")
      * @Groups({"list-entreprise"})
      */
@@ -35,7 +36,7 @@ class Entreprise
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\NotBlank(message="Le NINEA ne doit pas être vide")
      * @Assert\Length(min="4", max="255" ,minMessage="Le NINEA est trop court !!")
      * @Groups({"list-entreprise"})
      */
@@ -43,7 +44,7 @@ class Entreprise
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\NotBlank(message="L'adresse de l'entreprise ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="L'adresse est trop court !!")
      * @Groups({"list-entreprise"})
      */
@@ -73,7 +74,7 @@ class Entreprise
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\NotBlank(message="Le numero de téléphone de l'entreprise ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le numero de téléphone est trop court !!")
      * @Groups({"list-entreprise"})
      */
@@ -81,7 +82,7 @@ class Entreprise
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Assert\NotBlank(message="L'email de l'entreprise ne doit pas être vide")
      * @Assert\Email(message="Veuillez mettre un email valide !!")
      * @Groups({"list-entreprise"})
      */

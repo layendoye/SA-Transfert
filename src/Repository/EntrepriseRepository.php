@@ -18,7 +18,24 @@ class EntrepriseRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Entreprise::class);
     }
-
+    /**
+     * @return Entreprise[] Returns an array of Entreprise objects
+     */
+    
+    public function findPartenaire()
+    {
+        $val1='SA Transfert';
+        $val2='Etat du Sénégal';
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.raisonSociale != :val1')
+            ->andWhere('e.raisonSociale != :val2')
+            ->setParameter('val1', $val1)
+            ->setParameter('val2', $val2)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
     // /**
     //  * @return Entreprise[] Returns an array of Entreprise objects
     //  */
