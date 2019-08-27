@@ -385,11 +385,12 @@ class EntrepriseController extends AbstractFOSRestController
         return new Response($data,200);
     }
      /**
-     * @Route("/user/{id}", name="user_entreprise", methods={"GET"})
+     * @Route("/user/{id}", name="listeUser", methods={"GET"})
      * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
      */
     public function listerUser(SerializerInterface $serializer,Utilisateur $user,UserInterface $userConnecte)
     {
+        
         if(!$user instanceof Utilisateur) {//regler le cas du super admin qui liste les admins principaux
             throw new HttpException(404,'Resource non trouvée ! ');
         }

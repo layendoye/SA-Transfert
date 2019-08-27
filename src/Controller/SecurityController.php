@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Utilisateur;
+use App\Form\UpdateUserType;
 use App\Form\UtilisateurType;
 use App\Repository\CompteRepository;
 use App\Repository\ProfilRepository;
@@ -30,7 +31,6 @@ class SecurityController extends AbstractFOSRestController
         $this->status="status";
         $this->saTransfert="SA Transfert";
         $this->image_directory="image_directory";
-
     }
     /**
      * @Route("/inscription", name="inscription", methods={"POST"})
@@ -112,7 +112,7 @@ class SecurityController extends AbstractFOSRestController
             if(!$user){
                 throw new HttpException(404,'Cet utilisateur n\'existe pas !');
             }
-            $form = $this->createForm(UtilisateurType::class,$user);
+            $form = $this->createForm(UpdateUserType::class,$user);
             $data=json_decode($request->getContent(),true);//si json
             if(!$data){
                 $data=$request->request->all();//si non json
@@ -148,8 +148,6 @@ class SecurityController extends AbstractFOSRestController
 
         #####################------Début finalisation de l'inscription--------#####################
             
-            $hash=$encoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($hash);
             $manager->persist($user); 
             $manager->flush();
             $afficher = [
@@ -165,6 +163,13 @@ class SecurityController extends AbstractFOSRestController
      *@Route("/connexion", name="connexion", methods={"POST"})
      */
     public function login(){ }
+     /**
+     *@Route("/profil", name="profil", methods={"GET"})
+     */
+    public function profil(ProfilRepository $repo,UserInterface $Userconnecte){
+        $data=$repo->findAll();
+        return $this->handleView($this->view($data,Response::HTTP_CREATED));
+    }
 
     public function validationRole($roles,$roleUserConnecte){
         $roleSupAdmi=['ROLE_Super-admin'];

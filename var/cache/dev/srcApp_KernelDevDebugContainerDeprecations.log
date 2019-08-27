@@ -1,1 +1,1 @@
-a:0:{}
+a:1:{i:0;a:6:{s:4:"type";i:16384;s:7:"message";s:217:"The "App\Controller\PdfController" class extends "Symfony\Bundle\FrameworkBundle\Controller\Controller" that is deprecated since Symfony 4.2, use "Symfony\Bundle\FrameworkBundle\Controller\AbstractController" instead.";s:4:"file";s:114:"/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/vendor/symfony/debug/DebugClassLoader.php";s:4:"line";i:200;s:5:"trace";a:1:{i:0;a:1:{s:8:"function";s:17:"spl_autoload_call";}}s:5:"count";i:1;}}

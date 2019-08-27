@@ -31,6 +31,7 @@ class Utilisateur implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="Le login ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le login est trop court !!")
+     * @Groups({"list-user"})
      */
     private $username;
 
