@@ -25,6 +25,8 @@ use App\Repository\UtilisateurRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Repository\UserCompteActuelRepository;
 use App\Entity\UserCompteActuel;
+use SebastianBergmann\CodeCoverage\Util;
+use Symfony\Component\Security\Core\User\User;
 
 class EntrepriseController extends AbstractFOSRestController
 {
@@ -367,6 +369,26 @@ class EntrepriseController extends AbstractFOSRestController
     }
 
     /**
+     * @Route("/compte/entreprise/{id}", name="compte_entr", methods={"GET"})
+     * @Route("/MesComptes", name="compte_userCon", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function getCompte(UserInterface $userConnecte, SerializerInterface $serializer,Entreprise $entreprise=null,$id=null)
+    {
+        
+        if($id && !$entreprise instanceof Entreprise) {
+            throw new HttpException(404,'Ce partenaire n\'existe pas!');
+        }
+        elseif(!$id){
+            $entreprise=$userConnecte->getEntreprise();
+            
+        }
+        
+        $data = $serializer->serialize($entreprise->getComptes(),'json',[ $this->groups => ['list-compte']]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200,[$this->contentType => 'application/json']);
+    }
+
+    /**
      * @Route("/gestion/comptes/liste", name="user_comptes", methods={"GET"})
      * @Route("/gestion/compte/{id}", name="user_compte", methods={"GET"})
      * @IsGranted({"ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -468,5 +490,23 @@ class EntrepriseController extends AbstractFOSRestController
                 - L’envoyeur et le bénéficiaire seront informés des éléments de la transaction par un message texte émanant du fournisseur."
 
         ];
+    }
+    /**
+     * @Route("/compte/user/{id}", name="userCompte", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function userCompte(SerializerInterface $serializer,UserCompteActuelRepository $repo,Utilisateur $user){
+        $userComp=$repo->findUserComptActu($user);
+        $data = $serializer->serialize($userComp,'json',[ $this->groups => ['list-userCmpt']]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200);
+    }
+    /**
+     * @Route("/comptes/affecte/user/{id}", name="userCompteAffecte", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function userComptesAffecte(SerializerInterface $serializer,UserCompteActuelRepository $repo,Utilisateur $user){
+        $userComp=$repo->findUserComptesAff($user);
+        $data = $serializer->serialize($userComp,'json',[ $this->groups => ['list-userCmpt']]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200);
     }
 }

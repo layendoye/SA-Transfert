@@ -38,6 +38,21 @@ class UserCompteActuelRepository extends ServiceEntityRepository
         }
         return $tous[count($tous)-1];
     }
+    /**
+     * @return UserCompteActuel[] Returns an array of UserCompteActuel objects
+     */
+    
+    
+        public function findUserComptesAff(Utilisateur $user){
+            return $this->createQueryBuilder('u')
+                ->andWhere('u.utilisateur = :val')
+                ->setParameter('val', $user)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
+
     // /**
     //  * @return UserCompteActuel[] Returns an array of UserCompteActuel objects
     //  */
