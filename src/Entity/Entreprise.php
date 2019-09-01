@@ -22,7 +22,7 @@ class Entreprise
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"list-entreprise"})
+     * @Groups({"list-entreprise","list-compte","list-user"})
      */
     private $id;
 

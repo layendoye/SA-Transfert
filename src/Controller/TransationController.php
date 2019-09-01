@@ -37,6 +37,8 @@ class TransationController extends AbstractFOSRestController
     private $retraits;
     private $dateDebut;
     private $dateFin;
+    private $listRetraits;
+    private $listEnvois;
     public function __construct()
     {
         $this->message="message";
@@ -47,6 +49,8 @@ class TransationController extends AbstractFOSRestController
         $this->retraits='retraits';
         $this->dateDebut='dateDebut';
         $this->dateFin='dateFin';
+        $this->listRetraits='list-retraits';
+        $this->listEnvois='list-envois';
     }
 
     /**
@@ -150,7 +154,7 @@ class TransationController extends AbstractFOSRestController
         
         $userComp=$repoUserComp->findUserComptActu($userConnecte);
         if(!$userComp){
-            throw new HttpException(403,'Vous n\'etes rattachéà aucun compte !');
+            throw new HttpException(403,'Vous n\'etes rattaché à aucun compte !');
         }
         $retrait->setDateReception(new \DateTime())
                 ->setCommissionRecepteur($commissionRecep)
@@ -199,17 +203,17 @@ class TransationController extends AbstractFOSRestController
             return $this->handleView($this->view(['Résultat'=>'Aucune transaction trouvée !!!!'],404));
         }
         if($action == $this->envois){
-             $values = $serializer->serialize($transactionsUser,'json',[ $this->groups => ['list-envois']]);//chercher une alternative pour les groupes avec forest
+             $values = $serializer->serialize($transactionsUser,'json',[ $this->groups => [$this->listEnvois]]);//chercher une alternative pour les groupes avec forest
         }
         else{
-            $values = $serializer->serialize($transactionsUser,'json',[ $this->groups => ['list-retraits']]);//chercher une alternative pour les groupes avec forest
+            $values = $serializer->serialize($transactionsUser,'json',[ $this->groups => [$this->listRetraits]]);//chercher une alternative pour les groupes avec forest
         }
         return new Response($values,200);
     }
     
     /**
     * @Route("/transation/partenaire/{action}/{id}", name="transation_partenaire")
-    * @IsGranted({"ROLE_Super-admin","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+    * @IsGranted({"ROLE_utilisateur","ROLE_admin","ROLE_admin-Principal"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
     */
     public function transactionPartenaire(Request $request,$action,TransactionRepository $repoTrans,SerializerInterface $serializer,Entreprise $entreprise,UserInterface $userConnecte){
         $data = json_decode($request->getContent(),true);
@@ -236,14 +240,28 @@ class TransationController extends AbstractFOSRestController
             return $this->handleView($this->view(['Résultat'=>'Aucune transaction trouvée !!!!'],404));
         }
         if($action== $this->envois){
-             $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => ['list-envois']]);//chercher une alternative pour les groupes avec forest
+             $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => [$this->listEnvois]]);//chercher une alternative pour les groupes avec forest
         }
         else{
-            $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => ['list-retraits']]);//chercher une alternative pour les groupes avec forest
+            $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => [$this->listRetraits]]);//chercher une alternative pour les groupes avec forest
         }
         return new Response($data,200);
     } 
-
+    /**
+     * @Route("/info/transaction", name="infoTransaction", methods={"POST"})
+     * @IsGranted({"ROLE_utilisateur","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function infoTransaction(Request $request,SerializerInterface $serializer,TransactionRepository $repo){
+        $data = json_decode($request->getContent(),true);
+        if(!$data){
+            $data=$request->request->all();
+        }
+        $code=$data["code"];
+        $transation=$repo->findOneBy(["code"=>$code]);
+        
+        $data = $serializer->serialize($transation,'json',[ $this->groups => [$this->listRetraits,"list-envois"]]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200);
+    }
 
     
     public function transationDate(TransactionRepository $repoTrans,$debut,$fin,$action, Utilisateur $user=null,Entreprise $entreprise=null){
@@ -340,4 +358,5 @@ class TransationController extends AbstractFOSRestController
             'Transaction'=>$trans
         ];
     }
+
 }

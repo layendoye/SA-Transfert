@@ -21,12 +21,14 @@ return [
         '/gestion/comptes/liste' => [[['_route' => 'user_comptes', '_controller' => 'App\\Controller\\EntrepriseController::listerUserCompt'], null, ['GET' => 0], null, false, false, null]],
         '/lister/users' => [[['_route' => 'user_entreprise', '_controller' => 'App\\Controller\\EntrepriseController::listerLesUser'], null, ['GET' => 0], null, false, false, null]],
         '/compte/Mesdepots' => [[['_route' => 'showDepotCompte', '_controller' => 'App\\Controller\\EntrepriseController::showDepotCompte'], null, ['POST' => 0], null, false, false, null]],
+        '/compte/numeroCompte' => [[['_route' => 'leCompte', '_controller' => 'App\\Controller\\EntrepriseController::getLeCompte'], null, ['POST' => 0], null, false, false, null]],
         '/inscription' => [[['_route' => 'inscription', '_controller' => 'App\\Controller\\SecurityController::inscriptionUtilisateur'], null, ['POST' => 0], null, false, false, null]],
         '/connexion' => [[['_route' => 'connexion', '_controller' => 'App\\Controller\\SecurityController::login'], null, ['POST' => 0], null, false, false, null]],
         '/profil' => [[['_route' => 'profil', '_controller' => 'App\\Controller\\SecurityController::profil'], null, ['GET' => 0], null, false, false, null]],
         '/userConnecte' => [[['_route' => 'userConnecte', '_controller' => 'App\\Controller\\SecurityController::userConnecte'], null, ['GET' => 0], null, false, false, null]],
         '/transation/envoie' => [[['_route' => 'transation_envoie', '_controller' => 'App\\Controller\\TransationController::envois'], null, null, null, false, false, null]],
         '/transation/retrait' => [[['_route' => 'transation_retrait', '_controller' => 'App\\Controller\\TransationController::retrait'], null, null, null, false, false, null]],
+        '/info/transaction' => [[['_route' => 'infoTransaction', '_controller' => 'App\\Controller\\TransationController::infoTransaction'], null, ['POST' => 0], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

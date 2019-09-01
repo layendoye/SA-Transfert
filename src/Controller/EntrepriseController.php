@@ -542,4 +542,26 @@ class EntrepriseController extends AbstractFOSRestController
         $data = $serializer->serialize($userComp,'json',[ $this->groups => ['list-user']]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
+    /**
+     * @Route("/compte/numeroCompte", name="leCompte", methods={"POST"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_Caissier"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function getLeCompte(Request $request, SerializerInterface $serializer,CompteRepository $repo){
+        $data=json_decode($request->getContent(),true);
+        if(!$data){
+            $data=$request->request->all();//si non json
+        }
+        
+        if($compte=$repo->findOneBy(['numeroCompte'=>$data["numeroCompte"]])){
+            
+            if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
+                throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
+            }
+        }
+        else{
+            throw new HttpException(404,'Ce numero de compte n\'existe pas !');
+        }
+        $data = $serializer->serialize($compte,'json',[ $this->groups => ["list-compte"]]);
+        return new Response($data,200);
+    }
 }

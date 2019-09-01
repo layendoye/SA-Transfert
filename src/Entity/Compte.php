@@ -42,6 +42,7 @@ class Compte
      * @ORM\ManyToOne(targetEntity="App\Entity\Entreprise", inversedBy="comptes")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Groups({"list-compte"})
      */
     private $entreprise;
 

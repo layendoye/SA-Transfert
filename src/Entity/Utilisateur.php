@@ -108,6 +108,7 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Entreprise", inversedBy="utilisateurs")
+     * @Groups({"list-user"})
      */
     private $entreprise;
 
