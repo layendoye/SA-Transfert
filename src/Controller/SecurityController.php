@@ -17,6 +17,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Serializer\SerializerInterface;
+
 class SecurityController extends AbstractFOSRestController
 {
     private $actif;
@@ -46,8 +48,9 @@ class SecurityController extends AbstractFOSRestController
             if(!$data){//s il n'existe pas donc on recupere directement le tableau via la request
                 $data=$request->request->all();
             }
+            
             $form->submit($data);
-            if(!$form->isSubmitted() ||!$form->isValid()){
+            if(!$form->isSubmitted()){
                 return $this->handleView($this->view($validator->validate($form)));
             }
 
@@ -75,6 +78,7 @@ class SecurityController extends AbstractFOSRestController
         #####################------------------------Début gestion des images --------------------#####################
             
             if($requestFile=$request->files->all()){
+                
                 $file=$requestFile['image'];
                 $extension=$file->guessExtension();
                 if($extension!='png' && $extension!='jpeg'){
@@ -89,7 +93,7 @@ class SecurityController extends AbstractFOSRestController
         #####################-------------------------Fin gestion des images ---------------------#####################
 
         #####################------------------Début finalisation de l'inscription----------------#####################
-            
+               
             $user->setEntreprise($Userconnecte->getEntreprise());//si super admin ajout caissier (mm entreprise) si admin principal ajout admin ou user simple (mm entreprise)
             $user->setStatus($this->actif)
                  ->setEntreprise($Userconnecte->getEntreprise());
@@ -130,6 +134,7 @@ class SecurityController extends AbstractFOSRestController
             
             if($requestFile=$request->files->all()){
                 $file=$requestFile['image'];
+                var_dump($requestFile);die();
                 if($file->guessExtension()!='png' && $file->guessExtension()!='jpeg'){
                     throw new HttpException(400,'Entrer une image valide !! ');
                 }
@@ -162,13 +167,21 @@ class SecurityController extends AbstractFOSRestController
     /**
      *@Route("/connexion", name="connexion", methods={"POST"})
      */
-    public function login(){ }
+    public function login(){}
      /**
      *@Route("/profil", name="profil", methods={"GET"})
      */
     public function profil(ProfilRepository $repo,UserInterface $Userconnecte){
         $data=$repo->findAll();
         return $this->handleView($this->view($data,Response::HTTP_CREATED));
+    }
+
+    /**
+     * @Route("/userConnecte", name="userConnecte", methods={"GET"})
+     */
+    public function userConnecte(SerializerInterface $serializer,UserInterface $userConnecte){
+        $data = $serializer->serialize($userConnecte,'json',[ 'groups' => ['list-user']]);
+        return new Response($data,200);
     }
 
     public function validationRole($roles,$roleUserConnecte){

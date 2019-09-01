@@ -22,12 +22,14 @@ class Depot
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"list-depot"})
      */
     private $date;
 
     /**
      * @ORM\Column(type="bigint")
      * @Assert\Range(min=75000 ,minMessage="Le depot doit être superieur à 75 000 !!")
+     * @Groups({"list-depot"})
      */
     private $montant;
 

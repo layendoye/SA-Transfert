@@ -10,6 +10,7 @@ use App\Entity\Utilisateur;
 use App\Form\EntrepriseType;
 use App\Form\UtilisateurType;
 use App\Repository\CompteRepository;
+use App\Repository\DepotRepository;
 use App\Repository\EntrepriseRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -40,6 +41,7 @@ class EntrepriseController extends AbstractFOSRestController
     private $utilisateurStr;
     private $compteStr;
     private $bloqueStr;
+    private $listUserCmpt;
     public function __construct()
     {
         $this->actif="Actif";
@@ -49,8 +51,9 @@ class EntrepriseController extends AbstractFOSRestController
         $this->groups='groups';
         $this->contentType='Content-Type';
         $this->utilisateurStr='utilisateur';
-        $this->compteStr='compte';
+        $this->compteStr="compte";
         $this->bloqueStr='Bloqué';
+        $this->listUserCmpt='list-userCmpt';
     }
     /**
      * @Route("/entreprises/liste", name="entreprises", methods={"GET"})
@@ -312,7 +315,7 @@ class EntrepriseController extends AbstractFOSRestController
         $afficher = [
             $this->status => 201,
             $this->message => 'Un nouveau compte est créé pour l\'entreprise '.$entreprise->getRaisonSociale(),
-            'Numéro de compte '=> $compte->getNumeroCompte()
+            'compte'=> $compte->getNumeroCompte()
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
@@ -322,8 +325,6 @@ class EntrepriseController extends AbstractFOSRestController
      */
     public function changeCompte(Request $request,ObjectManager $manager, UserInterface $Userconnecte,UtilisateurRepository $repoUser,CompteRepository $repoCompte,UserCompteActuelRepository $repoUserComp)
     {   
-        
-        
         $data=json_decode($request->getContent(),true);
         if(!$data){
             $data=$request->request->all();//si non json
@@ -403,7 +404,7 @@ class EntrepriseController extends AbstractFOSRestController
             $userCompte=$repo->findByEntreprise($userConnecte->getEntreprise());
         }
         
-        $data = $serializer->serialize($userCompte,'json',[ $this->groups => ['list-userCmpt']]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($userCompte,'json',[ $this->groups => [$this->listUserCmpt]]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
      /**
@@ -497,7 +498,7 @@ class EntrepriseController extends AbstractFOSRestController
      */
     public function userCompte(SerializerInterface $serializer,UserCompteActuelRepository $repo,Utilisateur $user){
         $userComp=$repo->findUserComptActu($user);
-        $data = $serializer->serialize($userComp,'json',[ $this->groups => ['list-userCmpt']]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($userComp,'json',[ $this->groups => [$this->listUserCmpt]]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
     /**
@@ -506,7 +507,39 @@ class EntrepriseController extends AbstractFOSRestController
      */
     public function userComptesAffecte(SerializerInterface $serializer,UserCompteActuelRepository $repo,Utilisateur $user){
         $userComp=$repo->findUserComptesAff($user);
-        $data = $serializer->serialize($userComp,'json',[ $this->groups => ['list-userCmpt']]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($userComp,'json',[ $this->groups => [$this->listUserCmpt]]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200);
+    }
+    /**
+     * @Route("/compte/Mesdepots", name="showDepotCompte", methods={"POST"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_Caissier"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function showDepotCompte(Request $request, UserInterface $userConnecte, SerializerInterface $serializer,DepotRepository $repoDepot,CompteRepository $repoCompte){
+        $data=json_decode($request->getContent(),true);
+        if(!$data){
+            $data=$request->request->all();//si non json
+        }
+        
+        if($compte=$repoCompte->findOneBy(['numeroCompte'=>$data["numeroCompte"]])){
+            
+            if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
+                throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
+            }
+        }
+        else{
+            throw new HttpException(404,'Ce numero de compte n\'existe pas !');
+        }
+        $depots=$repoDepot->findMesDepots($userConnecte,$compte);
+        $data = $serializer->serialize($depots,'json',[ $this->groups => ['list-depot']]);
+        return new Response($data,200);
+    }
+    /**
+     * @Route("/entreprise/responsable/{id}", name="adminPartenaire", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function getResponsable(SerializerInterface $serializer,Entreprise $entreprise,UtilisateurRepository $repo){
+        $userComp=$repo->findResponsable($entreprise);
+        $data = $serializer->serialize($userComp,'json',[ $this->groups => ['list-user']]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
 }

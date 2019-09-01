@@ -117,6 +117,7 @@ class Utilisateur implements UserInterface
      */
     private $image;
 
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserCompteActuel", mappedBy="utilisateur")
      */
@@ -125,6 +126,7 @@ class Utilisateur implements UserInterface
 
     public function __construct()
     {
+        $this->imageFile='';
         $this->depots = new ArrayCollection();
         $this->envois = new ArrayCollection();
         $this->retraits = new ArrayCollection();

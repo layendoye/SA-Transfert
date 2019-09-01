@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Proxies\__CG__\App\Entity\Entreprise;
+use App\Entity\Entreprise;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -36,6 +36,22 @@ class UtilisateurRepository extends ServiceEntityRepository
         ;
     }
     
+    public function findResponsable(Entreprise $entreprise): ?Utilisateur
+    {   
+        //$responsable=['ROLE_admin-Principal',"ROLE_USER"];
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.entreprise = :val')
+            //->andWhere('u.roles = :val2')
+            ->setParameter('val', $entreprise)
+            //->setParameter('val2', $responsable)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+        //le premier sera toujour l afmin principal car c est le premier à etre ajouter donc il est le premier à avoir id de l entreprise
+    }
+    
+
     // /**
     //  * @return Utilisateur[] Returns an array of Utilisateur objects
     //  */

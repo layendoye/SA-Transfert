@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Depot;
+use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Compte;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -18,6 +20,22 @@ class DepotRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Depot::class);
     }
+
+
+    /**
+     * @return Depot[] Returns an array of Depot objects
+     */
+    public function findMesDepots(Utilisateur $caissier,Compte $compte){
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.caissier = :val')
+            ->andWhere('d.compte = :val2')
+            ->setParameter('val', $caissier)
+            ->setParameter('val2', $compte)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
 
     // /**
     //  * @return Depot[] Returns an array of Depot objects
