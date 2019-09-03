@@ -34,7 +34,7 @@ class Compte
 
     /**
      * @ORM\Column(type="bigint", nullable=true)
-     * @Groups({"list-entreprise","list-compte"})
+     * @Groups({"list-entreprise","list-compte","list-userCmpt"})
      */
     private $solde;
 

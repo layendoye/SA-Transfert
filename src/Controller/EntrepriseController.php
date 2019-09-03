@@ -42,6 +42,8 @@ class EntrepriseController extends AbstractFOSRestController
     private $compteStr;
     private $bloqueStr;
     private $listUserCmpt;
+    private $listUser;
+    private $numeroCompte;
     public function __construct()
     {
         $this->actif="Actif";
@@ -51,9 +53,11 @@ class EntrepriseController extends AbstractFOSRestController
         $this->groups='groups';
         $this->contentType='Content-Type';
         $this->utilisateurStr='utilisateur';
-        $this->compteStr="compte";
+        $this->compteStr='compte';
         $this->bloqueStr='Bloqué';
         $this->listUserCmpt='list-userCmpt';
+        $this->listUser='list-user';
+        $this->numeroCompte= "numeroComptee";
     }
     /**
      * @Route("/entreprises/liste", name="entreprises", methods={"GET"})
@@ -152,7 +156,7 @@ class EntrepriseController extends AbstractFOSRestController
             $afficher = [
                 $this->status => 201,
                 $this->message => 'Le partenaire '.$entreprise->getRaisonSociale().' ainsi que son admin principal ont bien été ajouté !! ',
-               'compte' =>'Le compte numéro '.$compte->getNumeroCompte().' lui a été assigné'
+               $this->compteStr =>'Le compte numéro '.$compte->getNumeroCompte().' lui a été assigné'
             ];
             return $this->handleView($this->view($afficher,Response::HTTP_CREATED));
         #####################----------------------------Fin finalisation-------------------------#####################
@@ -200,14 +204,14 @@ class EntrepriseController extends AbstractFOSRestController
         if(!$data){
             $data=$request->request->all();//si non json
         }
-        if($compte=$repo->findOneBy(['numeroCompte'=>$data[$this->compteStr]])){
+        if($compte=$repo->findOneBy([ $this->numeroCompte=>$data[$this->compteStr]])){
             $data[$this->compteStr]=$compte->getId();//on lui donne directement l'id
             if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
-                throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
+                throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert!');
             }
         }
         else{
-            throw new HttpException(404,'Ce numero de compte n\'existe pas !');
+            throw new HttpException(404,'Ce numero de compte n\'existe pas!');
         }
         $form->submit($data);
 
@@ -315,7 +319,7 @@ class EntrepriseController extends AbstractFOSRestController
         $afficher = [
             $this->status => 201,
             $this->message => 'Un nouveau compte est créé pour l\'entreprise '.$entreprise->getRaisonSociale(),
-            'compte'=> $compte->getNumeroCompte()
+            $this->compteStr=> $compte->getNumeroCompte()
         ];
         return $this->handleView($this->view($afficher,Response::HTTP_OK));
     }
@@ -420,7 +424,7 @@ class EntrepriseController extends AbstractFOSRestController
         elseif($user->getEntreprise()!=$userConnecte->getEntreprise()){
             throw new HttpException(404,'Cet utilisateur n\'est pas membre de votre entreprise ! ');
         }
-        $data = $serializer->serialize($user,'json',[ $this->groups => ['list-user']]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($user,'json',[ $this->groups => [$this->listUser]]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
     /**
@@ -430,10 +434,22 @@ class EntrepriseController extends AbstractFOSRestController
     public function listerLesUser(SerializerInterface $serializer,UserInterface $userConnecte,UtilisateurRepository $repo)
     {
         $entreprise=$userConnecte->getEntreprise();
-        $users=$repo->findUserEntreprise($entreprise,$userConnecte);
-        $data = $serializer->serialize($users,'json',[ $this->groups => ['list-user']]);//chercher une alternative pour les groupes avec forest
+        $users=$repo->findUserEntreprise($entreprise,$userConnecte);//les users sans l admin principal
+        $data = $serializer->serialize($users,'json',[ $this->groups => [$this->listUser]]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
+    /**
+     * @Route("/lister/users/all", name="user_entrepriseAll", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function listerTousUser(SerializerInterface $serializer,UserInterface $userConnecte,UtilisateurRepository $repo)
+    {
+        $entreprise=$userConnecte->getEntreprise();//tous les users meme l admin principal
+        $users=$repo->findBy(['entreprise'=>$entreprise]);
+        $data = $serializer->serialize($users,'json',[ $this->groups => [$this->listUser]]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200);
+    }
+
     /**
      * @Route("/contrat/{id}", name="contrat", methods={"GET"})
      * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -520,7 +536,7 @@ class EntrepriseController extends AbstractFOSRestController
             $data=$request->request->all();//si non json
         }
         
-        if($compte=$repoCompte->findOneBy(['numeroCompte'=>$data["numeroCompte"]])){
+        if($compte=$repoCompte->findOneBy([ $this->numeroCompte=>$data[$this->numeroCompte]])){
             
             if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
                 throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');
@@ -539,7 +555,7 @@ class EntrepriseController extends AbstractFOSRestController
      */
     public function getResponsable(SerializerInterface $serializer,Entreprise $entreprise,UtilisateurRepository $repo){
         $userComp=$repo->findResponsable($entreprise);
-        $data = $serializer->serialize($userComp,'json',[ $this->groups => ['list-user']]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($userComp,'json',[ $this->groups => [$this->listUser]]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
     /**
@@ -552,7 +568,7 @@ class EntrepriseController extends AbstractFOSRestController
             $data=$request->request->all();//si non json
         }
         
-        if($compte=$repo->findOneBy(['numeroCompte'=>$data["numeroCompte"]])){
+        if($compte=$repo->findOneBy([ $this->numeroCompte=>$data[$this->numeroCompte]])){
             
             if($compte->getEntreprise()->getRaisonSociale()==$this->saTransfert){
                 throw new HttpException(403,'On ne peut pas faire de depot dans le compte de SA Transfert !');

@@ -20,6 +20,7 @@ return [
         '/MesComptes' => [[['_route' => 'compte_userCon', '_controller' => 'App\\Controller\\EntrepriseController::getCompte'], null, ['GET' => 0], null, false, false, null]],
         '/gestion/comptes/liste' => [[['_route' => 'user_comptes', '_controller' => 'App\\Controller\\EntrepriseController::listerUserCompt'], null, ['GET' => 0], null, false, false, null]],
         '/lister/users' => [[['_route' => 'user_entreprise', '_controller' => 'App\\Controller\\EntrepriseController::listerLesUser'], null, ['GET' => 0], null, false, false, null]],
+        '/lister/users/all' => [[['_route' => 'user_entrepriseAll', '_controller' => 'App\\Controller\\EntrepriseController::listerTousUser'], null, ['GET' => 0], null, false, false, null]],
         '/compte/Mesdepots' => [[['_route' => 'showDepotCompte', '_controller' => 'App\\Controller\\EntrepriseController::showDepotCompte'], null, ['POST' => 0], null, false, false, null]],
         '/compte/numeroCompte' => [[['_route' => 'leCompte', '_controller' => 'App\\Controller\\EntrepriseController::getLeCompte'], null, ['POST' => 0], null, false, false, null]],
         '/inscription' => [[['_route' => 'inscription', '_controller' => 'App\\Controller\\SecurityController::inscriptionUtilisateur'], null, ['POST' => 0], null, false, false, null]],

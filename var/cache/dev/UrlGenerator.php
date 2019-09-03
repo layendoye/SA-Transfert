@@ -30,6 +30,7 @@ return [
     'user_compte' => [['id'], ['id' => null, '_controller' => 'App\\Controller\\EntrepriseController::listerUserCompt'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/gestion/compte']], [], []],
     'listeUser' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::listerUser'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/user']], [], []],
     'user_entreprise' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::listerLesUser'], [], [['text', '/lister/users']], [], []],
+    'user_entrepriseAll' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::listerTousUser'], [], [['text', '/lister/users/all']], [], []],
     'contrat' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::contrat'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/contrat']], [], []],
     'userCompte' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::userCompte'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/compte/user']], [], []],
     'userCompteAffecte' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::userComptesAffecte'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/comptes/affecte/user']], [], []],

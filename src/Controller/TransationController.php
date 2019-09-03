@@ -262,8 +262,6 @@ class TransationController extends AbstractFOSRestController
         $data = $serializer->serialize($transation,'json',[ $this->groups => [$this->listRetraits,"list-envois"]]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
-
-    
     public function transationDate(TransactionRepository $repoTrans,$debut,$fin,$action, Utilisateur $user=null,Entreprise $entreprise=null){
         $transactionsAll=[];
         $transactions=$repoTrans->findAll();
@@ -317,9 +315,9 @@ class TransationController extends AbstractFOSRestController
                 $tel=>$transaction->getTelephoneRecepteur(),
             ];
             $trans=[
-                'Code transaction'=>$transaction->getCode(),
-                'Montant Envoyé'=>$this->formatMil($transaction->getMontant()).' CFA',
-                'Commissions TTC'=>$this->formatMil($transaction->getFrais()).' CFA',
+                'CodeTransaction'=>$transaction->getCode(),
+                'MontantEnvoyé'=>$this->formatMil($transaction->getMontant()).' CFA',
+                'CommissionsTTC'=>$this->formatMil($transaction->getFrais()).' CFA',
                 'Total'=>$this->formatMil($transaction->getMontant()+$transaction->getFrais()).' CFA'
             ];
         }
@@ -340,14 +338,14 @@ class TransationController extends AbstractFOSRestController
                 'NCI'=>$transaction->getNciRecepteur()
             ];
             $trans=[
-                'Code transaction'=>$transaction->getCode(),
-                'Montant Retiré'=> $this->formatMil($transaction->getMontant()).' CFA',
+                'CodeTransaction'=>$transaction->getCode(),
+                'MontantRetiré'=> $this->formatMil($transaction->getMontant()).' CFA',
             ];
         }
         return [
             'Type'=>$libelle,
             'Entreprise'=>[
-                'Raison sociale'=>$entreprise->getRaisonSociale(),
+                'RaisonSociale'=>$entreprise->getRaisonSociale(),
                 'Adresse'=>$entreprise->getAdresse(),
                 $tel=>$entreprise->getTelephoneEntreprise(),
                 'Guichetier'=>$guichetier->getNom(),
