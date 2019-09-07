@@ -128,13 +128,15 @@ class SecurityController extends AbstractFOSRestController
                 return $this->handleView($this->view($validator->validate($form)));
             }
 
+            if(!$user->getImage()){//s il ne change pas sa photo
+                $user->setImage($ancienNom);
+            }
         #####################-----------Fin gestion formulaire----------------#####################
         
         #####################----------Début gestion des images --------------#####################
-            
             if($requestFile=$request->files->all()){
                 $file=$requestFile['image'];
-                var_dump($requestFile);die();
+                
                 if($file->guessExtension()!='png' && $file->guessExtension()!='jpeg'){
                     throw new HttpException(400,'Entrer une image valide !! ');
                 }

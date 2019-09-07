@@ -44,6 +44,8 @@ class EntrepriseController extends AbstractFOSRestController
     private $listUserCmpt;
     private $listUser;
     private $numeroCompte;
+    private $listCompte;
+    private $applicationJson;
     public function __construct()
     {
         $this->actif="Actif";
@@ -58,6 +60,8 @@ class EntrepriseController extends AbstractFOSRestController
         $this->listUserCmpt='list-userCmpt';
         $this->listUser='list-user';
         $this->numeroCompte= "numeroComptee";
+        $this->listCompte= 'list-compte';
+        $this->applicationJson='application/json';
     }
     /**
      * @Route("/entreprises/liste", name="entreprises", methods={"GET"})
@@ -74,7 +78,7 @@ class EntrepriseController extends AbstractFOSRestController
             $entreprise=$repo->findPartenaire();
         }
         $data = $serializer->serialize($entreprise,'json',[ $this->groups => ['list-entreprise']]);//chercher une alternative pour les groupes avec forest
-        return new Response($data,200,[$this->contentType => 'application/json']);
+        return new Response($data,200,[$this->contentType => $this->applicationJson]);
     }
     /**
      * @Route("/partenaires/add", name="add_entreprise", methods={"POST"})
@@ -312,8 +316,8 @@ class EntrepriseController extends AbstractFOSRestController
             throw new HttpException(403,'Impossible de créer plusieurs compte pour SA Transfert!');
         }
         $compte->setNumeroCompte(date('y').date('m').' '.date('d').date('H').' '.date('i').date('s'))
-                   ->setEntreprise($entreprise);
-           
+                ->setEntreprise($entreprise)
+                ->setSolde(0);
         $manager->persist($compte);
         $manager->flush();
         $afficher = [
@@ -389,8 +393,42 @@ class EntrepriseController extends AbstractFOSRestController
             
         }
         
-        $data = $serializer->serialize($entreprise->getComptes(),'json',[ $this->groups => ['list-compte']]);//chercher une alternative pour les groupes avec forest
-        return new Response($data,200,[$this->contentType => 'application/json']);
+        $data = $serializer->serialize($entreprise->getComptes(),'json',[ $this->groups => [ $this->listCompte]]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200,[$this->contentType => $this->applicationJson]);
+    }
+
+    /**
+     * @Route("/comptes/all", name="comptesAll", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function getAllCompte(SerializerInterface $serializer,CompteRepository $repo)
+    {
+        $comptes=$repo->findAll();
+        $data = $serializer->serialize($comptes,'json',[ $this->groups => [ $this->listCompte]]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200,[$this->contentType => $this->applicationJson]);
+    }
+
+    /**
+     * @Route("/utilisateur/affecterCompte/{id}", name="utilisateurCmpt", methods={"GET"})
+     * @IsGranted({"ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function getUtilisateursActuCompte(SerializerInterface $serializer,Compte $compte,UserCompteActuelRepository $repo,UserInterface $userConnecte)
+    {
+        $tab=[];
+        $users=$userConnecte->getEntreprise()->getUtilisateurs();//tous les users de l entreprise
+         
+        for($i=0;$i<count($users);$i++){
+            $tous=$repo->findBy(['utilisateur'=>$users[$i]]);//on recup toutes les affectations de compte d un user
+            if($tous){
+                $usercompt=$tous[count($tous)-1];//il est actuellement affecter au dernier
+                $compteAct=$usercompt->getCompte();//son compte
+                if($compteAct==$compte){//si c est le mm que selui du id on l ajoute dans le array
+                    array_push($tab ,$usercompt);
+                }
+            }
+        }
+        $data = $serializer->serialize($tab,'json',[ $this->groups => ['liste-affCmpt']]);//chercher une alternative pour les groupes avec forest
+        return new Response($data,200,[$this->contentType => $this->applicationJson]);
     }
 
     /**
@@ -411,6 +449,8 @@ class EntrepriseController extends AbstractFOSRestController
         $data = $serializer->serialize($userCompte,'json',[ $this->groups => [$this->listUserCmpt]]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
+
+    
      /**
      * @Route("/user/{id}", name="listeUser", methods={"GET"})
      * @IsGranted({"ROLE_Super-admin","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -580,4 +620,6 @@ class EntrepriseController extends AbstractFOSRestController
         $data = $serializer->serialize($compte,'json',[ $this->groups => ["list-compte"]]);
         return new Response($data,200);
     }
+
+
 }

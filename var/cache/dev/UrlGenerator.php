@@ -26,6 +26,8 @@ return [
     'change_compte' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::changeCompte'], [], [['text', '/changer/compte']], [], []],
     'compte_entr' => [['id'], ['id' => null, '_controller' => 'App\\Controller\\EntrepriseController::getCompte'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/compte/entreprise']], [], []],
     'compte_userCon' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::getCompte'], [], [['text', '/MesComptes']], [], []],
+    'comptesAll' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::getAllCompte'], [], [['text', '/comptes/all']], [], []],
+    'utilisateurCmpt' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::getUtilisateursActuCompte'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/utilisateur/affecterCompte']], [], []],
     'user_comptes' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::listerUserCompt'], [], [['text', '/gestion/comptes/liste']], [], []],
     'user_compte' => [['id'], ['id' => null, '_controller' => 'App\\Controller\\EntrepriseController::listerUserCompt'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/gestion/compte']], [], []],
     'listeUser' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::listerUser'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/user']], [], []],

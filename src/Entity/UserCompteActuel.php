@@ -21,7 +21,7 @@ class UserCompteActuel
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="userCompteActuels")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"list-userCmpt"})
+     * @Groups({"list-userCmpt","liste-affCmpt"})
      */
     private $utilisateur;
 
@@ -34,7 +34,7 @@ class UserCompteActuel
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"list-userCmpt"})
+     * @Groups({"list-userCmpt","liste-affCmpt"})
      */
     private $dateAffectation;
 

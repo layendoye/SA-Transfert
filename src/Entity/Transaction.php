@@ -25,7 +25,7 @@ class Transaction
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le nom est trop court !!")
-     * @Groups({"list-envois"})
+     * @Groups({"list-envois","list-retraits"})
      */
     private $nomClientEmetteur;
 
@@ -33,7 +33,7 @@ class Transaction
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le téléphone est trop court !!")
-     * @Groups({"list-envois"})
+     * @Groups({"list-envois","list-retraits"})
      */
     private $telephoneEmetteur;
 
@@ -41,7 +41,6 @@ class Transaction
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le NCI est trop court !!")
-     * @Groups({"list-envois"})
      */
     private $nciEmetteur;
 
@@ -95,7 +94,6 @@ class Transaction
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"list-retraits"})
      */
     private $nciRecepteur;
 

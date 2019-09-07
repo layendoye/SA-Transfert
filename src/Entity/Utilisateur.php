@@ -58,7 +58,7 @@ class Utilisateur implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le nom du responsable ne doit pas être vide")
      * @Assert\Length(min="2", max="255" ,minMessage="Le nom est trop court !!")
-     * @Groups({"list-userCmpt","list-user"})
+     * @Groups({"list-userCmpt","list-user","liste-affCmpt"})
      */
     private $nom;
 

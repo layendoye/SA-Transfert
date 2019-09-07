@@ -274,8 +274,10 @@ class TransationController extends AbstractFOSRestController
             throw new HttpException(403,'Impossible car la date de fin est superieure à la date actuelle !');
         }
         for($i=0;$i<count($transactions);$i++){
-            $dateEnvois=new \DateTime($transactions[$i]->getDateEnvoi()->format('Y-m-d'));//$transactions[$i]->getDateEnvoi() seulement renvois un objet de type date avec les minutes et les secondes donc 2019-08-11 < 2019-08-11 08h22 et $transactions[$i]->getDateEnvoi()->format('Y-m-d') renvois une chaine de caracteres pour le remettre en objet date j ai utilisé le new \DateTime()
-            $dateRetrait=new \DateTime($transactions[$i]->getDateReception()->format('Y-m-d'));
+            if($action == $this->envois)
+                $dateEnvois=new \DateTime($transactions[$i]->getDateEnvoi()->format('Y-m-d'));//$transactions[$i]->getDateEnvoi() seulement renvois un objet de type date avec les minutes et les secondes donc 2019-08-11 < 2019-08-11 08h22 et $transactions[$i]->getDateEnvoi()->format('Y-m-d') renvois une chaine de caracteres pour le remettre en objet date j ai utilisé le new \DateTime()
+            elseif($action == $this->retraits && $transactions[$i]->getDateReception())
+                $dateRetrait=new \DateTime($transactions[$i]->getDateReception()->format('Y-m-d'));
             $userComptEmetteur=$transactions[$i]->getUserComptePartenaireEmetteur();
             $userComptRecpt=$transactions[$i]->getUserComptePartenaireRecepteur();
             $cas1 = ($action == $this->envois   && $userComptEmetteur && $debut <= $dateEnvois  && $dateEnvois  <= $fin);//si la transaction est un envois et que le $userComptEmetteur existe et que la date est entre le debut et la fin ça retourne true
