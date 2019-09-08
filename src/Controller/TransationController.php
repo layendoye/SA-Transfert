@@ -17,6 +17,7 @@ use App\Repository\EntrepriseRepository;
 use App\Repository\TransactionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\UserCompteActuelRepository;
+use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -299,7 +300,7 @@ class TransationController extends AbstractFOSRestController
     }
     public function recuDeTransaction($type,Transaction $transaction){
         $senegal='Sénégal';
-        $tel='Téléphone';
+        $tel='Telephone';
         if($type=='envoi'){
             $libelle="Reçu d'envoi";
             $guichetier=$transaction->getUserComptePartenaireEmetteur()->getUtilisateur();
@@ -318,7 +319,7 @@ class TransationController extends AbstractFOSRestController
             ];
             $trans=[
                 'CodeTransaction'=>$transaction->getCode(),
-                'MontantEnvoyé'=>$this->formatMil($transaction->getMontant()).' CFA',
+                'MontantEnvoye'=>$this->formatMil($transaction->getMontant()).' CFA',
                 'CommissionsTTC'=>$this->formatMil($transaction->getFrais()).' CFA',
                 'Total'=>$this->formatMil($transaction->getMontant()+$transaction->getFrais()).' CFA'
             ];
@@ -327,7 +328,7 @@ class TransationController extends AbstractFOSRestController
             $libelle="Reçu de retrait";
             $guichetier=$transaction->getUserComptePartenaireRecepteur()->getUtilisateur();
             $entreprise= $guichetier->getEntreprise();
-            $date=$transaction->getDateReception();
+            $date=new \DateTime();
             $envoyeur=[
                 'Nom'=>$transaction->getNomClientEmetteur(),
                 'Pays'=>$senegal,
@@ -341,7 +342,7 @@ class TransationController extends AbstractFOSRestController
             ];
             $trans=[
                 'CodeTransaction'=>$transaction->getCode(),
-                'MontantRetiré'=> $this->formatMil($transaction->getMontant()).' CFA',
+                'MontantRetire'=> $this->formatMil($transaction->getMontant()).' CFA',
             ];
         }
         return [
@@ -354,7 +355,7 @@ class TransationController extends AbstractFOSRestController
                 'Date'=> $date->format('d-m-Y H:i')
             ],
             'Envoyeur'=> $envoyeur,
-            'Bénéficiaire'=> $beneficiaire,
+            'Beneficiaire'=> $beneficiaire,
             'Transaction'=>$trans
         ];
     }

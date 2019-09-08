@@ -26,6 +26,7 @@ class SecurityController extends AbstractFOSRestController
     private $status;
     private $saTransfert;
     private $image_directory;
+    private $imageAng;
     public function __construct()
     {
         $this->actif="Actif";
@@ -33,6 +34,7 @@ class SecurityController extends AbstractFOSRestController
         $this->status="status";
         $this->saTransfert="SA Transfert";
         $this->image_directory="image_directory";
+        $this->imageAng="image_ang";
     }
     /**
      * @Route("/inscription", name="inscription", methods={"POST"})
@@ -50,7 +52,7 @@ class SecurityController extends AbstractFOSRestController
             }
             
             $form->submit($data);
-            if(!$form->isSubmitted()){
+            if(!$form->isSubmitted() || !$form->isValid()){
                 return $this->handleView($this->view($validator->validate($form)));
             }
 
@@ -87,7 +89,7 @@ class SecurityController extends AbstractFOSRestController
                 
                 $fileName=md5(uniqid()).'.'.$extension;//on change le nom du fichier
                 $user->setImage($fileName);
-                $file->move($this->getParameter($this->image_directory),$fileName); //definir le image_directory dans service.yaml
+                $file->move($this->getParameter($this->imageAng),$fileName);
             }
 
         #####################-------------------------Fin gestion des images ---------------------#####################
@@ -116,6 +118,7 @@ class SecurityController extends AbstractFOSRestController
             if(!$user){
                 throw new HttpException(404,'Cet utilisateur n\'existe pas !');
             }
+            $ancienPassword=$user->getPassword();
             $form = $this->createForm(UpdateUserType::class,$user);
             $data=json_decode($request->getContent(),true);//si json
             if(!$data){
@@ -124,7 +127,7 @@ class SecurityController extends AbstractFOSRestController
             $ancienNom=$user->getImage();//pour le supprimer
             
             $form->submit($data);
-            if(!$form->isSubmitted() || !$form->isValid()){
+            if(!$form->isSubmitted()){
                 return $this->handleView($this->view($validator->validate($form)));
             }
 
@@ -143,8 +146,8 @@ class SecurityController extends AbstractFOSRestController
 
                 $fileName=md5(uniqid()).'.'.$file->guessExtension();//on change le nom du fichier
                 $user->setImage($fileName);
-                $file->move($this->getParameter($this->image_directory),$fileName); //definir le image_directory dans service.yaml
-                $ancienPhoto=$this->getParameter($this->image_directory)."/".$ancienNom;
+                $file->move($this->getParameter($this->imageAng),$fileName); //definir le image_directory dans service.yaml
+                $ancienPhoto=$this->getParameter($this->imageAng)."/".$ancienNom;
                 if($ancienNom){
                    unlink($ancienPhoto);//supprime l'ancienne 
                 }
@@ -154,7 +157,14 @@ class SecurityController extends AbstractFOSRestController
         #####################-----------Fin gestion des images ---------------#####################
 
         #####################------Début finalisation de l'inscription--------#####################
-            
+            if(count($data)>7){
+                $hash=$encoder->encodePassword($user, $data["password"]);
+                $user->setPassword($hash);
+            }
+            else{
+                $user->setPassword($ancienPassword);
+            }
+
             $manager->persist($user); 
             $manager->flush();
             $afficher = [
