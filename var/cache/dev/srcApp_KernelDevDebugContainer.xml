@@ -1824,6 +1824,14 @@
         <argument>2048</argument>
       </call>
       <call method="addListener">
+        <argument>console.command</argument>
+        <argument type="collection">
+          <argument type="service" id="debug.debug_handlers_listener"/>
+          <argument>configure</argument>
+        </argument>
+        <argument>2048</argument>
+      </call>
+      <call method="addListener">
         <argument>kernel.exception</argument>
         <argument type="collection">
           <argument type="service" id="debug.debug_handlers_listener"/>
@@ -6047,6 +6055,13 @@
         <argument key="userConnecte" type="service" id=".errored..service_locator.pOqsW2f.Symfony\Component\Security\Core\User\UserInterface"/>
       </argument>
     </service>
+    <service id=".service_locator.x3sQNTd" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="repoTrans" type="service" id="App\Repository\TransactionRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
+      </argument>
+    </service>
     <service id=".service_locator.TjYyUj6" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -6066,7 +6081,7 @@
         <argument key="transaction" type="service" id=".errored..service_locator.EWX.KyZ.App\Entity\Transaction"/>
       </argument>
     </service>
-    <service id=".service_locator.jNMQSCy" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.YHwubV1" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\EntrepriseController::addCompte" type="service" id=".service_locator.pV4HNdF"/>
@@ -6101,6 +6116,7 @@
         <argument key="App\Controller\TransationController::retrait" type="service" id=".service_locator.3GSHdrB"/>
         <argument key="App\Controller\TransationController::setViewHandler" type="service" id=".service_locator.l2alLEu"/>
         <argument key="App\Controller\TransationController::transactionPartenaire" type="service" id=".service_locator.pOqsW2f"/>
+        <argument key="App\Controller\TransationController::transactionPartenaireAll" type="service" id=".service_locator.x3sQNTd"/>
         <argument key="App\Controller\TransationController::transactionUser" type="service" id=".service_locator._399Gt1"/>
         <argument key="App\Controller\TransationController::transationDate" type="service" id=".service_locator.LP6MjeK"/>
         <argument key="App\Controller\EntrepriseController:addCompte" type="service" id=".service_locator.pV4HNdF"/>
@@ -6135,6 +6151,7 @@
         <argument key="App\Controller\TransationController:retrait" type="service" id=".service_locator.3GSHdrB"/>
         <argument key="App\Controller\TransationController:setViewHandler" type="service" id=".service_locator.l2alLEu"/>
         <argument key="App\Controller\TransationController:transactionPartenaire" type="service" id=".service_locator.pOqsW2f"/>
+        <argument key="App\Controller\TransationController:transactionPartenaireAll" type="service" id=".service_locator.x3sQNTd"/>
         <argument key="App\Controller\TransationController:transactionUser" type="service" id=".service_locator._399Gt1"/>
         <argument key="App\Controller\TransationController:transationDate" type="service" id=".service_locator.LP6MjeK"/>
       </argument>
@@ -6432,12 +6449,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.jNMQSCy"/>
+      <argument type="service" id=".service_locator.YHwubV1"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.jNMQSCy"/>
+      <argument type="service" id=".service_locator.YHwubV1"/>
     </service>
     <service id="fos_rest.serializer.form_error_handler.inner" class="JMS\Serializer\Handler\FormErrorHandler" public="false">
       <argument>null</argument>
@@ -6953,7 +6970,7 @@
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.jNMQSCy"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.YHwubV1"/>
     <service id="fos_rest.serializer" alias="fos_rest.serializer.jms"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>

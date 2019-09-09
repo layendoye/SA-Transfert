@@ -183,7 +183,7 @@ class TransationController extends AbstractFOSRestController
         }
 
         if(!isset($data[$this->dateDebut],$data[$this->dateFin])){
-            throw new HttpException(404,'Il y a une erreur sur les données transmises !');
+            throw new HttpException(404,'Il y a une erreur sur les données transmises!');
         }
         $debut=$data[$this->dateDebut];
         $fin=$data[$this->dateFin];
@@ -201,7 +201,7 @@ class TransationController extends AbstractFOSRestController
         }
         $transactionsUser=$this->transationDate($repoTrans,$debut,$fin,$action,$user);
         if($transactionsUser==[]){
-            return $this->handleView($this->view(['Résultat'=>'Aucune transaction trouvée !!!!'],404));
+            return $this->handleView($this->view(['Resultat'=>'Aucune transaction trouvée!!!!'],404));
         }
         if($action == $this->envois){
              $values = $serializer->serialize($transactionsUser,'json',[ $this->groups => [$this->listEnvois]]);//chercher une alternative pour les groupes avec forest
@@ -238,6 +238,38 @@ class TransationController extends AbstractFOSRestController
         }
         $transactionsPart=$this->transationDate($repoTrans,$debut,$fin,$action,null,$entreprise);
         if($transactionsPart==[]){
+            return $this->handleView($this->view(['Resultat'=>'Aucune transaction trouvée !!!!'],404));
+        }
+        if($action== $this->envois){
+             $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => [$this->listEnvois]]);//chercher une alternative pour les groupes avec forest
+        }
+        else{
+            $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => [$this->listRetraits]]);//chercher une alternative pour les groupes avec forest
+        }
+        return new Response($data,200);
+    }
+    
+    /**
+    * @Route("/transations/partenaires/{action}", name="transation_partenaires")
+    * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+    */
+    public function transactionPartenaireAll(Request $request,$action,TransactionRepository $repoTrans,SerializerInterface $serializer){
+        $data = json_decode($request->getContent(),true);
+        if(!$data){
+            $data=$request->request->all();
+        }
+
+        if(!isset($data[$this->dateDebut],$data[$this->dateFin])){
+            throw new HttpException(404,'Il y a une erreur sur les données transmises !');
+        }
+        $debut=$data[$this->dateDebut];
+        $fin=$data[$this->dateFin];
+
+        if($action!= $this->envois && $action!=$this->retraits){
+            throw new HttpException(404,'Resource non trouvée !!!!');
+        }
+        $transactionsPart=$this->transationDate($repoTrans,$debut,$fin,$action,null,null,true);
+        if($transactionsPart==[]){
             return $this->handleView($this->view(['Résultat'=>'Aucune transaction trouvée !!!!'],404));
         }
         if($action== $this->envois){
@@ -247,7 +279,7 @@ class TransationController extends AbstractFOSRestController
             $data = $serializer->serialize($transactionsPart,'json',[ $this->groups => [$this->listRetraits]]);//chercher une alternative pour les groupes avec forest
         }
         return new Response($data,200);
-    } 
+    }
     /**
      * @Route("/info/transaction", name="infoTransaction", methods={"POST"})
      * @IsGranted({"ROLE_utilisateur","ROLE_admin-Principal","ROLE_admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -263,7 +295,7 @@ class TransationController extends AbstractFOSRestController
         $data = $serializer->serialize($transation,'json',[ $this->groups => [$this->listRetraits,"list-envois"]]);//chercher une alternative pour les groupes avec forest
         return new Response($data,200);
     }
-    public function transationDate(TransactionRepository $repoTrans,$debut,$fin,$action, Utilisateur $user=null,Entreprise $entreprise=null){
+    public function transationDate(TransactionRepository $repoTrans,$debut,$fin,$action, Utilisateur $user=null,Entreprise $entreprise=null,$tous=null){
         $transactionsAll=[];
         $transactions=$repoTrans->findAll();
         $debut=new \DateTime($debut);
@@ -283,11 +315,12 @@ class TransationController extends AbstractFOSRestController
             $userComptRecpt=$transactions[$i]->getUserComptePartenaireRecepteur();
             $cas1 = ($action == $this->envois   && $userComptEmetteur && $debut <= $dateEnvois  && $dateEnvois  <= $fin);//si la transaction est un envois et que le $userComptEmetteur existe et que la date est entre le debut et la fin ça retourne true
             $cas2 = ($action == $this->retraits && $userComptRecpt    && $debut <= $dateRetrait && $dateRetrait <= $fin);
-            
+
             if($user       && $cas1 && $userComptEmetteur->getUtilisateur()                  == $user       || 
                $user       && $cas2 && $userComptRecpt->getUtilisateur()                     == $user       ||
                $entreprise && $cas1 && $userComptEmetteur->getUtilisateur()->getEntreprise() == $entreprise ||
-               $entreprise && $cas2 && $userComptRecpt->getUtilisateur()->getEntreprise()    == $entreprise   )
+               $entreprise && $cas2 && $userComptRecpt->getUtilisateur()->getEntreprise()    == $entreprise ||
+               $tous       && $cas1 || $tous && $cas2 )
             {
                 $transactionsAll[]=$transactions[$i];
             } 
