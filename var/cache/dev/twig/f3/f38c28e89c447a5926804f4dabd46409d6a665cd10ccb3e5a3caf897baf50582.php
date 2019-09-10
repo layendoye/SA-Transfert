@@ -79,6 +79,6 @@ class __TwigTemplate_d4139f9734904ce86dbd8552a4e1e3f33031a5a542510e17250452bf3ed
 {{ status_code }} {{ status_text }}
 
 */
-", "@Twig/Exception/error.css.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/symfony/twig-bundle/Resources/views/Exception/error.css.twig");
+", "@Twig/Exception/error.css.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/vendor/symfony/twig-bundle/Resources/views/Exception/error.css.twig");
     }
 }

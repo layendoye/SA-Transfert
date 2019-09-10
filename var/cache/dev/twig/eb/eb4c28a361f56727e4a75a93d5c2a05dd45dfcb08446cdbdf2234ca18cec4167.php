@@ -154,6 +154,6 @@ class __TwigTemplate_2568ee8475100bf054e726a7577ab5759c959eb464908d6a064a20691d4
     </ul>
 </div>
 {% endblock %}
-", "transation/index.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/templates/transation/index.html.twig");
+", "transation/index.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/templates/transation/index.html.twig");
     }
 }

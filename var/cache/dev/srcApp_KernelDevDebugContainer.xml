@@ -5344,7 +5344,7 @@
       <tag name="console.command" command="server:run"/>
       <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/public</argument>
       <argument>dev</argument>
-      <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/var/cache</argument>
+      <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert</argument>
       <call method="setName">
         <argument>server:run</argument>
       </call>
@@ -5353,21 +5353,21 @@
       <tag name="console.command" command="server:start"/>
       <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/public</argument>
       <argument>dev</argument>
-      <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/var/cache</argument>
+      <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert</argument>
       <call method="setName">
         <argument>server:start</argument>
       </call>
     </service>
     <service id="web_server.command.server_stop" class="Symfony\Bundle\WebServerBundle\Command\ServerStopCommand" public="false">
       <tag name="console.command" command="server:stop"/>
-      <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/var/cache</argument>
+      <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert</argument>
       <call method="setName">
         <argument>server:stop</argument>
       </call>
     </service>
     <service id="web_server.command.server_status" class="Symfony\Bundle\WebServerBundle\Command\ServerStatusCommand" public="false">
       <tag name="console.command" command="server:status"/>
-      <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/var/cache</argument>
+      <argument>/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert</argument>
       <call method="setName">
         <argument>server:status</argument>
       </call>
@@ -5968,6 +5968,14 @@
         <argument key="userConnecte" type="service" id=".errored..service_locator.59pZj8W.Symfony\Component\Security\Core\User\UserInterface"/>
       </argument>
     </service>
+    <service id=".service_locator.xShm5gD" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="caissier" type="service" id=".errored..service_locator.xShm5gD.App\Entity\Utilisateur"/>
+        <argument key="repoDepot" type="service" id="App\Repository\DepotRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
+      </argument>
+    </service>
     <service id=".service_locator.fLHhYHo" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -6081,7 +6089,7 @@
         <argument key="transaction" type="service" id=".errored..service_locator.EWX.KyZ.App\Entity\Transaction"/>
       </argument>
     </service>
-    <service id=".service_locator.YHwubV1" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.9iUQQdn" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\EntrepriseController::addCompte" type="service" id=".service_locator.pV4HNdF"/>
@@ -6102,6 +6110,7 @@
         <argument key="App\Controller\EntrepriseController::listerUserCompt" type="service" id=".service_locator.aTNbF6n"/>
         <argument key="App\Controller\EntrepriseController::setViewHandler" type="service" id=".service_locator.l2alLEu"/>
         <argument key="App\Controller\EntrepriseController::showDepotCompte" type="service" id=".service_locator.59pZj8W"/>
+        <argument key="App\Controller\EntrepriseController::showDepotUser" type="service" id=".service_locator.xShm5gD"/>
         <argument key="App\Controller\EntrepriseController::updatePartenaire" type="service" id=".service_locator.wI8CRMK"/>
         <argument key="App\Controller\EntrepriseController::userCompte" type="service" id=".service_locator.3ke85KT"/>
         <argument key="App\Controller\EntrepriseController::userComptesAffecte" type="service" id=".service_locator.3ke85KT"/>
@@ -6137,6 +6146,7 @@
         <argument key="App\Controller\EntrepriseController:listerUserCompt" type="service" id=".service_locator.aTNbF6n"/>
         <argument key="App\Controller\EntrepriseController:setViewHandler" type="service" id=".service_locator.l2alLEu"/>
         <argument key="App\Controller\EntrepriseController:showDepotCompte" type="service" id=".service_locator.59pZj8W"/>
+        <argument key="App\Controller\EntrepriseController:showDepotUser" type="service" id=".service_locator.xShm5gD"/>
         <argument key="App\Controller\EntrepriseController:updatePartenaire" type="service" id=".service_locator.wI8CRMK"/>
         <argument key="App\Controller\EntrepriseController:userCompte" type="service" id=".service_locator.3ke85KT"/>
         <argument key="App\Controller\EntrepriseController:userComptesAffecte" type="service" id=".service_locator.3ke85KT"/>
@@ -6449,12 +6459,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.YHwubV1"/>
+      <argument type="service" id=".service_locator.9iUQQdn"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.YHwubV1"/>
+      <argument type="service" id=".service_locator.9iUQQdn"/>
     </service>
     <service id="fos_rest.serializer.form_error_handler.inner" class="JMS\Serializer\Handler\FormErrorHandler" public="false">
       <argument>null</argument>
@@ -6509,6 +6519,7 @@
     <service id=".errored..service_locator..DLxPyI.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
     <service id=".errored..service_locator.3ke85KT.App\Entity\Utilisateur" class="App\Entity\Utilisateur"/>
     <service id=".errored..service_locator.59pZj8W.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
+    <service id=".errored..service_locator.xShm5gD.App\Entity\Utilisateur" class="App\Entity\Utilisateur"/>
     <service id=".errored..service_locator.fLHhYHo.App\Entity\Entreprise" class="App\Entity\Entreprise"/>
     <service id=".errored..service_locator.dbg_bpF.Symfony\Component\Security\Core\User\UserInterface" class="Symfony\Component\Security\Core\User\UserInterface"/>
     <service id=".errored..service_locator.bhTckp7.App\Entity\Utilisateur" class="App\Entity\Utilisateur"/>
@@ -6970,7 +6981,7 @@
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.YHwubV1"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.9iUQQdn"/>
     <service id="fos_rest.serializer" alias="fos_rest.serializer.jms"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>

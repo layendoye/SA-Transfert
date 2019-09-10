@@ -42,6 +42,7 @@ class Depot
      * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="depots")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank(message="Le champ ne doit pas être vide")
+     * @Groups({"list-depot"})
      */
     private $compte;
 

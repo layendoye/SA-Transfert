@@ -222,6 +222,6 @@ class __TwigTemplate_e87926817dc9063734b7ed078899bc1dd40d5204fa99e79249bd6556bde
         </div>
     {% endif %}
 {% endblock %}
-", "@WebProfiler/Collector/exception.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/symfony/web-profiler-bundle/Resources/views/Collector/exception.html.twig");
+", "@WebProfiler/Collector/exception.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/vendor/symfony/web-profiler-bundle/Resources/views/Collector/exception.html.twig");
     }
 }

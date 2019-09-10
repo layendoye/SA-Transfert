@@ -490,6 +490,6 @@ class __TwigTemplate_e9aa97d0aa1a13ef288e5e2a33d20babeabba76be192d1b6ee1493c7524
         {% endif %}
     </div>
 </div>
-", "@Twig/Exception/exception.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/symfony/twig-bundle/Resources/views/Exception/exception.html.twig");
+", "@Twig/Exception/exception.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/vendor/symfony/twig-bundle/Resources/views/Exception/exception.html.twig");
     }
 }

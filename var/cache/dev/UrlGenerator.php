@@ -36,6 +36,7 @@ return [
     'userCompte' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::userCompte'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/compte/user']], [], []],
     'userCompteAffecte' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::userComptesAffecte'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/comptes/affecte/user']], [], []],
     'showDepotCompte' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::showDepotCompte'], [], [['text', '/compte/Mesdepots']], [], []],
+    'showDepotUser' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::showDepotUser'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/depot/all']], [], []],
     'adminPartenaire' => [['id'], ['_controller' => 'App\\Controller\\EntrepriseController::getResponsable'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/entreprise/responsable']], [], []],
     'leCompte' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::getLeCompte'], [], [['text', '/compte/numeroCompte']], [], []],
     'app_pdf_pdf' => [['action'], ['_controller' => 'App\\Controller\\PdfController::pdf'], [], [['variable', '/', '[^/]++', 'action', true], ['text', '/pdf']], [], []],

@@ -1,0 +1,53 @@
+<?php return [PHP_INT_MAX, static function () {
+
+    return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+        $o = [
+            clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Routing\\Annotation\\Route'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Routing\\Annotation\\Route')),
+            clone $p['Symfony\\Component\\Routing\\Annotation\\Route'],
+            clone ($p['Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted')),
+        ],
+        null,
+        [
+            'Symfony\\Component\\Routing\\Annotation\\Route' => [
+                'path' => [
+                    '/compte/entreprise/{id}',
+                    '/MesComptes',
+                ],
+                'name' => [
+                    'compte_entr',
+                    'compte_userCon',
+                ],
+                'methods' => [
+                    [
+                        'GET',
+                    ],
+                    [
+                        'GET',
+                    ],
+                ],
+            ],
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted' => [
+                'attributes' => [
+                    2 => [
+                        'ROLE_Super-admin',
+                        'ROLE_admin-Principal',
+                        'ROLE_admin',
+                    ],
+                ],
+                'message' => [
+                    2 => 'Vous n\'avez pas accès à cette page !',
+                ],
+                'statusCode' => [
+                    2 => 403,
+                ],
+            ],
+        ],
+        [
+            $o[0],
+            $o[1],
+            $o[2],
+        ],
+        []
+    );
+
+}];

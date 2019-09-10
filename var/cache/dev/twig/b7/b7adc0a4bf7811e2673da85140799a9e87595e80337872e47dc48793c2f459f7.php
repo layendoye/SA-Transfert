@@ -375,6 +375,6 @@ class __TwigTemplate_90851fd7e285a1d68493cfaecd5c1a5d8cc715d45e8e2d38b10c0072a2f
 
 </body>
 </html>
-", "@ApiPlatform/SwaggerUi/index.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/api-platform/core/src/Bridge/Symfony/Bundle/Resources/views/SwaggerUi/index.html.twig");
+", "@ApiPlatform/SwaggerUi/index.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/vendor/api-platform/core/src/Bridge/Symfony/Bundle/Resources/views/SwaggerUi/index.html.twig");
     }
 }

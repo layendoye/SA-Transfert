@@ -238,6 +238,7 @@ class EntrepriseController extends AbstractFOSRestController
         }
         return $this->handleView($this->view($validator->validate($form)));
     }
+
     /**
     * @Route("/bloque/entreprises/{id}", name="bloque_entreprise", methods={"GET"})
     * @IsGranted({"ROLE_Super-admin"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
@@ -527,6 +528,28 @@ class EntrepriseController extends AbstractFOSRestController
         }
         $depots=$repoDepot->findMesDepots($userConnecte,$compte);
         $data = $serializer->serialize($depots,'json',[ $this->groups => ['list-depot']]);
+        return new Response($data,200);
+    }
+    /**
+     * @Route("/depot/all/{id}", name="showDepotUser", methods={"GET"})
+     * @IsGranted({"ROLE_Super-admin","ROLE_Caissier"}, statusCode=403, message="Vous n'avez pas accès à cette page !")
+     */
+    public function showDepotUser(Request $request, Utilisateur $caissier, SerializerInterface $serializer,DepotRepository $repoDepot){
+       
+        if(!$caissier){
+            throw new HttpException(404,'Ce caissier n\'existe pas !');
+        }
+        $depots=$repoDepot->findBy(["caissier"=>$caissier]);
+        $moyenne=0;
+        $somme=0;
+        for($i=0;$i<count($depots);$i++){
+            $somme+=$depots[$i]->getMontant();
+        }
+        if($depots){
+            $moyenne=intval($somme/count($depots));
+        }
+        $data = $serializer->serialize([$depots,$moyenne],'json',[ $this->groups => ['list-depot']]);
+
         return new Response($data,200);
     }
     /**

@@ -171,6 +171,6 @@ class __TwigTemplate_72070f26e241210f133a5c18085a69694dbf52f112661c265d7f9f36669
         {%- endfor -%}
     </pre>
 {% endif %}
-", "@Doctrine/Collector/explain.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/SATransfert/vendor/doctrine/doctrine-bundle/Resources/views/Collector/explain.html.twig");
+", "@Doctrine/Collector/explain.html.twig", "/home/abdoulaye/Bureau/Mes Projets Symfony/Sa transfert/Back-SATransfert/vendor/doctrine/doctrine-bundle/Resources/views/Collector/explain.html.twig");
     }
 }

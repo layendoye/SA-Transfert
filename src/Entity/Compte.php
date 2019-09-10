@@ -20,7 +20,7 @@ class Compte
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"list-compte"})
+     * @Groups({"list-compte","list-depot"})
      */
     private $id;
 
