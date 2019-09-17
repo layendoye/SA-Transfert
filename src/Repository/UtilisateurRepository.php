@@ -38,12 +38,12 @@ class UtilisateurRepository extends ServiceEntityRepository
     
     public function findResponsable(Entreprise $entreprise): ?Utilisateur
     {   
-        //$responsable=['ROLE_admin-Principal',"ROLE_USER"];
+
         return $this->createQueryBuilder('u')
             ->andWhere('u.entreprise = :val')
-            //->andWhere('u.roles = :val2')
+            ->andWhere('u.roles LIKE :role')
             ->setParameter('val', $entreprise)
-            //->setParameter('val2', $responsable)
+            ->setParameter('role', '%"'.'ROLE_admin-Principal'.'"%')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()

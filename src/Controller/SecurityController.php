@@ -112,11 +112,14 @@ class SecurityController extends AbstractFOSRestController
     /**
      * @Route("/user/update/{id}", name="update_user", methods={"POST"})
      */
-    public function updateUser(Utilisateur $user,Request $request, ObjectManager $manager, ValidatorInterface $validator,UserPasswordEncoderInterface $encoder){
+    public function updateUser(Utilisateur $user,Request $request, ObjectManager $manager, ValidatorInterface $validator,UserPasswordEncoderInterface $encoder,UserInterface $userConnecte){
         #####################----------Début gestion formulaire---------------#####################
             
             if(!$user){
                 throw new HttpException(404,'Cet utilisateur n\'existe pas !');
+            }
+            if($user->getId()==1 && $userConnecte!=$user){
+                throw new HttpException(403,'Vous ne pouvez pas modifier les informations de l\'admin principal !');
             }
             $ancienPassword=$user->getPassword();
             $form = $this->createForm(UpdateUserType::class,$user);

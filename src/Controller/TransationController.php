@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 
+use DateTime;
+use Osms\Osms;
 use App\Entity\Compte;
 use App\Form\EnvoieType;
 use App\Entity\Entreprise;
@@ -12,15 +14,14 @@ use App\Form\TransactionType;
 use App\Entity\UserCompteActuel;
 use App\Repository\CompteRepository;
 use App\Repository\TarifsRepository;
-use Symfony\Component\Serializer\SerializerInterface;
 use App\Repository\EntrepriseRepository;
 use App\Repository\TransactionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\UserCompteActuelRepository;
-use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -151,7 +152,7 @@ class TransationController extends AbstractFOSRestController
             return $this->handleView($this->view($validator->validate($form)));
         }
         $montant = $retrait->getMontant();
-        $commissionRecep=$retrait->getCommissionEmetteur()/2;//car l'emetteur avait 20% et le recepteur doit en avoir 10 
+        $commissionRecep=$retrait->getCommissionEmetteur()/2;
         
         $userComp=$repoUserComp->findUserComptActu($userConnecte);
         if(!$userComp){
@@ -391,6 +392,25 @@ class TransationController extends AbstractFOSRestController
             'Beneficiaire'=> $beneficiaire,
             'Transaction'=>$trans
         ];
+    }
+    public function sendMessage($numeroEnvoyer,$numeroRecepteur){
+        $config = array();
+        
+        $osms = new Osms($config);
+        
+        // retrieve an access token
+        $response = $osms->getTokenFromConsumerKey();
+        
+        if (!empty($response['access_token'])) {
+            $senderAddress = 'tel:+221'.$numeroEnvoyer;
+            $receiverAddress = 'tel:+221'.$numeroRecepteur;
+            $message = 'Hello World!';
+            $senderName = 'Optimus Prime';
+        
+            $osms->sendSMS($senderAddress, $receiverAddress, $message, $senderName);
+        } else {
+            // error
+        }
     }
 
 }

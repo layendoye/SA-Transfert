@@ -77,7 +77,7 @@ class EntrepriseController extends AbstractFOSRestController
         if(!$entreprise){
             $entreprise=$repo->findPartenaire();
         }
-        $data = $serializer->serialize($entreprise,'json',[ $this->groups => ['list-entreprise']]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($entreprise,'json',[ $this->groups => ['list-entreprise']]);
         return new Response($data,200,[$this->contentType => $this->applicationJson]);
     }
     /**
@@ -395,7 +395,7 @@ class EntrepriseController extends AbstractFOSRestController
             
         }
         
-        $data = $serializer->serialize($entreprise->getComptes(),'json',[ $this->groups => [ $this->listCompte]]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($entreprise->getComptes(),'json',[ $this->groups => [ $this->listCompte]]);
         return new Response($data,200,[$this->contentType => $this->applicationJson]);
     }
 
@@ -406,7 +406,7 @@ class EntrepriseController extends AbstractFOSRestController
     public function getAllCompte(SerializerInterface $serializer,CompteRepository $repo)
     {
         $comptes=$repo->findAll();
-        $data = $serializer->serialize($comptes,'json',[ $this->groups => [ $this->listCompte]]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($comptes,'json',[ $this->groups => [ $this->listCompte]]);
         return new Response($data,200,[$this->contentType => $this->applicationJson]);
     }
 
@@ -429,7 +429,7 @@ class EntrepriseController extends AbstractFOSRestController
                 }
             }
         }
-        $data = $serializer->serialize($tab,'json',[ $this->groups => ['liste-affCmpt']]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($tab,'json',[ $this->groups => ['liste-affCmpt']]);
         return new Response($data,200,[$this->contentType => $this->applicationJson]);
     }
 
@@ -448,7 +448,7 @@ class EntrepriseController extends AbstractFOSRestController
             $userCompte=$repo->findByEntreprise($userConnecte->getEntreprise());
         }
         
-        $data = $serializer->serialize($userCompte,'json',[ $this->groups => [$this->listUserCmpt]]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($userCompte,'json',[ $this->groups => [$this->listUserCmpt]]);
         return new Response($data,200);
     }
 
@@ -458,13 +458,13 @@ class EntrepriseController extends AbstractFOSRestController
     public function listerUser(SerializerInterface $serializer,Utilisateur $user,UserInterface $userConnecte)
     {
         
-        if(!$user instanceof Utilisateur) {//regler le cas du super admin qui liste les admins principaux
+        if(!$user instanceof Utilisateur) {
             throw new HttpException(404,'Resource non trouvée ! ');
         }
         elseif($user->getEntreprise()!=$userConnecte->getEntreprise()){
             throw new HttpException(404,'Cet utilisateur n\'est pas membre de votre entreprise ! ');
         }
-        $data = $serializer->serialize($user,'json',[ $this->groups => [$this->listUser]]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($user,'json',[ $this->groups => [$this->listUser]]);
         return new Response($data,200);
     }
     /**
@@ -475,7 +475,7 @@ class EntrepriseController extends AbstractFOSRestController
     {
         $entreprise=$userConnecte->getEntreprise();
         $users=$repo->findUserEntreprise($entreprise,$userConnecte);//les users sans l admin principal
-        $data = $serializer->serialize($users,'json',[ $this->groups => [$this->listUser]]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($users,'json',[ $this->groups => [$this->listUser]]);
         return new Response($data,200);
     }
     /**
@@ -486,7 +486,7 @@ class EntrepriseController extends AbstractFOSRestController
     {
         $entreprise=$userConnecte->getEntreprise();//tous les users meme l admin principal
         $users=$repo->findBy(['entreprise'=>$entreprise]);
-        $data = $serializer->serialize($users,'json',[ $this->groups => [$this->listUser]]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($users,'json',[ $this->groups => [$this->listUser]]);
         return new Response($data,200);
     }
 
@@ -495,7 +495,7 @@ class EntrepriseController extends AbstractFOSRestController
      */
     public function userCompte(SerializerInterface $serializer,UserCompteActuelRepository $repo,Utilisateur $user){
         $userComp=$repo->findUserComptActu($user);
-        $data = $serializer->serialize($userComp,'json',[ $this->groups => [$this->listUserCmpt]]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($userComp,'json',[ $this->groups => [$this->listUserCmpt]]);
         return new Response($data,200);
     }
     /**
@@ -504,7 +504,7 @@ class EntrepriseController extends AbstractFOSRestController
      */
     public function userComptesAffecte(SerializerInterface $serializer,UserCompteActuelRepository $repo,Utilisateur $user){
         $userComp=$repo->findUserComptesAff($user);
-        $data = $serializer->serialize($userComp,'json',[ $this->groups => [$this->listUserCmpt]]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($userComp,'json',[ $this->groups => [$this->listUserCmpt]]);
         return new Response($data,200);
     }
     /**
@@ -558,7 +558,7 @@ class EntrepriseController extends AbstractFOSRestController
      */
     public function getResponsable(SerializerInterface $serializer,Entreprise $entreprise,UtilisateurRepository $repo){
         $userComp=$repo->findResponsable($entreprise);
-        $data = $serializer->serialize($userComp,'json',[ $this->groups => [$this->listUser]]);//chercher une alternative pour les groupes avec forest
+        $data = $serializer->serialize($userComp,'json',[ $this->groups => [$this->listUser]]);
         return new Response($data,200);
     }
     /**
